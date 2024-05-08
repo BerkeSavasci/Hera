@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 *.iml
 .gradle
 /local.properties
@@ -13,3 +14,12 @@
 .externalNativeBuild
 .cxx
 local.properties
+=======
+#Folders
+.gradle/
+.idea/
+
+# Files
+local.properties
+gradle.properties
+>>>>>>> origin/userstory1
