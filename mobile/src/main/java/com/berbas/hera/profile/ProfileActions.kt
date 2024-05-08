@@ -1,4 +1,4 @@
-package com.berbas.hera
+package com.berbas.hera.profile
 
 import java.time.LocalTime
 import java.util.Date

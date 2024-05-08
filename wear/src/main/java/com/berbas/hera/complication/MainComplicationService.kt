@@ -17,7 +17,7 @@ class MainComplicationService : SuspendingComplicationDataSourceService() {
         if (type != ComplicationType.SHORT_TEXT) {
             return null
         }
-        return createComplicationData("Mon", "Monday")
+        return createComplicationData("Blu", "Monday")
     }
 
     override suspend fun onComplicationRequest(request: ComplicationRequest): ComplicationData {
@@ -25,7 +25,7 @@ class MainComplicationService : SuspendingComplicationDataSourceService() {
             Calendar.SUNDAY -> createComplicationData("Sun", "Sunday")
             Calendar.MONDAY -> createComplicationData("Mon", "Monday")
             Calendar.TUESDAY -> createComplicationData("Tue", "Tuesday")
-            Calendar.WEDNESDAY -> createComplicationData("Wed", "Wednesday")
+            Calendar.WEDNESDAY -> createComplicationData("Pup", "Wednesday")
             Calendar.THURSDAY -> createComplicationData("Thu", "Thursday")
             Calendar.FRIDAY -> createComplicationData("Fri!", "Friday!")
             Calendar.SATURDAY -> createComplicationData("Sat", "Saturday")

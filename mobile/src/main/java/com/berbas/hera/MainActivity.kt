@@ -4,6 +4,9 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.berbas.hera.databinding.ActivityMainBinding
+import com.berbas.hera.goals.GoalFragment
+import com.berbas.hera.home.HomeFragment
+import com.berbas.hera.profile.ProfileFragment
 
 class MainActivity : AppCompatActivity() {
 

@@ -1,4 +1,4 @@
-package com.berbas.hera
+package com.berbas.hera.details
 
 /**
  * Interface for details actions
