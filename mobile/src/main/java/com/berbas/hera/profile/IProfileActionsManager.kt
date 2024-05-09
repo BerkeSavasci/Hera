@@ -8,7 +8,8 @@ import java.util.Date
  * This interface acts as a controller for the ProfileFragment.
  * It defines a set of methods that correspond to different actions a user can perform on their profile.
  */
-interface ProfileActions {
+interface IProfileActionsManager {
+
     /**
      * Set the step goal for the user.
      * This could be used to track the user's daily step count goal.

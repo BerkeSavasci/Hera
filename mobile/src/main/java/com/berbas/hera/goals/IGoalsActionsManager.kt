@@ -4,7 +4,7 @@ package com.berbas.hera.goals
  * Interface for Goal actions.
  * This interface acts as a controller for the GoalFragments.
  */
-interface GoalsActions {
+interface IGoalsActionsManager {
 
     /**
      * Returns a list of all fitness programs.

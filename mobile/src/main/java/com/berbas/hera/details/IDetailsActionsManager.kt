@@ -4,7 +4,7 @@ package com.berbas.hera.details
  * Interface for details actions
  * Acts as a controller for the DetailsFragment
  */
-interface DetailsActions {
+interface IDetailsActionsManager {
     // TODO: enums for the different types of details
 
     /**

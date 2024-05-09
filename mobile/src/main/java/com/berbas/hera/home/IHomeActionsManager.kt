@@ -4,7 +4,8 @@ package com.berbas.hera.home
  * Interface for HomeFragment actions
  * Acts as a controller for the HomeFragment
  */
-interface HomeFragmentActions {
+interface IHomeActionsManager {
+
 
     /**
      * Check sync status
@@ -35,7 +36,7 @@ interface HomeFragmentActions {
      * Download data
      * Download data from the server
      */
-    fun downloadData(): FitnessData? {
+    private fun downloadData(): FitnessData? {
         // Download data
         return null
     }
@@ -44,16 +45,18 @@ interface HomeFragmentActions {
      * Merge data
      * Merge data with the local data
      */
-    fun mergeData(newData: FitnessData) {
+    private fun mergeData(newData: FitnessData): Boolean {
         // Merge data
+        return false
     }
 
     /**
      * Upload data
      * Upload data to the server
      */
-    fun uploadData(newData: FitnessData) {
+    private fun uploadData(newData: FitnessData): Boolean {
         // Upload data
+        return false
     }
 
     /**
