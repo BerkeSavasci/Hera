@@ -20,6 +20,5 @@ local.properties
 .idea/
 
 # Files
-local.properties
 gradle.properties
 >>>>>>> origin/userstory1
