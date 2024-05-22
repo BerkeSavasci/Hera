@@ -22,4 +22,4 @@ dependencyResolutionManagement {
 rootProject.name = "Hera"
 include(":mobile")
 include(":wear")
-include(":heraConnect")
+include(":heraConnectCommon")
