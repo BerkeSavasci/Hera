@@ -12,5 +12,5 @@ interface ConnectionFactory {
     /**
      * Create connection
      */
-    fun createConnection(): Connection
+    fun createConnection()
 }

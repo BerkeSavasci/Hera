@@ -5,12 +5,28 @@
     android:layout_height="match_parent"
     tools:context=".home.HomeFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Home Fragment"
-        android:textSize="26sp"
-        android:layout_gravity="center"/>
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/start_scan_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Start Scanning" />
+
+        <Button
+            android:id="@+id/stop_scan_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Stop Scanning" />
+
+        <ListView
+            android:id="@+id/devices_list_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
 
 </FrameLayout>

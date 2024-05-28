@@ -8,7 +8,7 @@ import com.berbas.heraconnectcommon.connection.Connection
  */
 interface BluetoothConnectionFactory : ConnectionFactory {
 
-    override fun createConnection(): Connection {
-        return BluetoothConnection()
+    override fun createConnection() {
+
     }
 }

@@ -7,7 +7,7 @@ import com.berbas.heraconnectcommon.connection.WifiConnection
  * WifiConnectionFactory class
  */
 interface WifiConnectionFactory : ConnectionFactory {
-    override fun createConnection(): Connection {
-        return WifiConnection()
+    override fun createConnection() {
+
     }
 }
