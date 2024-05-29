@@ -24,6 +24,7 @@ class BluetoothConnection(
     private val bluetoothAdapter by lazy {
         bluetoothManager?.adapter
     }
+    var foundDeviceReceiverRegistered = false
 
     private val _scannedDevices = MutableStateFlow<List<BluetoothDeviceDomain>>(emptyList())
     override val scannedDevices: StateFlow<List<BluetoothDeviceDomain>>
@@ -41,6 +42,7 @@ class BluetoothConnection(
             val newDevice = device.toBluetoothDeviceDomain()
             if (newDevice in devices) devices else devices + newDevice
         }
+        foundDeviceReceiverRegistered = true
     }
 
     init {

@@ -16,10 +16,18 @@ import com.berbas.hera.databinding.ActivityMainBinding
 import com.berbas.hera.goals.GoalFragment
 import com.berbas.hera.home.HomeFragment
 import com.berbas.hera.profile.ProfileFragment
+import com.berbas.heraconnectcommon.connection.BluetoothConnection
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
+    private lateinit var bluetoothConnection: BluetoothConnection
+
+    // reference to the fragments so they don't get recreated every time
+    private val homeFragment = HomeFragment()
+    private val goalFragment = GoalFragment()
+    private val profileFragment = ProfileFragment()
+
     var bluetoothEnabled = false
 
     private val enableBluetoothResultLauncher =
@@ -37,15 +45,15 @@ class MainActivity : AppCompatActivity() {
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        replaceFragment(HomeFragment())
+        replaceFragment(homeFragment)
         binding.bottomNavigationView.selectedItemId = R.id.home
 
         binding.bottomNavigationView.setOnItemSelectedListener {
 
             when (it.itemId) {
-                R.id.home -> replaceFragment(HomeFragment())
-                R.id.goals -> replaceFragment(GoalFragment())
-                R.id.profile -> replaceFragment(ProfileFragment())
+                R.id.home -> replaceFragment(homeFragment)
+                R.id.goals -> replaceFragment(goalFragment)
+                R.id.profile -> replaceFragment(profileFragment)
                 else -> {
 
                 }
@@ -87,5 +95,10 @@ class MainActivity : AppCompatActivity() {
         val fragmentTransaction = fragmentManager.beginTransaction()
         fragmentTransaction.replace(R.id.frame_layout, fragment)
         fragmentTransaction.commit()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        bluetoothConnection.release()
     }
 }
