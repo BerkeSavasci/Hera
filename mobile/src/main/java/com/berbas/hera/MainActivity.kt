@@ -27,7 +27,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var devicesAdapter: ArrayAdapter<BluetoothDeviceDomain>
 
 
-
     var bluetoothEnabled = false
 
     private val enableBluetoothResultLauncher =
@@ -43,21 +42,23 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        // create the bluetooth connection and the adapter for the devices
         bluetoothConnection = BluetoothConnection(this)
         devicesAdapter = ArrayAdapter(this, android.R.layout.simple_list_item_1)
 
 
         // reference to the fragments so they don't get recreated every time
-         val homeFragment = HomeFragment.newInstance(bluetoothConnection, devicesAdapter)
-         val goalFragment = GoalFragment.newInstance("placeholder","placeholder")
-         val profileFragment = ProfileFragment.newInstance("placeholder","placeholder")
+        val homeFragment = HomeFragment.newInstance(bluetoothConnection, devicesAdapter)
+        val goalFragment = GoalFragment.newInstance("placeholder", "placeholder")
+        val profileFragment = ProfileFragment.newInstance("placeholder", "placeholder")
+
+
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         replaceFragment(homeFragment)
         binding.bottomNavigationView.selectedItemId = R.id.home
 
         binding.bottomNavigationView.setOnItemSelectedListener {
-
             when (it.itemId) {
                 R.id.home -> replaceFragment(homeFragment)
                 R.id.goals -> replaceFragment(goalFragment)
@@ -69,12 +70,27 @@ class MainActivity : AppCompatActivity() {
             true
         }
 
+        // get the bluetooth adapter and check if it is enabled
         val bluetoothManager = getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
         val bluetoothAdapter = bluetoothManager.adapter
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED ||
-                ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.BLUETOOTH_CONNECT, Manifest.permission.BLUETOOTH_SCAN), 0)
+            if (ActivityCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.BLUETOOTH_CONNECT
+                ) != PackageManager.PERMISSION_GRANTED ||
+                ActivityCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.BLUETOOTH_SCAN
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                ActivityCompat.requestPermissions(
+                    this,
+                    arrayOf(
+                        Manifest.permission.BLUETOOTH_CONNECT,
+                        Manifest.permission.BLUETOOTH_SCAN
+                    ),
+                    0
+                )
             }
         } else {
             if (bluetoothAdapter?.isEnabled == false) {
@@ -85,7 +101,11 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String>,
+        grantResults: IntArray
+    ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == 0 && grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             val bluetoothManager = getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
@@ -100,7 +120,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun replaceFragment(fragment: Fragment) {
         supportFragmentManager.beginTransaction().apply {
-            replace(R.id.frame_layout,fragment)
+            replace(R.id.frame_layout, fragment)
             commit()
         }
     }

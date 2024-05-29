@@ -9,10 +9,12 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.ListView
+import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
 import com.berbas.hera.R
 import com.berbas.heraconnectcommon.connection.BluetoothConnection
 import com.berbas.heraconnectcommon.connection.BluetoothDeviceDomain
+import com.berbas.heraconnectcommon.connection.ConnectionResult
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
@@ -39,6 +41,25 @@ class HomeFragment : Fragment() {
         val devicesListView = view.findViewById<ListView>(R.id.devices_list_view)
         devicesListView.adapter = devicesAdapter
 
+        // Set an item click listener on the ListView
+        devicesListView.setOnItemClickListener { parent, view, position, id ->
+            val device = devicesAdapter.getItem(position)
+            // Handle the device click here
+            Toast.makeText(context, "Device clicked: ${device?.name}", Toast.LENGTH_SHORT).show()
+            if (device != null) {
+                bluetoothConnection.connectToDevice(device).onEach { result ->
+                    when (result) {
+                        is ConnectionResult.ConnectionSuccess -> {
+                            Toast.makeText(context, "Connected to device: ${device.name}", Toast.LENGTH_SHORT).show()
+                        }
+                        is ConnectionResult.ConnectionFailure -> {
+                            Toast.makeText(context, "Failed to connect to device: ${device.name}", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                }.launchIn(viewLifecycleOwner.lifecycleScope)
+            }
+        }
+
         // Handle start scan button click
         val startScanButton = view.findViewById<Button>(R.id.start_scan_button)
         startScanButton.setOnClickListener {
@@ -52,6 +73,23 @@ class HomeFragment : Fragment() {
             Log.d("HomeFragment", "Stop Scan button clicked")
             bluetoothConnection.stopDiscovery()
         }
+
+        // Handle start server button click
+        val startServerButton = view.findViewById<Button>(R.id.start_server_button)
+        startServerButton.setOnClickListener {
+            Log.d("HomeFragment", "Start Server button clicked")
+            bluetoothConnection.startBluetoothServer().onEach { result ->
+                when (result) {
+                    is ConnectionResult.ConnectionSuccess -> {
+                        Toast.makeText(context, "Server started successfully", Toast.LENGTH_SHORT).show()
+                    }
+                    is ConnectionResult.ConnectionFailure -> {
+                        Toast.makeText(context, "Failed to start server", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }.launchIn(viewLifecycleOwner.lifecycleScope)
+        }
+
 
         // Observe scannedDevices state flow
         bluetoothConnection.scannedDevices.onEach { devices ->
