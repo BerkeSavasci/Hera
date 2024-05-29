@@ -26,7 +26,7 @@ class MainComplicationService : SuspendingComplicationDataSourceService() {
             Calendar.MONDAY -> createComplicationData("Mon", "Monday")
             Calendar.TUESDAY -> createComplicationData("Tue", "Tuesday")
             Calendar.WEDNESDAY -> createComplicationData("Pup", "Wednesday")
-            Calendar.THURSDAY -> createComplicationData("Thu", "Thursday")
+            Calendar.THURSDAY -> createComplicationData("bob", "Thursday")
             Calendar.FRIDAY -> createComplicationData("Fri!", "Friday!")
             Calendar.SATURDAY -> createComplicationData("Sat", "Saturday")
             else -> throw IllegalArgumentException("too many days")

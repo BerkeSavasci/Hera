@@ -65,6 +65,7 @@ dependencies {
     implementation(libs.androidx.lifecycle.livedata.ktx)
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
     implementation(libs.androidx.fragment.ktx)
+    implementation(libs.androidx.connect.client)
     implementation(project(":heraConnectCommon"))
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

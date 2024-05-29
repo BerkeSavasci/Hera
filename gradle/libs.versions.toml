@@ -1,11 +1,19 @@
 [versions]
 agp = "8.4.1"
+bsonKotlinx = "5.1.0"
+connectClient = "1.1.0-alpha07"
+junitJupiter = "5.8.1"
 kotlin = "1.9.0"
 coreKtx = "1.10.1"
 junit = "4.13.2"
 junitVersion = "1.1.5"
 espressoCore = "3.5.1"
 appcompat = "1.6.1"
+mockk = "1.12.0"
+mongodbDriverKotlin = "1.7.2"
+mongodbDriverKotlinCoroutine = "5.1.0"
+playServicesAuth = "21.2.0"
+playServicesFitness = "21.2.0"
 playServicesWearable = "18.0.0"
 material = "1.10.0"
 activity = "1.8.0"
@@ -26,12 +34,20 @@ lifecycleViewmodelKtx = "2.6.1"
 fragmentKtx = "1.5.6"
 
 [libraries]
+androidx-connect-client = { module = "androidx.health.connect:connect-client", version.ref = "connectClient" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-foundation = { module = "androidx.compose.foundation:foundation" }
+bson-kotlinx = { module = "org.mongodb:bson-kotlinx", version.ref = "bsonKotlinx" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+junit-jupiter = { module = "org.junit.jupiter:junit-jupiter", version.ref = "junitJupiter" }
+mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
+mongodb-driver-kotlin = { module = "org.mongodb:mongodb-driver-kotlin", version.ref = "mongodbDriverKotlin" }
+mongodb-driver-kotlin-coroutine = { module = "org.mongodb:mongodb-driver-kotlin-coroutine", version.ref = "mongodbDriverKotlinCoroutine" }
+play-services-auth = { module = "com.google.android.gms:play-services-auth", version.ref = "playServicesAuth" }
+play-services-fitness = { module = "com.google.android.gms:play-services-fitness", version.ref = "playServicesFitness" }
 play-services-wearable = { group = "com.google.android.gms", name = "play-services-wearable", version.ref = "playServicesWearable" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }

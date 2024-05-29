@@ -19,12 +19,14 @@ import com.berbas.hera.home.HomeFragment
 import com.berbas.hera.profile.ProfileFragment
 import com.berbas.heraconnectcommon.connection.BluetoothConnection
 import com.berbas.heraconnectcommon.connection.BluetoothDeviceDomain
+import androidx.health.connect.client.HealthConnectClient
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var bluetoothConnection: BluetoothConnection
     private lateinit var devicesAdapter: ArrayAdapter<BluetoothDeviceDomain>
+    private lateinit var healthConnectClient: HealthConnectClient
 
 
     var bluetoothEnabled = false
@@ -129,4 +131,26 @@ class MainActivity : AppCompatActivity() {
         super.onDestroy()
         bluetoothConnection.release()
     }
+
+    // TODO: Health Connect Permissions request
+/*    private fun launchHealthConnectPermissions() {
+        healthConnectClient.permissionController.requestPermissions(
+            permissions = setOf(
+                StepsRecord::class,
+                HeartRateRecord::class,
+                SleepSessionRecord::class
+            ),
+            permissionsLauncher = registerForActivityResult(
+                ActivityResultContracts.RequestMultiplePermissions()
+            ) { result ->
+                if (result.all { it.value }) {
+                    // Permissions granted
+                    readFitnessData()
+                } else {
+                    // Handle permission denial
+                    Log.d("Permissions", "Not all permissions granted")
+                }
+            }
+        )
+    }*/
 }
