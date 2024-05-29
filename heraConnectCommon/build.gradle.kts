@@ -17,6 +17,7 @@ android {
 
     }
 
+
     buildTypes {
         release {
             isMinifyEnabled = false
@@ -44,7 +45,11 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
-    implementation(libs.mongodb.driver.kotlin.coroutine)
+
+    implementation("org.mongodb:mongodb-driver-sync:4.4.0")
+    implementation("org.litote.kmongo:kmongo-coroutine:4.4.0")
+
+
     implementation(libs.bson.kotlinx)
     implementation(libs.play.services.fitness)
     implementation(libs.play.services.auth)

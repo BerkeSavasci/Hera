@@ -5,6 +5,11 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.DatePicker
+import android.widget.LinearLayout
+import android.widget.NumberPicker
+import android.widget.TextView
+import androidx.compose.runtime.Composable
 import com.berbas.hera.R
 
 // TODO: Rename parameter arguments, choose names that match
@@ -36,6 +41,35 @@ class ProfileFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_profile, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        val weightPicker = view.findViewById<NumberPicker>(R.id.numberPickerWeight)
+        weightPicker.minValue = 1
+        weightPicker.maxValue = 200
+
+        val heightPicker = view.findViewById<NumberPicker>(R.id.numberPickerHeight)
+        heightPicker.minValue = 1
+        heightPicker.maxValue = 250
+
+        val weightValue = view.findViewById<TextView>(R.id.weightValue)
+        val heightValue = view.findViewById<TextView>(R.id.heightValue)
+
+        // Set the saved values
+        weightValue.text = "Saved Weight Value"
+        heightValue.text = "Saved Height Value"
+
+        weightValue.setOnClickListener {
+            weightValue.visibility = View.GONE
+            weightPicker.visibility = View.VISIBLE
+        }
+
+        heightValue.setOnClickListener {
+            heightValue.visibility = View.GONE
+            heightPicker.visibility = View.VISIBLE
+        }
     }
 
     companion object {

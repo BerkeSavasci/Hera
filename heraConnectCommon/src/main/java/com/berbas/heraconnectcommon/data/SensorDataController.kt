@@ -21,7 +21,7 @@ import java.time.Instant
 class SensorDataController(
     private val context: Context,
     private val fitnessDataController: FitnessDataController
-) {
+) {/*
     private val healthConnectClient by lazy { HealthConnectClient.getOrCreate(context) }
 
     private val permissions = setOf(
@@ -88,5 +88,5 @@ class SensorDataController(
         val grantedPermissions = healthConnectClient.permissionController
             .getGrantedPermissions(permissions)
         return grantedPermissions == permissions
-    }
+    }*/
 }

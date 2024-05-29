@@ -5,13 +5,12 @@ import com.mongodb.ConnectionString
 import com.mongodb.MongoClientSettings
 import com.mongodb.ServerApi
 import com.mongodb.ServerApiVersion
-import com.mongodb.kotlin.client.coroutine.MongoClient
 import com.mongodb.client.model.Filters.eq
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.flow.firstOrNull
 
 class MongoClientConnection {
-    private val uri = "mongodb+srv://sgey:rohecE8fOyfg1yzW@cluster0.galdk78.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
+    /*private val uri = "mongodb+srv://sgey:rohecE8fOyfg1yzW@cluster0.galdk78.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
     private val mongoClient = MongoClient.create(uri)
 
     data class Movie(val title: String, val year: Int, val cast: List<String>)
@@ -51,5 +50,5 @@ class MongoClientConnection {
 
         mongoClient.close()
     }
-
+*/
 }
