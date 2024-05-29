@@ -25,6 +25,7 @@ import kotlinx.coroutines.flow.onEach
 class HomeFragment : Fragment() {
     private lateinit var bluetoothConnection: BluetoothConnection
     private lateinit var devicesAdapter: ArrayAdapter<BluetoothDeviceDomain>
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
@@ -35,12 +36,7 @@ class HomeFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_home, container, false)
 
-        // Initialize BluetoothConnection
-        bluetoothConnection = BluetoothConnection(requireContext())
-
-        // Initialize ListView and its adapter
         val devicesListView = view.findViewById<ListView>(R.id.devices_list_view)
-        devicesAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1)
         devicesListView.adapter = devicesAdapter
 
         // Handle start scan button click
@@ -66,20 +62,22 @@ class HomeFragment : Fragment() {
         return view
     }
 
+
     companion object {
         /**
          * Use this factory method to create a new instance of
          * this fragment using the provided parameters.
          *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
+         * @param bluetoothConnection bluetooth connection instance
+         * @param devicesAdapter devices adapter instance
          * @return A new instance of fragment Home.
          */
         // TODO: Rename and change types and number of parameters
         @JvmStatic
-        fun newInstance(param1: String, param2: String) =
+        fun newInstance(bluetoothConnection: BluetoothConnection, devicesAdapter: ArrayAdapter<BluetoothDeviceDomain>) =
             HomeFragment().apply {
-
+                this.bluetoothConnection = bluetoothConnection
+                this.devicesAdapter = devicesAdapter
             }
     }
 }

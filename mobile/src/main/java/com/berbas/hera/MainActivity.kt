@@ -8,6 +8,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
+import android.widget.ArrayAdapter
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -17,16 +18,15 @@ import com.berbas.hera.goals.GoalFragment
 import com.berbas.hera.home.HomeFragment
 import com.berbas.hera.profile.ProfileFragment
 import com.berbas.heraconnectcommon.connection.BluetoothConnection
+import com.berbas.heraconnectcommon.connection.BluetoothDeviceDomain
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var bluetoothConnection: BluetoothConnection
+    private lateinit var devicesAdapter: ArrayAdapter<BluetoothDeviceDomain>
 
-    // reference to the fragments so they don't get recreated every time
-    private val homeFragment = HomeFragment()
-    private val goalFragment = GoalFragment()
-    private val profileFragment = ProfileFragment()
+
 
     var bluetoothEnabled = false
 
@@ -43,6 +43,14 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        bluetoothConnection = BluetoothConnection(this)
+        devicesAdapter = ArrayAdapter(this, android.R.layout.simple_list_item_1)
+
+
+        // reference to the fragments so they don't get recreated every time
+         val homeFragment = HomeFragment.newInstance(bluetoothConnection, devicesAdapter)
+         val goalFragment = GoalFragment.newInstance("placeholder","placeholder")
+         val profileFragment = ProfileFragment.newInstance("placeholder","placeholder")
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         replaceFragment(homeFragment)
@@ -91,10 +99,10 @@ class MainActivity : AppCompatActivity() {
 
 
     private fun replaceFragment(fragment: Fragment) {
-        val fragmentManager = supportFragmentManager
-        val fragmentTransaction = fragmentManager.beginTransaction()
-        fragmentTransaction.replace(R.id.frame_layout, fragment)
-        fragmentTransaction.commit()
+        supportFragmentManager.beginTransaction().apply {
+            replace(R.id.frame_layout,fragment)
+            commit()
+        }
     }
 
     override fun onDestroy() {
