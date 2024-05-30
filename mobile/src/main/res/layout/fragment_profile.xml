@@ -29,6 +29,7 @@
 
         <!-- Gender Row -->
         <androidx.cardview.widget.CardView
+            android:id="@+id/genderCard"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
@@ -61,6 +62,7 @@
 
         <!-- Birthday Row -->
         <androidx.cardview.widget.CardView
+            android:id="@+id/birthdayCard"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -101,6 +103,7 @@
 
         <!-- Weight Row -->
         <androidx.cardview.widget.CardView
+            android:id="@+id/weightCard"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
@@ -133,6 +136,7 @@
 
         <!-- Height Row -->
         <androidx.cardview.widget.CardView
+            android:id="@+id/heightCard"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"

@@ -8,6 +8,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.TextView
+import android.widget.Toast
+import androidx.cardview.widget.CardView
 import androidx.lifecycle.lifecycleScope
 import androidx.room.Room
 import com.berbas.hera.R
@@ -82,11 +84,23 @@ class ProfileFragment : Fragment() {
         val weightValue = view.findViewById<TextView>(R.id.weightValue)
         val heightValue = view.findViewById<TextView>(R.id.heightValue)
 
+        val genderCard = view.findViewById<CardView>(R.id.genderCard)
+        val birthdayCard = view.findViewById<CardView>(R.id.birthdayCard)
+        val weightCard = view.findViewById<CardView>(R.id.weightCard)
+        val heightCard = view.findViewById<CardView>(R.id.heightCard)
+
+        genderCard.setOnClickListener { onGenderCardClicked() }
+        birthdayCard.setOnClickListener { onBirthdayCardClicked() }
+        weightCard.setOnClickListener { onWeightCardClicked() }
+        heightCard.setOnClickListener { onHeightCardClicked() }
+
         lifecycleScope.launch {
             val weight = controller.getPersonWeightById(personID)
             val height = controller.getPersonHeightById(personID)
             val birthday = controller.getPersonBirthdayById(personID)
             val gender = controller.getPersonGenderById(personID)
+
+
 
             heightValue.text = height
             weightValue.text = weight
@@ -95,6 +109,28 @@ class ProfileFragment : Fragment() {
         }
     }
 
+    private fun onGenderCardClicked() {
+        // TODO: Implement the logic for when the gender card is clicked
+        Toast.makeText(context, "Card Clicked", Toast.LENGTH_SHORT).show()
+    }
+
+    private fun onBirthdayCardClicked() {
+        // TODO: Implement the logic for when the birthday card is clicked
+        Toast.makeText(context, "Card Clicked", Toast.LENGTH_SHORT).show()
+
+    }
+
+    private fun onWeightCardClicked() {
+        // TODO: Implement the logic for when the weight card is clicked
+        Toast.makeText(context, "Card Clicked", Toast.LENGTH_SHORT).show()
+
+    }
+
+    private fun onHeightCardClicked() {
+        // TODO: Implement the logic for when the height card is clicked
+        Toast.makeText(context, "Card Clicked", Toast.LENGTH_SHORT).show()
+
+    }
 
     companion object {
         /**
