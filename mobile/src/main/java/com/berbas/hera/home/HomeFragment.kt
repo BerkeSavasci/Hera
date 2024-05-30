@@ -110,7 +110,6 @@ class HomeFragment : Fragment() {
          * @param devicesAdapter devices adapter instance
          * @return A new instance of fragment Home.
          */
-        // TODO: Rename and change types and number of parameters
         @JvmStatic
         fun newInstance(bluetoothConnection: BluetoothConnection, devicesAdapter: ArrayAdapter<BluetoothDeviceDomain>) =
             HomeFragment().apply {

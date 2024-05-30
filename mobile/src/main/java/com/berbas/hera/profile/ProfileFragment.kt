@@ -1,21 +1,21 @@
 package com.berbas.hera.profile
 
+import android.app.AlertDialog
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.DatePicker
-import android.widget.LinearLayout
-import android.widget.NumberPicker
+import android.widget.EditText
 import android.widget.TextView
-import androidx.compose.runtime.Composable
+import androidx.lifecycle.lifecycleScope
+import androidx.room.Room
 import com.berbas.hera.R
+import com.berbas.heraconnectcommon.data.UserDataController
+import com.berbas.heraconnectcommon.localData.Person
+import com.berbas.heraconnectcommon.localData.PersonDataBase
+import kotlinx.coroutines.launch
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
 /**
  * A simple [Fragment] subclass.
@@ -23,15 +23,46 @@ private const val ARG_PARAM2 = "param2"
  * create an instance of this fragment.
  */
 class ProfileFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+    //TODO Allow the user to edit their profile information
+
+    private var personID: Int = 0
+
+    private val db by lazy {
+        Room.databaseBuilder(
+            requireContext(),
+            PersonDataBase::class.java,
+            "person.db"
+        ).build()
+    }
+
+    private val controller by lazy {
+        UserDataController(db.dao, 1)
+    }
+
+    private lateinit var person: Person
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+
+        personID = arguments?.getInt("personID") ?: 0
+
+        lifecycleScope.launch {
+            val existingPerson = controller.getPersonById(personID)
+            if (existingPerson == null) {
+                // If the person does not exist, create a new person
+                val newPerson = Person(
+                    firstname = "Mary",
+                    lastname = "Jane",
+                    birthday = "1990-01-01",
+                    gender = "Female",
+                    height = "199",
+                    weight = "75"
+                )
+                controller.upsertPerson(newPerson)
+            } else {
+                person = existingPerson
+            }
         }
     }
 
@@ -46,31 +77,24 @@ class ProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val weightPicker = view.findViewById<NumberPicker>(R.id.numberPickerWeight)
-        weightPicker.minValue = 1
-        weightPicker.maxValue = 200
-
-        val heightPicker = view.findViewById<NumberPicker>(R.id.numberPickerHeight)
-        heightPicker.minValue = 1
-        heightPicker.maxValue = 250
-
+        val genderValue = view.findViewById<TextView>(R.id.genderValue)
+        val birthdayValue = view.findViewById<TextView>(R.id.birthdayValue)
         val weightValue = view.findViewById<TextView>(R.id.weightValue)
         val heightValue = view.findViewById<TextView>(R.id.heightValue)
 
-        // Set the saved values
-        weightValue.text = "Saved Weight Value"
-        heightValue.text = "Saved Height Value"
+        lifecycleScope.launch {
+            val weight = controller.getPersonWeightById(personID)
+            val height = controller.getPersonHeightById(personID)
+            val birthday = controller.getPersonBirthdayById(personID)
+            val gender = controller.getPersonGenderById(personID)
 
-        weightValue.setOnClickListener {
-            weightValue.visibility = View.GONE
-            weightPicker.visibility = View.VISIBLE
-        }
-
-        heightValue.setOnClickListener {
-            heightValue.visibility = View.GONE
-            heightPicker.visibility = View.VISIBLE
+            heightValue.text = height
+            weightValue.text = weight
+            birthdayValue.text = birthday
+            genderValue.text = gender
         }
     }
+
 
     companion object {
         /**
@@ -78,16 +102,13 @@ class ProfileFragment : Fragment() {
          * this fragment using the provided parameters.
          *
          * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
          * @return A new instance of fragment ProfileFragment.
          */
-        // TODO: Rename and change types and number of parameters
         @JvmStatic
-        fun newInstance(param1: String, param2: String) =
+        fun newInstance(personID: Int) =
             ProfileFragment().apply {
                 arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+                    putInt("personID", personID)
                 }
             }
     }

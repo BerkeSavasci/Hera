@@ -28,6 +28,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var devicesAdapter: ArrayAdapter<BluetoothDeviceDomain>
     private lateinit var healthConnectClient: HealthConnectClient
 
+    private var userID: Int = 0
 
     var bluetoothEnabled = false
 
@@ -48,11 +49,14 @@ class MainActivity : AppCompatActivity() {
         bluetoothConnection = BluetoothConnection(this)
         devicesAdapter = ArrayAdapter(this, android.R.layout.simple_list_item_1)
 
+        //get user id somehow for later
+        //for now just hardcode it
+        userID = 2
 
         // reference to the fragments so they don't get recreated every time
         val homeFragment = HomeFragment.newInstance(bluetoothConnection, devicesAdapter)
         val goalFragment = GoalFragment.newInstance("placeholder", "placeholder")
-        val profileFragment = ProfileFragment.newInstance("placeholder", "placeholder")
+        val profileFragment = ProfileFragment.newInstance(userID)
 
 
         binding = ActivityMainBinding.inflate(layoutInflater)

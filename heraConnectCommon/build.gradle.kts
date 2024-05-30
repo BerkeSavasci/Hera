@@ -1,6 +1,8 @@
 plugins {
     alias(libs.plugins.androidLibrary)
     alias(libs.plugins.jetbrainsKotlinAndroid)
+    id("kotlin-kapt")
+
 }
 
 android {
@@ -49,6 +51,9 @@ dependencies {
     implementation("org.mongodb:mongodb-driver-sync:4.4.0")
     implementation("org.litote.kmongo:kmongo-coroutine:4.4.0")
 
+    implementation("androidx.room:room-ktx:2.6.1")
+    implementation("androidx.room:room-runtime:2.6.1")
+    kapt ("androidx.room:room-compiler:2.6.1")
 
     implementation(libs.bson.kotlinx)
     implementation(libs.play.services.fitness)
