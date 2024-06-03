@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
+import android.widget.NumberPicker
 import android.widget.TextView
 import android.widget.Toast
 import androidx.cardview.widget.CardView
@@ -44,7 +45,7 @@ class ProfileFragment : Fragment() {
     }
 
     private val controller by lazy {
-        UserDataController(db.dao, 1)
+        UserDataController(db.dao, personID)
     }
 
     private lateinit var person: Person
@@ -115,6 +116,10 @@ class ProfileFragment : Fragment() {
         }
     }
 
+    /**
+     * Show a dialog to allow the user to select their gender
+     * and call the controller
+     */
     private fun onGenderCardClicked() {
         val options = arrayOf("Male", "Female", "Other")
         val builder = AlertDialog.Builder(requireContext())
@@ -128,59 +133,75 @@ class ProfileFragment : Fragment() {
         builder.show()
     }
 
+    /**
+     * Show a date picker dialog to allow the user to select their birthday
+     */
     private fun onBirthdayCardClicked() {
         val calendar = Calendar.getInstance()
         val year = calendar.get(Calendar.YEAR)
         val month = calendar.get(Calendar.MONTH)
         val day = calendar.get(Calendar.DAY_OF_MONTH)
 
-        val datePickerDialog = DatePickerDialog(requireContext(), { _, selectedYear, selectedMonth, selectedDay ->
-            val selectedDate = LocalDate.of(selectedYear, selectedMonth + 1, selectedDay)
-            lifecycleScope.launch {
-                controller.setBirthDate(Date.from(selectedDate.atStartOfDay(ZoneId.systemDefault()).toInstant()))
-            }
-        }, year, month, day)
+        val datePickerDialog =
+            DatePickerDialog(requireContext(), { _, selectedYear, selectedMonth, selectedDay ->
+                val selectedDate = LocalDate.of(selectedYear, selectedMonth + 1, selectedDay)
+                lifecycleScope.launch {
+                    controller.setBirthDate(
+                        Date.from(
+                            selectedDate.atStartOfDay(ZoneId.systemDefault()).toInstant()
+                        )
+                    )
+                }
+            }, year, month, day)
 
         datePickerDialog.show()
     }
 
+    /**
+     * Show a number picker dialog to allow the user to select their weight
+     */
     private fun onWeightCardClicked() {
-        val builder = AlertDialog.Builder(requireContext())
-        val input = EditText(requireContext())
-        input.inputType = InputType.TYPE_CLASS_NUMBER
-        builder.setView(input)
+        val numberPicker = NumberPicker(requireContext()).apply {
+            minValue = 0
+            maxValue = 300
+            value = person.weight.toInt()
+        }
 
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setTitle("Update Weight")
+        builder.setView(numberPicker)
         builder.setPositiveButton("OK") { dialog, _ ->
-            val weight = input.text.toString().toDoubleOrNull()
-            if (weight != null) {
-                lifecycleScope.launch {
-                    controller.setWeight(weight)
-                }
+            val weight = numberPicker.value.toDouble()
+            lifecycleScope.launch {
+                controller.setWeight(weight)
             }
             dialog.dismiss()
         }
         builder.setNegativeButton("Cancel") { dialog, _ -> dialog.cancel() }
-
         builder.show()
     }
 
+    /**
+     * Show a number picker dialog to allow the user to select their height
+     */
     private fun onHeightCardClicked() {
-        val builder = AlertDialog.Builder(requireContext())
-        val input = EditText(requireContext())
-        input.inputType = InputType.TYPE_CLASS_NUMBER
-        builder.setView(input)
+        val numberPicker = NumberPicker(requireContext()).apply {
+            minValue = 0
+            maxValue = 300
+            value = person.height.toInt()
+        }
 
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setTitle("Update Height")
+        builder.setView(numberPicker)
         builder.setPositiveButton("OK") { dialog, _ ->
-            val height = input.text.toString().toDoubleOrNull()
-            if (height != null) {
-                lifecycleScope.launch {
-                    controller.setHeight(height)
-                }
+            val height = numberPicker.value.toDouble()
+            lifecycleScope.launch {
+                controller.setHeight(height)
             }
             dialog.dismiss()
         }
         builder.setNegativeButton("Cancel") { dialog, _ -> dialog.cancel() }
-
         builder.show()
     }
 
@@ -189,7 +210,7 @@ class ProfileFragment : Fragment() {
          * Use this factory method to create a new instance of
          * this fragment using the provided parameters.
          *
-         * @param param1 Parameter 1.
+         * @param personID the ID of the person to display the profile for
          * @return A new instance of fragment ProfileFragment.
          */
         @JvmStatic

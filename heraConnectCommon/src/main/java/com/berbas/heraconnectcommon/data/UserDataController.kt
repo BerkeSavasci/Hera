@@ -4,8 +4,10 @@ import com.berbas.heraconnectcommon.localData.Person
 import com.berbas.heraconnectcommon.localData.PersonDao
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import java.text.SimpleDateFormat
 import java.time.LocalTime
 import java.util.Date
+import java.util.Locale
 
 /**
  *  USerDataController class is responsible for fetching and sending user data such as Settings User
@@ -121,7 +123,8 @@ class UserDataController(private val dao: PersonDao, private val id: Int) : Data
     suspend fun setBirthDate(birthDate: Date) {
         withContext(Dispatchers.IO) {
             val person = dao.getPersonById(id)
-            person.birthday = birthDate.toString() // Assuming the date is stored as a string
+            val dateFormat = SimpleDateFormat("dd MM yy", Locale.getDefault())
+            person.birthday = dateFormat.format(birthDate) // Assuming the date is stored as a string
             dao.upsertPerson(person)
         }
     }

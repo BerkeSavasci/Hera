@@ -51,7 +51,7 @@ class MainActivity : AppCompatActivity() {
 
         //get user id somehow for later
         //for now just hardcode it
-        userID = 2
+        userID = 3
 
         // reference to the fragments so they don't get recreated every time
         val homeFragment = HomeFragment.newInstance(bluetoothConnection, devicesAdapter)
