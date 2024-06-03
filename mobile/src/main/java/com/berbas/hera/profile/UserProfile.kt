@@ -20,7 +20,7 @@ data class UserProfile(
     override var birthDate: Date,
     override var weight: Double,
     override var height: Double
-): IUserProfile{
+) : IUserProfile {
     override fun serialize(): String {
         TODO("Not yet implemented")
     }

@@ -1,7 +1,9 @@
 package com.berbas.hera.profile
 
 import android.app.AlertDialog
+import android.app.DatePickerDialog
 import android.os.Bundle
+import android.text.InputType
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -17,6 +19,10 @@ import com.berbas.heraconnectcommon.data.UserDataController
 import com.berbas.heraconnectcommon.localData.Person
 import com.berbas.heraconnectcommon.localData.PersonDataBase
 import kotlinx.coroutines.launch
+import java.time.LocalDate
+import java.time.ZoneId
+import java.util.Calendar
+import java.util.Date
 
 
 /**
@@ -54,12 +60,12 @@ class ProfileFragment : Fragment() {
             if (existingPerson == null) {
                 // If the person does not exist, create a new person
                 val newPerson = Person(
-                    firstname = "Mary",
-                    lastname = "Jane",
-                    birthday = "1990-01-01",
-                    gender = "Female",
-                    height = "199",
-                    weight = "75"
+                    firstname = " ",
+                    lastname = " ",
+                    birthday = " ",
+                    gender = " ",
+                    height = " ",
+                    weight = " "
                 )
                 controller.upsertPerson(newPerson)
             } else {
@@ -110,26 +116,72 @@ class ProfileFragment : Fragment() {
     }
 
     private fun onGenderCardClicked() {
-        // TODO: Implement the logic for when the gender card is clicked
-        Toast.makeText(context, "Card Clicked", Toast.LENGTH_SHORT).show()
+        val options = arrayOf("Male", "Female", "Other")
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setTitle("Select Gender")
+        builder.setItems(options) { dialog, which ->
+            lifecycleScope.launch {
+                controller.setGender(options[which])
+            }
+            dialog.dismiss()
+        }
+        builder.show()
     }
 
     private fun onBirthdayCardClicked() {
-        // TODO: Implement the logic for when the birthday card is clicked
-        Toast.makeText(context, "Card Clicked", Toast.LENGTH_SHORT).show()
+        val calendar = Calendar.getInstance()
+        val year = calendar.get(Calendar.YEAR)
+        val month = calendar.get(Calendar.MONTH)
+        val day = calendar.get(Calendar.DAY_OF_MONTH)
 
+        val datePickerDialog = DatePickerDialog(requireContext(), { _, selectedYear, selectedMonth, selectedDay ->
+            val selectedDate = LocalDate.of(selectedYear, selectedMonth + 1, selectedDay)
+            lifecycleScope.launch {
+                controller.setBirthDate(Date.from(selectedDate.atStartOfDay(ZoneId.systemDefault()).toInstant()))
+            }
+        }, year, month, day)
+
+        datePickerDialog.show()
     }
 
     private fun onWeightCardClicked() {
-        // TODO: Implement the logic for when the weight card is clicked
-        Toast.makeText(context, "Card Clicked", Toast.LENGTH_SHORT).show()
+        val builder = AlertDialog.Builder(requireContext())
+        val input = EditText(requireContext())
+        input.inputType = InputType.TYPE_CLASS_NUMBER
+        builder.setView(input)
 
+        builder.setPositiveButton("OK") { dialog, _ ->
+            val weight = input.text.toString().toDoubleOrNull()
+            if (weight != null) {
+                lifecycleScope.launch {
+                    controller.setWeight(weight)
+                }
+            }
+            dialog.dismiss()
+        }
+        builder.setNegativeButton("Cancel") { dialog, _ -> dialog.cancel() }
+
+        builder.show()
     }
 
     private fun onHeightCardClicked() {
-        // TODO: Implement the logic for when the height card is clicked
-        Toast.makeText(context, "Card Clicked", Toast.LENGTH_SHORT).show()
+        val builder = AlertDialog.Builder(requireContext())
+        val input = EditText(requireContext())
+        input.inputType = InputType.TYPE_CLASS_NUMBER
+        builder.setView(input)
 
+        builder.setPositiveButton("OK") { dialog, _ ->
+            val height = input.text.toString().toDoubleOrNull()
+            if (height != null) {
+                lifecycleScope.launch {
+                    controller.setHeight(height)
+                }
+            }
+            dialog.dismiss()
+        }
+        builder.setNegativeButton("Cancel") { dialog, _ -> dialog.cancel() }
+
+        builder.show()
     }
 
     companion object {

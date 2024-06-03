@@ -10,12 +10,12 @@ import java.time.LocalDate
  */
 @Entity
 data class Person(
-    val firstname: String,
-    val lastname: String,
-    val birthday: String,
-    val gender: String,
-    val height: String,
-    val weight: String,
+    var firstname: String,
+    var lastname: String,
+    var birthday: String,
+    var gender: String,
+    var height: String,
+    var weight: String,
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0
 )

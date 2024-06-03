@@ -1,5 +1,6 @@
 package com.berbas.hera.profile
 
+import com.berbas.heraconnectcommon.localData.Person
 import java.time.LocalTime
 import java.util.Date
 
@@ -8,7 +9,7 @@ import java.util.Date
  * This interface acts as a controller for the ProfileFragment.
  * It defines a set of methods that correspond to different actions a user can perform on their profile.
  */
-interface IProfileActionsManager {
+interface IProfileActionsManagerInterface {
 
     /**
      * Set the step goal for the user.
