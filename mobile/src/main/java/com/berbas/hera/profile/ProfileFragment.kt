@@ -61,9 +61,6 @@ class ProfileFragment : Fragment() {
         personID = arguments?.getInt("personID") ?: 0
         Log.d(TAG, "onCreate: personID: $personID")
 
-        lifecycleScope.launch {
-            initializePerson()
-        }
     }
 
     override fun onCreateView(
