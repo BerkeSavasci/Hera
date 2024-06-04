@@ -1,8 +1,5 @@
 package com.berbas.heraconnectcommon.connection.connectionFactory
 
-import com.berbas.heraconnectcommon.connection.Connection
-import com.berbas.heraconnectcommon.connection.WifiConnection
-
 /**
  * WifiConnectionFactory class
  */

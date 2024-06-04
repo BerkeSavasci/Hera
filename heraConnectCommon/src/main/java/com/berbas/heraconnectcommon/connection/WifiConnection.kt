@@ -1,6 +1,6 @@
 package com.berbas.heraconnectcommon.connection
 
-class WifiConnection: Connection {
+class WifiConnection: WifiConnectionInterface {
     override fun connect() {
         TODO("Not yet implemented")
     }

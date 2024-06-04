@@ -1,6 +1,5 @@
-package com.berbas.hera.profile
+package com.berbas.heraconnectcommon.data
 
-import com.berbas.heraconnectcommon.localData.Person
 import java.time.LocalTime
 import java.util.Date
 
@@ -9,7 +8,7 @@ import java.util.Date
  * This interface acts as a controller for the ProfileFragment.
  * It defines a set of methods that correspond to different actions a user can perform on their profile.
  */
-interface IProfileActionsManagerInterface {
+interface ProfileActionsManagerInterface {
 
     /**
      * Set the step goal for the user.
@@ -34,7 +33,7 @@ interface IProfileActionsManagerInterface {
      *
      * @param gender The gender of the user.
      */
-    fun setGender(gender: String)
+    suspend fun setGender(gender: String)
 
     /**
      * Set the birth date for the user.
@@ -42,7 +41,7 @@ interface IProfileActionsManagerInterface {
      *
      * @param birthDate The birth date of the user.
      */
-    fun setBirthDate(birthDate: Date)
+    suspend fun setBirthDate(birthDate: Date)
 
     /**
      * Set the weight for the user.
@@ -50,7 +49,7 @@ interface IProfileActionsManagerInterface {
      *
      * @param weight The weight of the user.
      */
-    fun setWeight(weight: Double)
+    suspend fun setWeight(weight: Double)
 
     /**
      * Set the height for the user.
@@ -58,11 +57,5 @@ interface IProfileActionsManagerInterface {
      *
      * @param height The height of the user.
      */
-    fun setHeight(height: Double)
-
-    /**
-     * View the data of the user.
-     * This could be used to display all the user's profile information.
-     */
-    fun viewData()
+    suspend fun setHeight(height: Double)
 }

@@ -22,7 +22,7 @@ import java.util.*
 @SuppressLint("MissingPermission")
 class BluetoothConnection(
     private val context: Context
-) : Connection, BluetoothController {
+) : BluetoothControllerInterface {
 
     companion object {
         const val SERVICE_UUID = "00001101-0000-1000-8000-00805F9B34FB"
@@ -190,24 +190,6 @@ class BluetoothConnection(
         currentServerSocket?.close()
         currentServerSocket = null
     }
-
-
-    override fun connect() {
-        TODO("Not yet implemented")
-    }
-
-    override fun disconnect() {
-        TODO("Not yet implemented")
-    }
-
-    override fun send(data: String) {
-        TODO("Not yet implemented")
-    }
-
-    override fun receive(): String {
-        TODO("Not yet implemented")
-    }
-
 
     private fun updatePairedDevices() {
         if (!hasPermissions(Manifest.permission.BLUETOOTH_CONNECT)) {

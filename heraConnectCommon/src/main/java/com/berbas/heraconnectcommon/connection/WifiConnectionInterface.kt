@@ -1,6 +1,6 @@
 package com.berbas.heraconnectcommon.connection
 
-interface Connection {
+interface WifiConnectionInterface {
     /**
      * Connect to the device
      */

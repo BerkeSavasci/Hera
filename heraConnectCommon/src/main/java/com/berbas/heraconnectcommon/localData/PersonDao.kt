@@ -5,6 +5,9 @@ import androidx.room.Delete
 import androidx.room.Query
 import androidx.room.Upsert
 
+/**
+ * Data access object for the person table
+ */
 @Dao
 interface PersonDao {
 

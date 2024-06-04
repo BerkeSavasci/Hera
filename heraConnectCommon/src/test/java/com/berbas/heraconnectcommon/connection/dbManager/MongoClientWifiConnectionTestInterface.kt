@@ -3,7 +3,7 @@ package com.berbas.heraconnectcommon.connection.dbManager
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.Assertions.*
 
-class MongoClientConnectionTest {
+class MongoClientWifiConnectionTestInterface {
 
     @Test
     fun testMain() {

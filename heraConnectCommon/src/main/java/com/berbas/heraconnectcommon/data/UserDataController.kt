@@ -15,7 +15,7 @@ import java.util.Locale
  *  Additionally, it is responsible for processing the data such as clean up duplicates.
  *
  */
-class UserDataController(private val dao: PersonDao, private val id: Int) : DataController {
+class UserDataController(private val dao: PersonDao, private val id: Int) : DataController, ProfileActionsManagerInterface{
     override fun fetch(fetchedData: Any): Any {
         TODO("Not yet implemented")
     }
@@ -86,7 +86,7 @@ class UserDataController(private val dao: PersonDao, private val id: Int) : Data
      * @param toBed The time the user wants to go to bed.
      * @param wakeUp The time the user wants to wake up.
      */
-    fun setStepGoal(stepGoal: Int) {
+    override fun setStepGoal(stepGoal: Int) {
         TODO("Not yet implemented")
     }
 
@@ -96,7 +96,7 @@ class UserDataController(private val dao: PersonDao, private val id: Int) : Data
      *
      * @param stepGoal The step goal to set for the user.
      */
-    fun setSleepTime(toBed: LocalTime, wakeUp: LocalTime) {
+    override fun setSleepTime(toBed: LocalTime, wakeUp: LocalTime) {
         TODO("Not yet implemented")
     }
 
@@ -106,7 +106,7 @@ class UserDataController(private val dao: PersonDao, private val id: Int) : Data
      *
      * @param gender The gender of the user.
      */
-    suspend fun setGender(gender: String) {
+    override suspend fun setGender(gender: String) {
         withContext(Dispatchers.IO) {
             val person = dao.getPersonById(id)
             person.gender = gender
@@ -120,7 +120,7 @@ class UserDataController(private val dao: PersonDao, private val id: Int) : Data
      *
      * @param birthDate The birth date of the user.
      */
-    suspend fun setBirthDate(birthDate: Date) {
+    override suspend fun setBirthDate(birthDate: Date) {
         withContext(Dispatchers.IO) {
             val person = dao.getPersonById(id)
             val dateFormat = SimpleDateFormat("dd MM yy", Locale.getDefault())
@@ -129,7 +129,7 @@ class UserDataController(private val dao: PersonDao, private val id: Int) : Data
         }
     }
 
-    suspend fun setWeight(weight: Double) {
+    override suspend fun setWeight(weight: Double) {
         withContext(Dispatchers.IO) {
             val person = dao.getPersonById(id)
             person.weight = weight.toString() // Assuming the weight is stored as a string
@@ -137,19 +137,11 @@ class UserDataController(private val dao: PersonDao, private val id: Int) : Data
         }
     }
 
-    suspend fun setHeight(height: Double) {
+    override suspend fun setHeight(height: Double) {
         withContext(Dispatchers.IO) {
             val person = dao.getPersonById(id)
             person.height = height.toString() // Assuming the height is stored as a string
             dao.upsertPerson(person)
         }
-    }
-
-    /**
-     * View the data of the user.
-     * This could be used to display all the user's profile information.
-     */
-    fun viewData() {
-
     }
 }
