@@ -37,7 +37,7 @@ class UserDataController(private val dao: PersonDao, private val id: Int) : Data
     /**
      * get a person from the database by their id
      */
-    suspend fun getPersonById(id: Int): Person {
+    suspend fun getPersonById(id: Int): Person? {
         return withContext(Dispatchers.IO) {
             dao.getPersonById(id)
         }

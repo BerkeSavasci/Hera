@@ -94,7 +94,8 @@ class HomeFragment : Fragment() {
         // Observe scannedDevices state flow
         bluetoothConnection.scannedDevices.onEach { devices ->
             devicesAdapter.clear()
-            devicesAdapter.addAll(devices)
+            val devicesWithName = devices.filter { it.name != null}
+            devicesAdapter.addAll(devicesWithName)
         }.launchIn(viewLifecycleOwner.lifecycleScope)
 
         return view

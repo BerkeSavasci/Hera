@@ -2,8 +2,11 @@ package com.berbas.hera.profile
 
 import android.app.AlertDialog
 import android.app.DatePickerDialog
+import android.content.ContentValues.TAG
+import android.nfc.Tag
 import android.os.Bundle
 import android.text.InputType
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -35,6 +38,7 @@ class ProfileFragment : Fragment() {
     //TODO Allow the user to edit their profile information
 
     private var personID: Int = 0
+    private var isPersonInitialized = false
 
     private val db by lazy {
         Room.databaseBuilder(
@@ -55,23 +59,10 @@ class ProfileFragment : Fragment() {
         super.onCreate(savedInstanceState)
 
         personID = arguments?.getInt("personID") ?: 0
+        Log.d(TAG, "onCreate: personID: $personID")
 
         lifecycleScope.launch {
-            val existingPerson = controller.getPersonById(personID)
-            if (existingPerson == null) {
-                // If the person does not exist, create a new person
-                val newPerson = Person(
-                    firstname = " ",
-                    lastname = " ",
-                    birthday = " ",
-                    gender = " ",
-                    height = " ",
-                    weight = " "
-                )
-                controller.upsertPerson(newPerson)
-            } else {
-                person = existingPerson
-            }
+            initializePerson()
         }
     }
 
@@ -102,17 +93,14 @@ class ProfileFragment : Fragment() {
         heightCard.setOnClickListener { onHeightCardClicked() }
 
         lifecycleScope.launch {
-            val weight = controller.getPersonWeightById(personID)
-            val height = controller.getPersonHeightById(personID)
-            val birthday = controller.getPersonBirthdayById(personID)
-            val gender = controller.getPersonGenderById(personID)
-
-
-
-            heightValue.text = height
-            weightValue.text = weight
-            birthdayValue.text = birthday
-            genderValue.text = gender
+            if (!isPersonInitialized){
+                initializePerson()
+        }
+            // Now you can safely access the person object
+            heightValue.text = person.height
+            weightValue.text = person.weight
+            birthdayValue.text = person.birthday
+            genderValue.text = person.gender
         }
     }
 
@@ -203,6 +191,26 @@ class ProfileFragment : Fragment() {
         }
         builder.setNegativeButton("Cancel") { dialog, _ -> dialog.cancel() }
         builder.show()
+    }
+
+    private suspend fun initializePerson() {
+        val existingPerson = controller.getPersonById(personID)
+        if (existingPerson == null) {
+            // If not, create a new Person object
+            val newPerson = Person(
+                firstname = "John",
+                lastname = "Doe",
+                birthday = "2000-01-01",
+                gender = "Male",
+                height = "180",
+                weight = "80"
+            )
+            controller.upsertPerson(newPerson)
+            person = newPerson
+        } else {
+            person = existingPerson
+        }
+        isPersonInitialized = true
     }
 
     companion object {
