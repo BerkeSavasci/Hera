@@ -7,11 +7,13 @@ import android.nfc.Tag
 import android.os.Bundle
 import android.text.InputType
 import android.util.Log
+import android.view.Gravity
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
+import android.widget.LinearLayout
 import android.widget.NumberPicker
 import android.widget.TextView
 import android.widget.Toast
@@ -39,13 +41,17 @@ class ProfileFragment : Fragment() {
 
     private var personID: Int = 0
     private var isPersonInitialized = false
+    private lateinit var genderValue: TextView
+    private lateinit var birthdayValue: TextView
+    private lateinit var weightValue: TextView
+    private lateinit var heightValue: TextView
 
     private val db by lazy {
         Room.databaseBuilder(
             requireContext(),
             PersonDataBase::class.java,
             "person.db"
-        ).build()
+        ).fallbackToDestructiveMigration().build()
     }
 
     private val controller by lazy {
@@ -74,10 +80,10 @@ class ProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val genderValue = view.findViewById<TextView>(R.id.genderValue)
-        val birthdayValue = view.findViewById<TextView>(R.id.birthdayValue)
-        val weightValue = view.findViewById<TextView>(R.id.weightValue)
-        val heightValue = view.findViewById<TextView>(R.id.heightValue)
+        genderValue = view.findViewById(R.id.genderValue)
+        birthdayValue = view.findViewById(R.id.birthdayValue)
+        weightValue = view.findViewById(R.id.weightValue)
+        heightValue = view.findViewById(R.id.heightValue)
 
         val genderCard = view.findViewById<CardView>(R.id.genderCard)
         val birthdayCard = view.findViewById<CardView>(R.id.birthdayCard)
@@ -90,12 +96,11 @@ class ProfileFragment : Fragment() {
         heightCard.setOnClickListener { onHeightCardClicked() }
 
         lifecycleScope.launch {
-            if (!isPersonInitialized){
+            if (!isPersonInitialized) {
                 initializePerson()
-        }
-            // Now you can safely access the person object
-            heightValue.text = person.height
-            weightValue.text = person.weight
+            }
+            heightValue.text = person.height.toString() + " cm"
+            weightValue.text = person.weight.toString() + " kg"
             birthdayValue.text = person.birthday
             genderValue.text = person.gender
         }
@@ -146,19 +151,39 @@ class ProfileFragment : Fragment() {
      * Show a number picker dialog to allow the user to select their weight
      */
     private fun onWeightCardClicked() {
-        val numberPicker = NumberPicker(requireContext()).apply {
+        val integerPicker = NumberPicker(requireContext()).apply {
             minValue = 0
             maxValue = 300
             value = person.weight.toInt()
         }
 
+        val decimalPicker = NumberPicker(requireContext()).apply {
+            minValue = 0
+            maxValue = 9
+            value = ((person.weight - person.weight.toInt()) * 10).toInt()
+        }
+
+        val decimalPoint = TextView(requireContext()).apply {
+            text = "."
+            gravity = Gravity.CENTER
+        }
+
+        val layout = LinearLayout(requireContext()).apply {
+            orientation = LinearLayout.HORIZONTAL
+            gravity = Gravity.CENTER
+            addView(integerPicker)
+            addView(decimalPoint)
+            addView(decimalPicker)
+        }
+
         val builder = AlertDialog.Builder(requireContext())
         builder.setTitle("Update Weight")
-        builder.setView(numberPicker)
+        builder.setView(layout)
         builder.setPositiveButton("OK") { dialog, _ ->
-            val weight = numberPicker.value.toDouble()
+            val weight = integerPicker.value + decimalPicker.value / 10.0
             lifecycleScope.launch {
                 controller.setWeight(weight)
+                weightValue.text = weight.toString() + " kg"
             }
             dialog.dismiss()
         }
@@ -170,19 +195,39 @@ class ProfileFragment : Fragment() {
      * Show a number picker dialog to allow the user to select their height
      */
     private fun onHeightCardClicked() {
-        val numberPicker = NumberPicker(requireContext()).apply {
+        val integerPicker = NumberPicker(requireContext()).apply {
             minValue = 0
             maxValue = 300
             value = person.height.toInt()
         }
 
+        val decimalPicker = NumberPicker(requireContext()).apply {
+            minValue = 0
+            maxValue = 9
+            value = ((person.height - person.height.toInt()) * 10).toInt()
+        }
+
+        val decimalPoint = TextView(requireContext()).apply {
+            text = "."
+            gravity = Gravity.CENTER
+        }
+
+        val layout = LinearLayout(requireContext()).apply {
+            orientation = LinearLayout.HORIZONTAL
+            gravity = Gravity.CENTER
+            addView(integerPicker)
+            addView(decimalPoint)
+            addView(decimalPicker)
+        }
+
         val builder = AlertDialog.Builder(requireContext())
         builder.setTitle("Update Height")
-        builder.setView(numberPicker)
+        builder.setView(layout)
         builder.setPositiveButton("OK") { dialog, _ ->
-            val height = numberPicker.value.toDouble()
+            val height = integerPicker.value + decimalPicker.value / 10.0
             lifecycleScope.launch {
                 controller.setHeight(height)
+                heightValue.text = height.toString() + " cm"
             }
             dialog.dismiss()
         }
@@ -199,8 +244,8 @@ class ProfileFragment : Fragment() {
                 lastname = "Doe",
                 birthday = "2000-01-01",
                 gender = "Male",
-                height = "180",
-                weight = "80"
+                height = 180.0,
+                weight = 80.0
             )
             controller.upsertPerson(newPerson)
             person = newPerson

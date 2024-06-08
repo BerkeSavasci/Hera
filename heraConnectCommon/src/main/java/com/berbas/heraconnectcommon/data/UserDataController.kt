@@ -46,7 +46,7 @@ class UserDataController(private val dao: PersonDao, private val id: Int) : Data
     /**
      * get a person from the database by their id and return their height
      */
-    suspend fun getPersonHeightById(id: Int): String {
+    suspend fun getPersonHeightById(id: Int): Double {
         return withContext(Dispatchers.IO) {
             dao.getPersonById(id).height
         }
@@ -55,7 +55,7 @@ class UserDataController(private val dao: PersonDao, private val id: Int) : Data
     /**
      * get a person from the database by their id and return their weight
      */
-    suspend fun getPersonWeightById(id: Int): String {
+    suspend fun getPersonWeightById(id: Int): Double {
         return withContext(Dispatchers.IO) {
             dao.getPersonById(id).weight
         }
@@ -132,7 +132,7 @@ class UserDataController(private val dao: PersonDao, private val id: Int) : Data
     override suspend fun setWeight(weight: Double) {
         withContext(Dispatchers.IO) {
             val person = dao.getPersonById(id)
-            person.weight = weight.toString() // Assuming the weight is stored as a string
+            person.weight = weight
             dao.upsertPerson(person)
         }
     }
@@ -140,7 +140,7 @@ class UserDataController(private val dao: PersonDao, private val id: Int) : Data
     override suspend fun setHeight(height: Double) {
         withContext(Dispatchers.IO) {
             val person = dao.getPersonById(id)
-            person.height = height.toString() // Assuming the height is stored as a string
+            person.height = height
             dao.upsertPerson(person)
         }
     }
