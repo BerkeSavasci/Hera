@@ -6,14 +6,20 @@
     android:orientation="vertical"
     android:padding="16dp">
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingBottom="16dp"
+        android:text="Profile"
+        android:textSize="24sp"/>
+
     <!-- Title -->
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
         android:paddingBottom="16dp"
         android:text="About You"
-        android:textSize="24sp" />
+        android:textSize="16sp" />
 
     <View
         android:layout_width="match_parent"
@@ -40,24 +46,34 @@
             card_view:cardCornerRadius="8dp"
             card_view:cardElevation="4dp">
 
-            <LinearLayout
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
                 android:padding="16dp">
 
                 <TextView
-                    android:id="@+id/genderValue"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:textSize="18sp" />
-
-                <ImageView
+                    android:id="@+id/genderTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@android:drawable/ic_menu_edit" />
-            </LinearLayout>
+                    android:layout_alignParentStart="true"
+                    android:text="Gender"
+                    android:textSize="11sp" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/genderTitle"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/genderValue"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingStart="2dp"
+                        android:paddingEnd="45dp"
+                        android:textSize="18sp" />
+                </LinearLayout>
+            </RelativeLayout>
         </androidx.cardview.widget.CardView>
 
         <!-- Birthday Row -->
@@ -69,28 +85,38 @@
             android:layout_weight="1"
             android:clickable="true"
             android:focusable="true"
-            android:onClick="onBirthDayCardClicked"
+            android:onClick="onWeightCardClicked"
             card_view:cardCornerRadius="8dp"
             card_view:cardElevation="4dp">
 
-            <LinearLayout
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
                 android:padding="16dp">
 
                 <TextView
-                    android:id="@+id/birthdayValue"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:textSize="18sp" />
-
-                <ImageView
+                    android:id="@+id/birthdayTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@android:drawable/ic_menu_edit" />
-            </LinearLayout>
+                    android:layout_alignParentStart="true"
+                    android:text="Birthday"
+                    android:textSize="11sp" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/birthdayTitle"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/birthdayValue"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingStart="2dp"
+                        android:paddingEnd="45dp"
+                        android:textSize="18sp" />
+                </LinearLayout>
+            </RelativeLayout>
         </androidx.cardview.widget.CardView>
     </LinearLayout>
 
@@ -140,12 +166,6 @@
                         android:paddingStart="2dp"
                         android:paddingEnd="45dp"
                         android:textSize="18sp" />
-
-                    <ImageView
-                        android:id="@+id/editIconWeight"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@android:drawable/ic_menu_edit" />
                 </LinearLayout>
             </RelativeLayout>
         </androidx.cardview.widget.CardView>
@@ -189,12 +209,6 @@
                         android:paddingStart="2dp"
                         android:paddingEnd="43dp"
                         android:textSize="18sp" />
-
-                    <ImageView
-                        android:id="@+id/editIconHeight"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@android:drawable/ic_menu_edit" />
                 </LinearLayout>
             </RelativeLayout>
         </androidx.cardview.widget.CardView>

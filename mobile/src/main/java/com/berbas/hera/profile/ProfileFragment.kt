@@ -117,6 +117,7 @@ class ProfileFragment : Fragment() {
         builder.setItems(options) { dialog, which ->
             lifecycleScope.launch {
                 controller.setGender(options[which])
+                genderValue.text = options[which]
             }
             dialog.dismiss()
         }
@@ -141,6 +142,7 @@ class ProfileFragment : Fragment() {
                             selectedDate.atStartOfDay(ZoneId.systemDefault()).toInstant()
                         )
                     )
+                    birthdayValue.text = controller.getPersonBirthdayById(personID)
                 }
             }, year, month, day)
 
@@ -183,7 +185,7 @@ class ProfileFragment : Fragment() {
             val weight = integerPicker.value + decimalPicker.value / 10.0
             lifecycleScope.launch {
                 controller.setWeight(weight)
-                weightValue.text = weight.toString() + " kg"
+                weightValue.text = "$weight kg"
             }
             dialog.dismiss()
         }
@@ -227,7 +229,7 @@ class ProfileFragment : Fragment() {
             val height = integerPicker.value + decimalPicker.value / 10.0
             lifecycleScope.launch {
                 controller.setHeight(height)
-                heightValue.text = height.toString() + " cm"
+                heightValue.text = "$height cm"
             }
             dialog.dismiss()
         }
