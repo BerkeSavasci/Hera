@@ -26,6 +26,13 @@ interface BluetoothControllerInterface {
     fun release()
 
     /**
+     * send a message to the connected device
+     * @param message String the message to send
+     * @return PersonDataMessage? the message that was sent
+     */
+    suspend fun trySendMessage(message: String): PersonDataMessage?
+
+    /**
      * start the bluetooth server
      * @return Flow<ConnectionResult>
      */

@@ -12,6 +12,7 @@ import android.content.Context
 import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.util.Log
+import com.berbas.heraconnectcommon.protocolEngine.BluetoothProtocolEngine
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
@@ -34,6 +35,8 @@ class BluetoothConnection(
     private val bluetoothAdapter by lazy {
         bluetoothManager?.adapter
     }
+
+    private var dataTransferService: BluetoothDataTransferService? = null
 
     private val _isConnected = MutableStateFlow<Boolean>(false)
     override val isConnected: StateFlow<Boolean>
@@ -115,6 +118,28 @@ class BluetoothConnection(
         closeConnection()
     }
 
+    override suspend fun trySendMessage(message: String): PersonDataMessage? {
+        if (!hasPermissions(Manifest.permission.BLUETOOTH_CONNECT)) {
+            return null
+        }
+
+        if (dataTransferService == null) {
+            return null
+        }
+
+        val personDataMessage =
+            PersonDataMessage(
+                message = message, senderName = bluetoothAdapter?.name ?: "Unkonwn",
+                isFromMobile = true
+            )
+        dataTransferService?.sendMessage(
+            BluetoothProtocolEngine().run {
+                personDataMessage.toByteArray()
+            }
+        )
+        return personDataMessage
+    }
+
     override fun startBluetoothServer(): Flow<ConnectionResult> {
         return flow {
             if (!hasPermissions(Manifest.permission.BLUETOOTH_CONNECT)) {
@@ -141,6 +166,10 @@ class BluetoothConnection(
                 // after accepting the connection, close the server socket
                 currentClientSocket?.let {
                     currentServerSocket?.close()
+                    val service = BluetoothDataTransferService(it)
+                    dataTransferService = service
+
+                    emitAll(service.listenForIncomingMessages())
                 }
             }
         }.onCompletion {
@@ -158,11 +187,12 @@ class BluetoothConnection(
 
             // connect to the device
             currentClientSocket = bluetoothDevice
-                ?.createRfcommSocketToServiceRecord(UUID.fromString(SERVICE_UUID)
+                ?.createRfcommSocketToServiceRecord(
+                    UUID.fromString(SERVICE_UUID)
                 )
             stopDiscovery()
 
-            if(bluetoothAdapter?.bondedDevices?.contains(bluetoothDevice) == false){
+            if (bluetoothAdapter?.bondedDevices?.contains(bluetoothDevice) == false) {
 
 
             }
@@ -172,7 +202,12 @@ class BluetoothConnection(
                     socket.connect()
                     emit(ConnectionResult.ConnectionSuccess)
 
-                }catch (e: IOException) {
+                    BluetoothDataTransferService(socket).also {
+                        dataTransferService = it
+                        emitAll(it.listenForIncomingMessages())
+                    }
+
+                } catch (e: IOException) {
                     socket.close()
                     currentClientSocket = null
                     emit(ConnectionResult.ConnectionFailure("Failed to connect to the device"))

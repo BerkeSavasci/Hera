@@ -2,7 +2,7 @@ plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
     id("kotlin-kapt")
-
+    id("com.google.dagger.hilt.android")
 }
 
 android {
@@ -50,6 +50,16 @@ dependencies {
     androidTestImplementation(composeBom)
     implementation(libs.androidx.ui)
 
+    implementation("com.google.dagger:hilt-android:2.48")
+    kapt("com.google.dagger:hilt-android-compiler:2.48")
+
+    // OPTIONAL: For instrumentation tests
+    androidTestImplementation("com.google.dagger:hilt-android-testing:2.44.2")
+    kaptAndroidTest("com.google.dagger:hilt-compiler:2.44.2")
+    // OPTIONAL: For local unit tests
+    testImplementation("com.google.dagger:hilt-android-testing:2.44.2")
+    kaptTest("com.google.dagger:hilt-compiler:2.44.2")
+
     implementation("androidx.compose.ui:ui-tooling-preview")
     debugImplementation("androidx.compose.ui:ui-tooling")
 
@@ -76,4 +86,9 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     wearApp(project(":wear"))
+}
+// Allow references to generated code
+
+kapt{
+    correctErrorTypes = true
 }

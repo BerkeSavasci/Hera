@@ -3,23 +3,22 @@ package com.berbas.hera.profile
 import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.content.ContentValues.TAG
-import android.nfc.Tag
 import android.os.Bundle
-import android.text.InputType
 import android.util.Log
 import android.view.Gravity
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.NumberPicker
 import android.widget.TextView
-import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
-import androidx.room.Room
 import com.berbas.hera.R
 import com.berbas.heraconnectcommon.data.UserDataController
 import com.berbas.heraconnectcommon.localData.Person
@@ -37,8 +36,6 @@ import java.util.Date
  * create an instance of this fragment.
  */
 class ProfileFragment : Fragment() {
-    //TODO Allow the user to edit their profile information
-
     private var personID: Int = 0
     private var isPersonInitialized = false
     private lateinit var genderValue: TextView
@@ -46,13 +43,7 @@ class ProfileFragment : Fragment() {
     private lateinit var weightValue: TextView
     private lateinit var heightValue: TextView
 
-    private val db by lazy {
-        Room.databaseBuilder(
-            requireContext(),
-            PersonDataBase::class.java,
-            "person.db"
-        ).fallbackToDestructiveMigration().build()
-    }
+    private lateinit var db: PersonDataBase
 
     private val controller by lazy {
         UserDataController(db.dao, personID)
@@ -63,7 +54,6 @@ class ProfileFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         personID = arguments?.getInt("personID") ?: 0
         Log.d(TAG, "onCreate: personID: $personID")
 
@@ -75,11 +65,12 @@ class ProfileFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_profile, container, false)
+
     }
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         genderValue = view.findViewById(R.id.genderValue)
         birthdayValue = view.findViewById(R.id.birthdayValue)
         weightValue = view.findViewById(R.id.weightValue)
@@ -237,10 +228,15 @@ class ProfileFragment : Fragment() {
         builder.show()
     }
 
+    /**
+     * Initialize the person object
+     * If the person does not exist, create a new default one
+     * If the person exists, fetch the person object
+     */
     private suspend fun initializePerson() {
         val existingPerson = controller.getPersonById(personID)
         if (existingPerson == null) {
-            // If not, create a new Person object
+            // If null, create a new Person object
             val newPerson = Person(
                 firstname = "John",
                 lastname = "Doe",
@@ -257,20 +253,27 @@ class ProfileFragment : Fragment() {
         isPersonInitialized = true
     }
 
+    override fun onResume() {
+        super.onResume()
+        (activity as? AppCompatActivity)?.supportActionBar?.title = "Profile"
+    }
+
     companion object {
         /**
          * Use this factory method to create a new instance of
          * this fragment using the provided parameters.
          *
          * @param personID the ID of the person to display the profile for
+         * @param db the person Database
          * @return A new instance of fragment ProfileFragment.
          */
         @JvmStatic
-        fun newInstance(personID: Int) =
+        fun newInstance(personID: Int, db: PersonDataBase) =
             ProfileFragment().apply {
                 arguments = Bundle().apply {
                     putInt("personID", personID)
                 }
+                this.db = db
             }
     }
 }

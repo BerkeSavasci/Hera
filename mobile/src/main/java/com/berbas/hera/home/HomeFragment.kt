@@ -15,6 +15,8 @@ import com.berbas.hera.R
 import com.berbas.heraconnectcommon.connection.BluetoothConnection
 import com.berbas.heraconnectcommon.connection.BluetoothDeviceDomain
 import com.berbas.heraconnectcommon.connection.ConnectionResult
+import com.berbas.heraconnectcommon.data.UserDataController
+import com.berbas.heraconnectcommon.localData.PersonDataBase
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
@@ -27,6 +29,12 @@ import kotlinx.coroutines.flow.onEach
 class HomeFragment : Fragment() {
     private lateinit var bluetoothConnection: BluetoothConnection
     private lateinit var devicesAdapter: ArrayAdapter<BluetoothDeviceDomain>
+    private lateinit var db: PersonDataBase
+    private var personID: Int = 0
+
+    private val controller by lazy {
+        UserDataController(db.dao, personID)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,17 +52,43 @@ class HomeFragment : Fragment() {
         // Set an item click listener on the ListView
         devicesListView.setOnItemClickListener { parent, view, position, id ->
             val device = devicesAdapter.getItem(position)
-            // Handle the device click here
-            Toast.makeText(context, "Device clicked: ${device?.name}", Toast.LENGTH_SHORT).show()
+
             if (device != null) {
                 bluetoothConnection.connectToDevice(device).onEach { result ->
                     when (result) {
                         is ConnectionResult.ConnectionSuccess -> {
-                            Toast.makeText(context, "Connected to device: ${device.name}", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(
+                                context,
+                                "Connected to device: ${device.name}",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            val message = getPersonData(personID)
+                            val sentMessage = bluetoothConnection.trySendMessage(message)
+                            sentMessage?.let {
+                                Toast.makeText(
+                                    context,
+                                    "Message sent: ${it.message}",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            } ?: run {
+                                Toast.makeText(
+                                    context,
+                                    "Failed to send message",
+                                    Toast.LENGTH_SHORT
+                                )
+                                    .show()
+                            }
                         }
+
                         is ConnectionResult.ConnectionFailure -> {
-                            Toast.makeText(context, "Failed to connect to device: ${device.name}", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(
+                                context,
+                                "Failed to connect to device: ${device.name}",
+                                Toast.LENGTH_SHORT
+                            ).show()
                         }
+
+                        is ConnectionResult.TransferSuccess -> TODO()
                     }
                 }.launchIn(viewLifecycleOwner.lifecycleScope)
             }
@@ -72,6 +106,7 @@ class HomeFragment : Fragment() {
         stopScanButton.setOnClickListener {
             Log.d("HomeFragment", "Stop Scan button clicked")
             bluetoothConnection.stopDiscovery()
+
         }
 
         // Handle start server button click
@@ -81,10 +116,22 @@ class HomeFragment : Fragment() {
             bluetoothConnection.startBluetoothServer().onEach { result ->
                 when (result) {
                     is ConnectionResult.ConnectionSuccess -> {
-                        Toast.makeText(context, "Server started successfully", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, "Server started successfully", Toast.LENGTH_SHORT)
+                            .show()
+
                     }
+
                     is ConnectionResult.ConnectionFailure -> {
                         Toast.makeText(context, "Failed to start server", Toast.LENGTH_SHORT).show()
+                    }
+
+                    is ConnectionResult.TransferSuccess -> {
+                        Toast.makeText(
+                            context,
+                            "The data transfer was successful",
+                            Toast.LENGTH_SHORT
+                        ).show()
+
                     }
                 }
             }.launchIn(viewLifecycleOwner.lifecycleScope)
@@ -94,13 +141,21 @@ class HomeFragment : Fragment() {
         // Observe scannedDevices state flow
         bluetoothConnection.scannedDevices.onEach { devices ->
             devicesAdapter.clear()
-            val devicesWithName = devices.filter { it.name != null}
+            val devicesWithName = devices.filter { it.name != null }
             devicesAdapter.addAll(devicesWithName)
         }.launchIn(viewLifecycleOwner.lifecycleScope)
 
         return view
     }
 
+    private suspend fun getPersonData(personID: Int): String {
+        val person = controller.getPersonById(personID)
+        Log.d("HomeFragment", "Person data: $person with personID: $personID")
+
+        return "Name: ${person?.firstname} ${person?.lastname}, " +
+                "Birthday: ${person?.birthday}, Gender: ${person?.gender}, " +
+                "Height: ${person?.height}, Weight: ${person?.weight}"
+    }
 
     companion object {
         /**
@@ -112,10 +167,17 @@ class HomeFragment : Fragment() {
          * @return A new instance of fragment Home.
          */
         @JvmStatic
-        fun newInstance(bluetoothConnection: BluetoothConnection, devicesAdapter: ArrayAdapter<BluetoothDeviceDomain>) =
+        fun newInstance(
+            personID: Int,
+            bluetoothConnection: BluetoothConnection,
+            devicesAdapter: ArrayAdapter<BluetoothDeviceDomain>,
+            db: PersonDataBase
+        ) =
             HomeFragment().apply {
+                this.personID = personID
                 this.bluetoothConnection = bluetoothConnection
                 this.devicesAdapter = devicesAdapter
+                this.db = db;
             }
     }
 }

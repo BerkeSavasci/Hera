@@ -8,10 +8,16 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.ArrayAdapter
+import androidx.appcompat.widget.Toolbar
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import androidx.core.view.GravityCompat
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import com.berbas.hera.databinding.ActivityMainBinding
 import com.berbas.hera.goals.GoalFragment
@@ -20,6 +26,10 @@ import com.berbas.hera.profile.ProfileFragment
 import com.berbas.heraconnectcommon.connection.BluetoothConnection
 import com.berbas.heraconnectcommon.connection.BluetoothDeviceDomain
 import androidx.health.connect.client.HealthConnectClient
+import androidx.room.Room
+import com.berbas.hera.profile.SyncActivity
+import com.berbas.heraconnectcommon.localData.PersonDataBase
+import com.google.android.material.navigation.NavigationView
 
 class MainActivity : AppCompatActivity() {
 
@@ -28,7 +38,18 @@ class MainActivity : AppCompatActivity() {
     private lateinit var devicesAdapter: ArrayAdapter<BluetoothDeviceDomain>
     private lateinit var healthConnectClient: HealthConnectClient
 
+    private lateinit var drawerLayout: DrawerLayout
+    private lateinit var navigationView: NavigationView
+
     private var userID: Int = 0
+
+    private val db by lazy {
+        Room.databaseBuilder(
+            this,
+            PersonDataBase::class.java,
+            "person.db"
+        ).fallbackToDestructiveMigration().build()
+    }
 
     var bluetoothEnabled = false
 
@@ -45,6 +66,31 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        val toolbar: Toolbar = findViewById(R.id.toolbar)
+        setSupportActionBar(toolbar)
+
+        drawerLayout = findViewById(R.id.drawer_layout)
+        navigationView = findViewById(R.id.nav_view)
+
+        val toggle = ActionBarDrawerToggle(
+            this, drawerLayout, toolbar,
+            R.string.navigation_drawer_open, R.string.navigation_drawer_close
+        )
+        drawerLayout.addDrawerListener(toggle)
+        toggle.syncState()
+
+        navigationView.setNavigationItemSelectedListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.nav_sync_devices -> {
+                    // Handle "Sync Devices" menu item click here
+                    val intent = Intent(this, SyncActivity::class.java)
+                    startActivity(intent)
+                }
+            }
+            drawerLayout.closeDrawer(GravityCompat.START)
+            true
+        }
+
         // create the bluetooth connection and the adapter for the devices
         bluetoothConnection = BluetoothConnection(this)
         devicesAdapter = ArrayAdapter(this, android.R.layout.simple_list_item_1)
@@ -54,23 +100,22 @@ class MainActivity : AppCompatActivity() {
         userID = 1
 
         // reference to the fragments so they don't get recreated every time
-        val homeFragment = HomeFragment.newInstance(bluetoothConnection, devicesAdapter)
-        val goalFragment = GoalFragment.newInstance("placeholder", "placeholder")
-        val profileFragment = ProfileFragment.newInstance(userID)
+        val homeFragment = HomeFragment.newInstance(userID, bluetoothConnection, devicesAdapter, db)
+        val goalFragment = GoalFragment.newInstance(userID, db)
+        val profileFragment = ProfileFragment.newInstance(userID, db)
 
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        replaceFragment(homeFragment)
+        replaceFragment(homeFragment, "Home")
         binding.bottomNavigationView.selectedItemId = R.id.home
 
         binding.bottomNavigationView.setOnItemSelectedListener {
             when (it.itemId) {
-                R.id.home -> replaceFragment(homeFragment)
-                R.id.goals -> replaceFragment(goalFragment)
-                R.id.profile -> replaceFragment(profileFragment)
+                R.id.home -> replaceFragment(homeFragment, "Home")
+                R.id.goals -> replaceFragment(goalFragment, "Goals")
+                R.id.profile -> replaceFragment(profileFragment, "Profile")
                 else -> {
-
                 }
             }
             true
@@ -106,6 +151,13 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    override fun onBackPressed() {
+        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            drawerLayout.closeDrawer(GravityCompat.START)
+        } else {
+            super.onBackPressed()
+        }
+    }
 
     override fun onRequestPermissionsResult(
         requestCode: Int,
@@ -124,11 +176,12 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    private fun replaceFragment(fragment: Fragment) {
+    private fun replaceFragment(fragment: Fragment, title: String) {
         supportFragmentManager.beginTransaction().apply {
             replace(R.id.frame_layout, fragment)
             commit()
         }
+        supportActionBar?.title = title
     }
 
     override fun onDestroy() {
@@ -137,24 +190,24 @@ class MainActivity : AppCompatActivity() {
     }
 
     // TODO: Health Connect Permissions request
-/*    private fun launchHealthConnectPermissions() {
-        healthConnectClient.permissionController.requestPermissions(
-            permissions = setOf(
-                StepsRecord::class,
-                HeartRateRecord::class,
-                SleepSessionRecord::class
-            ),
-            permissionsLauncher = registerForActivityResult(
-                ActivityResultContracts.RequestMultiplePermissions()
-            ) { result ->
-                if (result.all { it.value }) {
-                    // Permissions granted
-                    readFitnessData()
-                } else {
-                    // Handle permission denial
-                    Log.d("Permissions", "Not all permissions granted")
+    /*    private fun launchHealthConnectPermissions() {
+            healthConnectClient.permissionController.requestPermissions(
+                permissions = setOf(
+                    StepsRecord::class,
+                    HeartRateRecord::class,
+                    SleepSessionRecord::class
+                ),
+                permissionsLauncher = registerForActivityResult(
+                    ActivityResultContracts.RequestMultiplePermissions()
+                ) { result ->
+                    if (result.all { it.value }) {
+                        // Permissions granted
+                        readFitnessData()
+                    } else {
+                        // Handle permission denial
+                        Log.d("Permissions", "Not all permissions granted")
+                    }
                 }
-            }
-        )
-    }*/
+            )
+        }*/
 }
