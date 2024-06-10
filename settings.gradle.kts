@@ -23,3 +23,4 @@ rootProject.name = "Hera"
 include(":mobile")
 include(":wear")
 include(":heraConnectCommon")
+include(":fittrackapp")

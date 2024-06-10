@@ -1,13 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item android:title="Goals"
+    <item
+        android:title="Goals"
         android:id="@+id/goals"
         android:icon="@drawable/baseline_assistant_photo_24"/>
-    <item android:title="Home"
+    <item
+        android:title="Home"
         android:id="@+id/home"
         android:icon="@drawable/baseline_home_24"/>
-    <item android:title="Profile"
+    <item
+        android:title="Profile"
         android:id="@+id/profile"
         android:icon="@drawable/baseline_account_circle_24"/>
 
