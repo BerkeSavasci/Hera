@@ -1,25 +1,26 @@
 package com.berbas.fittrackapp.screens.profile
 
 import android.app.DatePickerDialog
-import android.content.res.Resources
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Build
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
+import com.berbas.fittrackapp.navigation.Screen
 import com.berbas.fittrackapp.ui.theme.HeraTheme
 import java.util.*
 
 @Composable
-fun ProfileScreen(viewModel: ProfileViewModel) {
+fun ProfileScreen(viewModel: ProfileViewModel, navController: NavHostController) {
     HeraTheme {
         val state = viewModel.state.collectAsState()
 
@@ -30,8 +31,10 @@ fun ProfileScreen(viewModel: ProfileViewModel) {
                     backgroundColor = MaterialTheme.colors.primary,
                     contentColor = Color.White,
                     actions = {
-                        IconButton(onClick = { /* Handle sync action here */ }) {
-                            Icon(Icons.Default.Refresh, contentDescription = "Sync")
+                        IconButton(onClick = {
+                            navController.navigate(Screen.BLUETOOTHSCREEN.name)
+                        }) {
+                            Icon(Icons.Default.Build, contentDescription = "Sync")
                         }
                     }
                 )

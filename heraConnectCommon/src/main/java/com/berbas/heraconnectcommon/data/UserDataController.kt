@@ -1,21 +1,24 @@
 package com.berbas.heraconnectcommon.data
 
-import com.berbas.heraconnectcommon.localData.Person
-import com.berbas.heraconnectcommon.localData.PersonDao
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
 import java.time.LocalTime
 import java.util.Date
 import java.util.Locale
 
+/*
 /**
- *  USerDataController class is responsible for fetching and sending user data such as Settings User
+ *  UserDataController class is responsible for fetching and sending user data such as Settings User
  *  specific information, goals.
  *  Additionally, it is responsible for processing the data such as clean up duplicates.
  *
  */
-class UserDataController(private val dao: PersonDao, private val id: Int) : DataController, ProfileActionsManagerInterface{
+class UserDataController(private val dao: PersonDao, private val id: Int) : DataController,
+    ProfileActionsManagerInterface {
+
     override fun fetch(fetchedData: Any): Any {
         TODO("Not yet implemented")
     }
@@ -37,7 +40,7 @@ class UserDataController(private val dao: PersonDao, private val id: Int) : Data
     /**
      * get a person from the database by their id
      */
-    suspend fun getPersonById(id: Int): Person? {
+    suspend fun getPerson(): Flow<Person> {
         return withContext(Dispatchers.IO) {
             dao.getPersonById(id)
         }
@@ -46,36 +49,36 @@ class UserDataController(private val dao: PersonDao, private val id: Int) : Data
     /**
      * get a person from the database by their id and return their height
      */
-    suspend fun getPersonHeightById(id: Int): Double {
+    suspend fun getPersonHeight(): Double {
         return withContext(Dispatchers.IO) {
-            dao.getPersonById(id).height
+            dao.getPersonById(id).first().height
         }
     }
 
     /**
      * get a person from the database by their id and return their weight
      */
-    suspend fun getPersonWeightById(id: Int): Double {
+    suspend fun getPersonWeight(): Double {
         return withContext(Dispatchers.IO) {
-            dao.getPersonById(id).weight
+            dao.getPersonById(id).first().weight
         }
     }
 
     /**
      * get a person from the database by their id and return their birthday
      */
-    suspend fun getPersonBirthdayById(id: Int): String {
+    suspend fun getPersonBirthday(): String {
         return withContext(Dispatchers.IO) {
-            dao.getPersonById(id).birthday
+            dao.getPersonById(id).first().birthday
         }
     }
 
     /**
      * get a person from the database by their id and return their gender
      */
-    suspend fun getPersonGenderById(id: Int): String {
+    suspend fun getPersonGender(): String {
         return withContext(Dispatchers.IO) {
-            dao.getPersonById(id).gender
+            dao.getPersonById(id).first().gender
         }
     }
 
@@ -108,7 +111,7 @@ class UserDataController(private val dao: PersonDao, private val id: Int) : Data
      */
     override suspend fun setGender(gender: String) {
         withContext(Dispatchers.IO) {
-            val person = dao.getPersonById(id)
+            val person = dao.getPersonById(id).first()
             person.gender = gender
             dao.upsertPerson(person)
         }
@@ -122,16 +125,17 @@ class UserDataController(private val dao: PersonDao, private val id: Int) : Data
      */
     override suspend fun setBirthDate(birthDate: Date) {
         withContext(Dispatchers.IO) {
-            val person = dao.getPersonById(id)
+            val person = dao.getPersonById(id).first()
             val dateFormat = SimpleDateFormat("dd MM yy", Locale.getDefault())
-            person.birthday = dateFormat.format(birthDate) // Assuming the date is stored as a string
+            person.birthday =
+                dateFormat.format(birthDate) // Assuming the date is stored as a string
             dao.upsertPerson(person)
         }
     }
 
     override suspend fun setWeight(weight: Double) {
         withContext(Dispatchers.IO) {
-            val person = dao.getPersonById(id)
+            val person = dao.getPersonById(id).first()
             person.weight = weight
             dao.upsertPerson(person)
         }
@@ -139,9 +143,11 @@ class UserDataController(private val dao: PersonDao, private val id: Int) : Data
 
     override suspend fun setHeight(height: Double) {
         withContext(Dispatchers.IO) {
-            val person = dao.getPersonById(id)
+            val person = dao.getPersonById(id).first()
             person.height = height
             dao.upsertPerson(person)
         }
     }
 }
+
+ */

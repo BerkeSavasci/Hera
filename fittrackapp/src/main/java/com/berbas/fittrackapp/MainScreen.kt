@@ -17,6 +17,9 @@ import androidx.compose.material.Text
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
+import com.berbas.fittrackapp.navigation.AppScreens
+import com.berbas.fittrackapp.navigation.BottomBarScreens
+import com.berbas.fittrackapp.navigation.BottomNavGraph
 import com.berbas.fittrackapp.screens.profile.ProfileViewModel
 
 /**
@@ -26,8 +29,16 @@ import com.berbas.fittrackapp.screens.profile.ProfileViewModel
 @Composable
 fun MainScreen(viewModel: ProfileViewModel) {
     val navController = rememberNavController()
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentDestination = navBackStackEntry?.destination
+
     Scaffold(
-        bottomBar = { BottomBar(navController = navController) }
+        bottomBar = {
+            // Check if the current destination is not the Bluetooth screen
+            if (currentDestination?.route != AppScreens.Bluetooth.route) {
+                BottomBar(navController = navController)
+            }
+        }
     ) {
         BottomNavGraph(navController = navController, viewModel = viewModel)
     }
@@ -40,9 +51,9 @@ fun MainScreen(viewModel: ProfileViewModel) {
 @Composable
 fun BottomBar(navController: NavHostController) {
     val screens = listOf(
-        BottomBarScreen.Goals,
-        BottomBarScreen.Home,
-        BottomBarScreen.Profile
+        BottomBarScreens.Goals,
+        BottomBarScreens.Home,
+        BottomBarScreens.Profile
     )
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
@@ -65,7 +76,7 @@ fun BottomBar(navController: NavHostController) {
  */
 @Composable
 fun RowScope.AddItem(
-    screen: BottomBarScreen,
+    screen: BottomBarScreens,
     currentDestination: NavDestination?,
     navController: NavHostController
 ) {

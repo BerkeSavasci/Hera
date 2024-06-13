@@ -133,7 +133,7 @@ class ProfileFragment : Fragment() {
                             selectedDate.atStartOfDay(ZoneId.systemDefault()).toInstant()
                         )
                     )
-                    birthdayValue.text = controller.getPersonBirthdayById(personID)
+                    birthdayValue.text = controller.getPersonBirthday()
                 }
             }, year, month, day)
 
@@ -234,7 +234,7 @@ class ProfileFragment : Fragment() {
      * If the person exists, fetch the person object
      */
     private suspend fun initializePerson() {
-        val existingPerson = controller.getPersonById(personID)
+        val existingPerson = controller.getPerson()
         if (existingPerson == null) {
             // If null, create a new Person object
             val newPerson = Person(

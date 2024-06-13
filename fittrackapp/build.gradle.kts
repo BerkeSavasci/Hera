@@ -90,6 +90,7 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.lifecycle.livedata.ktx.v231)
+    implementation(libs.appcompat)
 
     // default testing
     testImplementation(libs.junit)
