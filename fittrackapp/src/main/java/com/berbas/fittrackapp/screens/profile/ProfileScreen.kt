@@ -1,67 +1,74 @@
 package com.berbas.fittrackapp.screens.profile
 
 import android.app.DatePickerDialog
+import android.content.res.Resources
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.berbas.fittrackapp.ui.theme.HeraTheme
 import java.util.*
 
 @Composable
 fun ProfileScreen(viewModel: ProfileViewModel) {
-    val state = viewModel.state.collectAsState()
+    HeraTheme {
+        val state = viewModel.state.collectAsState()
 
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color(0xFF121212)) // Dark background
-    ) {
-        Column(
-            modifier = Modifier.padding(16.dp)
-        ) {
-            ProfileHeader()
-            AboutYouSection()
-            GenderAndBirthdayRow(
-                gender = state.value.gender,
-                onGenderSelected = { newValue -> viewModel.onEvent(PersonEvent.SetGender(newValue)) },
-                birthday = state.value.birthday,
-                onBirthdaySelected = { newValue ->
-                    viewModel.onEvent(
-                        PersonEvent.SetBirthday(
-                            newValue
-                        )
+        Scaffold(
+            topBar = {
+                TopAppBar(
+                    title = { Text("Profile") },
+                    backgroundColor = MaterialTheme.colors.primary,
+                    contentColor = Color.White,
+                    actions = {
+                        IconButton(onClick = { /* Handle sync action here */ }) {
+                            Icon(Icons.Default.Refresh, contentDescription = "Sync")
+                        }
+                    }
+                )
+            }
+        ) { paddingValues ->
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(MaterialTheme.colors.onBackground)
+                    .padding(paddingValues)
+            ) {
+                Column(
+                    modifier = Modifier.padding(16.dp)
+                ) {
+                    AboutYouSection()
+                    GenderAndBirthdayRow(
+                        gender = state.value.gender,
+                        onGenderSelected = { newValue -> viewModel.onEvent(PersonEvent.SetGender(newValue)) },
+                        birthday = state.value.birthday,
+                        onBirthdaySelected = { newValue ->
+                            viewModel.onEvent(
+                                PersonEvent.SetBirthday(
+                                    newValue
+                                )
+                            )
+                        }
+                    )
+                    WeightAndHeightRow(
+                        weight = state.value.weight,
+                        onWeightChange = { newValue -> viewModel.onEvent(PersonEvent.SetWeight(newValue.toDouble())) },
+                        height = state.value.height,
+                        onHeightChange = { newValue -> viewModel.onEvent(PersonEvent.SetHeight(newValue.toDouble())) }
                     )
                 }
-            )
-            WeightAndHeightRow(
-                weight = state.value.weight,
-                onWeightChange = { newValue -> viewModel.onEvent(PersonEvent.SetWeight(newValue.toDouble())) },
-                height = state.value.height,
-                onHeightChange = { newValue -> viewModel.onEvent(PersonEvent.SetHeight(newValue.toDouble())) }
-            )
+            }
         }
     }
-}
-
-@Composable
-fun ProfileHeader() {
-    Text(
-        text = "Profile",
-        fontSize = 30.sp,
-        fontWeight = FontWeight.Bold,
-        color = Color.White,
-        modifier = Modifier.padding(vertical = 16.dp)
-    )
 }
 
 @Composable
