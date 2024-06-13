@@ -2,13 +2,12 @@ package com.berbas.heraconnectcommon.localData
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import java.time.LocalDate
 
 /**
  * Data class for a person
  * each variable is a field in the database
  */
-@Entity
+@Entity(tableName = "Person")
 data class Person(
     var firstname: String,
     var lastname: String,
@@ -19,3 +18,4 @@ data class Person(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0
 )
+

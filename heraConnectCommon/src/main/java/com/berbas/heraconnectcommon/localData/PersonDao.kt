@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Query
 import androidx.room.Upsert
+import kotlinx.coroutines.flow.Flow
 
 /**
  * Data access object for the person table
@@ -28,13 +29,14 @@ interface PersonDao {
      * Get a person from the database by their id
      */
     @Query("SELECT * FROM Person WHERE id = :id")
-    fun getPersonById(id: Int): Person
+    fun getPersonById(id: Int): Flow<Person>
 
     /**
      * Get a person from the database by their name
      */
     @Query("SELECT * FROM Person WHERE firstname = :firstname AND lastname = :lastname")
-    fun getPersonByName(firstname: String, lastname: String): Person
+    fun getPersonByName(firstname: String, lastname: String): Flow<Person>
 
 
 }
+

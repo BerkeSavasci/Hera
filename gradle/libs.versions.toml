@@ -9,6 +9,7 @@ junit = "4.13.2"
 junitVersion = "1.1.5"
 espressoCore = "3.5.1"
 appcompat = "1.6.1"
+lifecycleLivedataKtxVersion = "2.3.1"
 mockk = "1.12.0"
 mongodbDriverKotlin = "1.7.2"
 mongodbDriverKotlinCoroutine = "5.1.0"
@@ -38,6 +39,7 @@ lifecycleRuntimeKtx = "2.8.1"
 androidx-connect-client = { module = "androidx.health.connect:connect-client", version.ref = "connectClient" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-foundation = { module = "androidx.compose.foundation:foundation" }
+androidx-lifecycle-livedata-ktx-v231 = { module = "androidx.lifecycle:lifecycle-livedata-ktx", version.ref = "lifecycleLivedataKtxVersion" }
 bson-kotlinx = { module = "org.mongodb:bson-kotlinx", version.ref = "bsonKotlinx" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
