@@ -21,13 +21,17 @@ import com.berbas.fittrackapp.navigation.AppScreens
 import com.berbas.fittrackapp.navigation.BottomBarScreens
 import com.berbas.fittrackapp.navigation.BottomNavGraph
 import com.berbas.fittrackapp.screens.profile.ProfileViewModel
+import com.berbas.fittrackapp.screens.profile.bluetooth.BluetoothSyncViewModel
 
 /**
  * A composable function that defines the navigation graph for the bottom navigation bar.
  */
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun MainScreen(viewModel: ProfileViewModel) {
+fun MainScreen(
+    profileViewModel: ProfileViewModel,
+    bluetoothSyncViewModel: BluetoothSyncViewModel
+) {
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
@@ -40,7 +44,11 @@ fun MainScreen(viewModel: ProfileViewModel) {
             }
         }
     ) {
-        BottomNavGraph(navController = navController, viewModel = viewModel)
+        BottomNavGraph(
+            navController = navController,
+            profileViewModel = profileViewModel,
+            bluetoothViewModel = bluetoothSyncViewModel
+        )
     }
 }
 

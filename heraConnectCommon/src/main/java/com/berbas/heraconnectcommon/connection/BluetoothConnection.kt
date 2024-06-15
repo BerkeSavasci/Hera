@@ -25,17 +25,22 @@ class BluetoothConnection(
     private val context: Context
 ) : BluetoothControllerInterface {
 
+    /** The UUID of the service to connect to */
     companion object {
         const val SERVICE_UUID = "00001101-0000-1000-8000-00805F9B34FB"
     }
 
+    /** The bluetooth manager to manage the bluetooth adapter */
     private val bluetoothManager by lazy {
         context.getSystemService(BluetoothManager::class.java)
     }
+
+    /** The bluetooth adapter to manage the bluetooth connection */
     private val bluetoothAdapter by lazy {
         bluetoothManager?.adapter
     }
 
+    /** The data transfer service to send and receive messages */
     private var dataTransferService: BluetoothDataTransferService? = null
 
     private val _isConnected = MutableStateFlow<Boolean>(false)
@@ -55,6 +60,17 @@ class BluetoothConnection(
         get() = _errors.asSharedFlow()
 
     /**
+     * Flag to check if the receiver is registered
+     */
+    private var isReceiverRegistered = false
+
+    /**
+     * Flag to check if the state receiver is registered
+     */
+    private var isStateReceiverRegistered = false
+
+
+    /**
      * BroadcastReceiver to listen to the found devices
      */
     private val foundDeviceReceiver = FoundDeviceReceiver { device ->
@@ -64,6 +80,9 @@ class BluetoothConnection(
         }
     }
 
+    /**
+     * BroadcastReceiver to listen to the bluetooth state
+     */
     private val bluetoothStateReceiver = BluetoothStateReceiver { isConnected, bluetoothDevice ->
         // update the connected state if only the device is paired
         if (bluetoothAdapter?.bondedDevices?.contains(bluetoothDevice) == true) {
@@ -88,6 +107,7 @@ class BluetoothConnection(
                 addAction(BluetoothAdapter.ACTION_CONNECTION_STATE_CHANGED)
             }
         )
+        isStateReceiverRegistered = true
     }
 
     override fun startDiscovery() {
@@ -95,11 +115,17 @@ class BluetoothConnection(
             Log.d("BluetoothConnection", "No permission to scan for devices")
             return
         }
-        Log.d("BluetoothConnection", "Starting discovery")
-        context.registerReceiver(foundDeviceReceiver, IntentFilter(BluetoothDevice.ACTION_FOUND))
-        updatePairedDevices()
+        if (!isReceiverRegistered) {
+            Log.d("BluetoothConnection", "Starting discovery")
+            context.registerReceiver(
+                foundDeviceReceiver,
+                IntentFilter(BluetoothDevice.ACTION_FOUND)
+            )
+            isReceiverRegistered = true
+            updatePairedDevices()
 
-        bluetoothAdapter?.startDiscovery()
+            bluetoothAdapter?.startDiscovery()
+        }
     }
 
     override fun stopDiscovery() {
@@ -108,13 +134,20 @@ class BluetoothConnection(
             return
         }
         Log.d("BluetoothConnection", "Stopping discovery")
+        isReceiverRegistered = false
         bluetoothAdapter?.cancelDiscovery()
 
     }
 
     override fun release() {
-        context.unregisterReceiver(foundDeviceReceiver)
-        context.unregisterReceiver(bluetoothStateReceiver)
+        if (isReceiverRegistered) {
+            context.unregisterReceiver(foundDeviceReceiver)
+            isReceiverRegistered = false
+        }
+        if (isStateReceiverRegistered) {
+            context.unregisterReceiver(bluetoothStateReceiver)
+            isStateReceiverRegistered = false
+        }
         closeConnection()
     }
 

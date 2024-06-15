@@ -33,7 +33,7 @@ class HomeFragment : Fragment() {
     private var personID: Int = 0
 
     private val controller by lazy {
-        UserDataController(db.dao, personID)
+        db.dao
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -88,7 +88,14 @@ class HomeFragment : Fragment() {
                             ).show()
                         }
 
-                        is ConnectionResult.TransferSuccess -> TODO()
+                        is ConnectionResult.TransferSuccess -> {
+                            Toast.makeText(
+                                context,
+                                "The data transfer was successful",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+
                     }
                 }.launchIn(viewLifecycleOwner.lifecycleScope)
             }
@@ -118,7 +125,6 @@ class HomeFragment : Fragment() {
                     is ConnectionResult.ConnectionSuccess -> {
                         Toast.makeText(context, "Server started successfully", Toast.LENGTH_SHORT)
                             .show()
-
                     }
 
                     is ConnectionResult.ConnectionFailure -> {

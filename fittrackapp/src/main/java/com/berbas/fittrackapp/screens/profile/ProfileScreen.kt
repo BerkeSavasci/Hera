@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Build
-import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -16,13 +15,18 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.berbas.fittrackapp.navigation.Screen
+import com.berbas.fittrackapp.screens.profile.bluetooth.BluetoothSyncViewModel
 import com.berbas.fittrackapp.ui.theme.HeraTheme
 import java.util.*
 
 @Composable
-fun ProfileScreen(viewModel: ProfileViewModel, navController: NavHostController) {
+fun ProfileScreen(
+    profileViewModel: ProfileViewModel,
+    bluetoothViewModel: BluetoothSyncViewModel,
+    navController: NavHostController
+) {
     HeraTheme {
-        val state = viewModel.state.collectAsState()
+        val state = profileViewModel.state.collectAsState()
 
         Scaffold(
             topBar = {
@@ -32,6 +36,8 @@ fun ProfileScreen(viewModel: ProfileViewModel, navController: NavHostController)
                     contentColor = Color.White,
                     actions = {
                         IconButton(onClick = {
+                            // when opening the screen start the server automatically
+                            bluetoothViewModel.startBluetoothServer()
                             navController.navigate(Screen.BLUETOOTHSCREEN.name)
                         }) {
                             Icon(Icons.Default.Build, contentDescription = "Sync")
@@ -52,10 +58,16 @@ fun ProfileScreen(viewModel: ProfileViewModel, navController: NavHostController)
                     AboutYouSection()
                     GenderAndBirthdayRow(
                         gender = state.value.gender,
-                        onGenderSelected = { newValue -> viewModel.onEvent(PersonEvent.SetGender(newValue)) },
+                        onGenderSelected = { newValue ->
+                            profileViewModel.onEvent(
+                                PersonEvent.SetGender(
+                                    newValue
+                                )
+                            )
+                        },
                         birthday = state.value.birthday,
                         onBirthdaySelected = { newValue ->
-                            viewModel.onEvent(
+                            profileViewModel.onEvent(
                                 PersonEvent.SetBirthday(
                                     newValue
                                 )
@@ -64,9 +76,21 @@ fun ProfileScreen(viewModel: ProfileViewModel, navController: NavHostController)
                     )
                     WeightAndHeightRow(
                         weight = state.value.weight,
-                        onWeightChange = { newValue -> viewModel.onEvent(PersonEvent.SetWeight(newValue.toDouble())) },
+                        onWeightChange = { newValue ->
+                            profileViewModel.onEvent(
+                                PersonEvent.SetWeight(
+                                    newValue.toDouble()
+                                )
+                            )
+                        },
                         height = state.value.height,
-                        onHeightChange = { newValue -> viewModel.onEvent(PersonEvent.SetHeight(newValue.toDouble())) }
+                        onHeightChange = { newValue ->
+                            profileViewModel.onEvent(
+                                PersonEvent.SetHeight(
+                                    newValue.toDouble()
+                                )
+                            )
+                        }
                     )
                 }
             }
