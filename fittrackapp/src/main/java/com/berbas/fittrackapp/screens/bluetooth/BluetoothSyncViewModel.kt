@@ -9,8 +9,12 @@ import com.berbas.fittrackapp.data.annotations.UserId
 import com.berbas.heraconnectcommon.connection.BluetoothControllerInterface
 import com.berbas.heraconnectcommon.connection.BluetoothDeviceDomain
 import com.berbas.heraconnectcommon.connection.ConnectionResult
+import com.berbas.heraconnectcommon.connection.PersonDataMessage
+import com.berbas.heraconnectcommon.localData.Person
 import com.berbas.heraconnectcommon.localData.PersonDao
+import com.google.gson.Gson
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -28,10 +32,20 @@ class BluetoothSyncViewModel @Inject constructor(
      */
     val devices: StateFlow<List<BluetoothDeviceDomain>> = bluetoothController.scannedDevices
 
+    private var receivedPersonData: PersonDataMessage? = null
+
+    private var serverJob: Job? = null
+
+    /**
+     * the data transfer status TODO change this to idle or smth
+     */
+    private val _dataTransferStatus = MutableStateFlow(DataTransferStatus.STARTED)
+    val dataTransferStatus: StateFlow<DataTransferStatus> = _dataTransferStatus
     /**
      * Handles the connection to a device, responds to the different results
      */
     fun connectToDevice(device: BluetoothDeviceDomain) {
+        _dataTransferStatus.value = DataTransferStatus.IN_PROGRESS
         viewModelScope.launch {
             bluetoothController.connectToDevice(device).collect { result ->
                 when (result) {
@@ -39,12 +53,16 @@ class BluetoothSyncViewModel @Inject constructor(
                         Log.d("BluetoothSyncViewModel", "Connected to device: ${device.name}")
                         personDao.getPersonById(id).collect { personData ->
                             val personDataString = personData.toString()
-                            Log.d("BluetoothSyncViewModel", "Sending person data: $personDataString")
+                            Log.d(
+                                "BluetoothSyncViewModel",
+                                "Sending person data: $personDataString"
+                            )
                             bluetoothController.trySendMessage(personDataString)
                         }
                     }
 
                     is ConnectionResult.ConnectionFailure -> {
+                        _dataTransferStatus.value = DataTransferStatus.FAILURE
                         Log.d(
                             "BluetoothSyncViewModel",
                             "Failed to connect to device: ${device.name}"
@@ -52,7 +70,12 @@ class BluetoothSyncViewModel @Inject constructor(
                     }
 
                     is ConnectionResult.TransferSuccess -> {
-                        Log.d("BluetoothSyncViewModel", "Data transfer was successful")
+                        receivedPersonData = result.message
+                        Log.d(
+                            "BluetoothSyncViewModel / connect",
+                            "Data transfer was successful: $receivedPersonData"
+                        )
+
                     }
                 }
             }
@@ -64,7 +87,8 @@ class BluetoothSyncViewModel @Inject constructor(
      * Handles the results accordingly
      */
     fun startBluetoothServer() {
-        viewModelScope.launch {
+        _dataTransferStatus.value = DataTransferStatus.STARTED
+        serverJob = viewModelScope.launch {
             bluetoothController.startBluetoothServer().collect { result ->
                 when (result) {
                     is ConnectionResult.ConnectionSuccess -> {
@@ -72,11 +96,22 @@ class BluetoothSyncViewModel @Inject constructor(
                     }
 
                     is ConnectionResult.ConnectionFailure -> {
-                        // TODO: Handle failed server start
+                        _dataTransferStatus.value = DataTransferStatus.FAILURE
                     }
 
                     is ConnectionResult.TransferSuccess -> {
-                        // TODO: Handle successful data transfer
+                        receivedPersonData = result.message
+                        Log.d(
+                            "BluetoothSyncViewModel / server",
+                            "Data transfer was successful: $receivedPersonData"
+                        )
+                        val localReceivedPersonData = receivedPersonData
+                        if (localReceivedPersonData != null) {
+                            val person =
+                                localReceivedPersonData.toPerson()
+                            personDao.upsertPerson(person)
+                            _dataTransferStatus.value = DataTransferStatus.SUCCESS
+                        }
                     }
                 }
             }
@@ -90,6 +125,11 @@ class BluetoothSyncViewModel @Inject constructor(
         viewModelScope.launch {
             bluetoothController.startDiscovery()
         }
+    }
+
+    fun stopBluetoothServer() {
+        serverJob?.cancel()
+        bluetoothController.closeConnection()
     }
 
     /**
@@ -109,4 +149,34 @@ class BluetoothSyncViewModel @Inject constructor(
             bluetoothController.release()
         }
     }
+
+    /**
+     * Converts the received row data (as String) to a person object and returns it
+     */
+    private fun PersonDataMessage.toPerson(): Person {
+        val personString = message.substringAfter("Person(").substringBeforeLast(")")
+        val personParts = personString.split(", ")
+
+        if (personParts.size < 6) {
+            _dataTransferStatus.value = DataTransferStatus.FAILURE
+            Log.e("BluetoothSyncViewModel / data.toperson", "Not enough data parts: $personParts")
+        }
+
+        return Person(
+            firstname = personParts[0].substringAfter("="),
+            lastname = personParts[1].substringAfter("="),
+            birthday = personParts[2].substringAfter("="),
+            gender = personParts[3].substringAfter("="),
+            height = personParts[4].substringAfter("=").toDouble(),
+            weight = personParts[5].substringAfter("=").toDouble()
+        )
+    }
+
+    /**
+     * A enum class that holds the status of the data transfer
+     */
+    enum class DataTransferStatus {
+        STARTED, IN_PROGRESS, SUCCESS, FAILURE
+    }
+
 }

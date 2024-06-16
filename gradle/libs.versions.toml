@@ -10,6 +10,8 @@ junitVersion = "1.1.5"
 espressoCore = "3.5.1"
 appcompat = "1.6.1"
 lifecycleLivedataKtxVersion = "2.3.1"
+mockitoInline = " 125"
+mockitoJunitJupiter = "124"
 mockk = "1.12.0"
 mongodbDriverKotlin = "1.7.2"
 mongodbDriverKotlinCoroutine = "5.1.0"
@@ -47,6 +49,8 @@ androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "j
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 junit-jupiter = { module = "org.junit.jupiter:junit-jupiter", version.ref = "junitJupiter" }
+mockito-inline = { module = "org.mockito:mockito-inline", version.ref = "mockitoInline" }
+mockito-junit-jupiter = { module = "org.mockito:mockito-junit-jupiter", version = "5.12.0" }
 mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
 mongodb-driver-kotlin = { module = "org.mongodb:mongodb-driver-kotlin", version.ref = "mongodbDriverKotlin" }
 mongodb-driver-kotlin-coroutine = { module = "org.mongodb:mongodb-driver-kotlin-coroutine", version.ref = "mongodbDriverKotlinCoroutine" }

@@ -170,6 +170,7 @@ class BluetoothConnection(
                 personDataMessage.toByteArray()
             }
         )
+        Log.d("BluetoothConnection", "Data transfer was successful: $personDataMessage")
         return personDataMessage
     }
 

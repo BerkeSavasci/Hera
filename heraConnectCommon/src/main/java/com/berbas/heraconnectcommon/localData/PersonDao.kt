@@ -2,6 +2,8 @@ package com.berbas.heraconnectcommon.localData
 
 import androidx.room.Dao
 import androidx.room.Delete
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Upsert
 import kotlinx.coroutines.flow.Flow
@@ -16,7 +18,7 @@ interface PersonDao {
      * Insert a person into the database
      * if the person with the id already exists, update the fields with the new values
      */
-    @Upsert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun upsertPerson(person: Person)
 
     /**

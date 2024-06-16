@@ -17,7 +17,6 @@ object BluetoothModule {
     @Singleton
     @Provides
     fun provideBluetoothController(@ApplicationContext context: Context): BluetoothControllerInterface {
-        // Use your implementation class here
         return BluetoothConnection(context)
     }
 }

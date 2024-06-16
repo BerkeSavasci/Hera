@@ -17,18 +17,16 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Face
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.debugInspectorInfo
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.berbas.fittrackapp.navigation.BottomBarScreens
-import com.berbas.heraconnectcommon.connection.BluetoothDevice
+
 
 /**
  * Represents the UI elements of the bluetooth screen
@@ -38,6 +36,8 @@ fun BluetoothSyncScreen(
     bluetoothViewModel: BluetoothSyncViewModel,
     navController: NavHostController
 ) {
+    val dataTransferStatus by bluetoothViewModel.dataTransferStatus.collectAsState()
+
     BackHandler {
         bluetoothViewModel.release()
         navController.popBackStack()
@@ -60,6 +60,51 @@ fun BluetoothSyncScreen(
             BluetoothDeviceList(bluetoothViewModel)
         }
     }
+    /**
+     * observe the status and show the appropriate UI screen to the user
+     * TODO: change some stuff
+     */
+    when (dataTransferStatus) {
+        BluetoothSyncViewModel.DataTransferStatus.STARTED -> {
+            Toast
+                .makeText(
+                    LocalContext.current,
+                    "The data transfer has started!",
+                    Toast.LENGTH_SHORT
+                )
+                .show()
+        }
+
+        BluetoothSyncViewModel.DataTransferStatus.IN_PROGRESS -> {
+            Toast
+                .makeText(
+                    LocalContext.current,
+                    "The data transfer is in progress please don't close the window!",
+                    Toast.LENGTH_SHORT
+                )
+                .show()
+        }
+
+        BluetoothSyncViewModel.DataTransferStatus.SUCCESS -> {
+            Toast
+                .makeText(
+                    LocalContext.current,
+                    "The data transfer was successful you can go back to the profile view!",
+                    Toast.LENGTH_SHORT
+                )
+                .show()
+        }
+
+        BluetoothSyncViewModel.DataTransferStatus.FAILURE -> {
+            Toast
+                .makeText(
+                    LocalContext.current,
+                    "The data transfer was unsuccessful, please try again later!",
+                    Toast.LENGTH_SHORT
+                )
+                .show()
+        }
+    }
 }
 
 /**
@@ -71,6 +116,7 @@ fun BluetoothFloatingActionButton(
     navController: NavHostController
 ) {
     FloatingActionButton(onClick = {
+        bluetoothViewModel.stopBluetoothServer()
         bluetoothViewModel.release()
         navController.navigate(BottomBarScreens.Profile.route)
     }) {

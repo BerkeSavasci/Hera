@@ -1,6 +1,7 @@
 package com.berbas.heraconnectcommon.connection
 
 import android.bluetooth.BluetoothSocket
+import android.util.Log
 import com.berbas.heraconnectcommon.protocolEngine.BluetoothProtocolEngine
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -28,8 +29,12 @@ class BluetoothDataTransferService(
                 val byteCount = try {
                     socket.inputStream.read(buffer)
                 } catch (e: IOException) {
-                    throw TransferFailedException()
+                    Log.d("BluetoothDataTransferService", "Socket closed, stopping reading from socket")
+                    break
                 }
+
+                val receivedMessage = buffer.decodeToString(endIndex = byteCount)
+                Log.d("BluetoothSyncViewModel", "Data received successfully: $receivedMessage")
 
                 val protocolEngine = BluetoothProtocolEngine()
 
@@ -43,7 +48,6 @@ class BluetoothDataTransferService(
 
                             )
                         )
-
                     }
                 )
             }

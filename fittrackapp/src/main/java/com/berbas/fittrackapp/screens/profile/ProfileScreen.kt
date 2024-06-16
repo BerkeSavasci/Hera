@@ -82,7 +82,7 @@ fun ProfileScreen(
                         onWeightChange = { newValue ->
                             profileViewModel.onEvent(
                                 PersonEvent.SetWeight(
-                                    newValue.toDouble()
+                                    newValue
                                 )
                             )
                         },
@@ -90,7 +90,7 @@ fun ProfileScreen(
                         onHeightChange = { newValue ->
                             profileViewModel.onEvent(
                                 PersonEvent.SetHeight(
-                                    newValue.toDouble()
+                                    newValue
                                 )
                             )
                         }

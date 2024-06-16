@@ -30,6 +30,7 @@ class ProfileViewModel @Inject constructor(
 
     init {
         refreshUser()
+        observePerson()
     }
 
     /**
@@ -55,6 +56,25 @@ class ProfileViewModel @Inject constructor(
                 height = person.height
             )
             personDao.upsertPerson(person)
+        }
+    }
+
+    /**
+     * observes the persons values as state and updates it as soon as a value changes.
+     * Is used in the UI to update the values of the fields :)
+     */
+    private fun observePerson() {
+        viewModelScope.launch {
+            personDao.getPersonById(id).collect { person ->
+                _state.value = ProfileState(
+                    firstName = person.firstname,
+                    lastName = person.lastname,
+                    gender = person.gender,
+                    birthday = person.birthday,
+                    weight = person.weight,
+                    height = person.height
+                )
+            }
         }
     }
 
@@ -142,6 +162,4 @@ class ProfileViewModel @Inject constructor(
             personDao.upsertPerson(person)
         }
     }
-
 }
-

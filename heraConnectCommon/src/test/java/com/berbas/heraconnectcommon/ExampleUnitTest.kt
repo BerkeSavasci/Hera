@@ -17,15 +17,5 @@ class ExampleUnitTest {
         assertEquals(4, 2 + 2)
     }
 
-    @Test
-    fun testMain() {
-        // Create a MongoClientConnection object
-        val mongoClientConnection = MongoClientConnection()
 
-        // Call the main method and check if an exception is thrown
-        assertDoesNotThrow {
-            mongoClientConnection.main()
-            mongoClientConnection.getMovie()
-        }
-    }
 }

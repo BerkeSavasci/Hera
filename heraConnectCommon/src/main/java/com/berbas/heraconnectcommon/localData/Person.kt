@@ -15,7 +15,7 @@ data class Person(
     var gender: String,
     var height: Double,
     var weight: Double,
-    @PrimaryKey(autoGenerate = true)
-    val id: Int = 0
+    @PrimaryKey
+    val id: Int = 1
 )
 
