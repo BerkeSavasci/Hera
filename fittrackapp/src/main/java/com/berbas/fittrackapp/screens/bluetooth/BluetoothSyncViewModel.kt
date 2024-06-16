@@ -1,5 +1,8 @@
-package com.berbas.fittrackapp.screens.profile.bluetooth
+package com.berbas.fittrackapp.screens.bluetooth
 
+import android.util.Log
+import android.widget.Toast
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.berbas.fittrackapp.data.annotations.UserId
@@ -20,29 +23,46 @@ class BluetoothSyncViewModel @Inject constructor(
     private val bluetoothController: BluetoothControllerInterface
 ) : ViewModel() {
 
-    private val _devices = MutableStateFlow<List<BluetoothDeviceDomain>>(emptyList())
-    val devices: StateFlow<List<BluetoothDeviceDomain>> = _devices
+    /**
+     * A stateflow of all the scanned devices as a list
+     */
+    val devices: StateFlow<List<BluetoothDeviceDomain>> = bluetoothController.scannedDevices
 
+    /**
+     * Handles the connection to a device, responds to the different results
+     */
     fun connectToDevice(device: BluetoothDeviceDomain) {
         viewModelScope.launch {
             bluetoothController.connectToDevice(device).collect { result ->
                 when (result) {
                     is ConnectionResult.ConnectionSuccess -> {
-                        // TODO Handle successful connection
+                        Log.d("BluetoothSyncViewModel", "Connected to device: ${device.name}")
+                        personDao.getPersonById(id).collect { personData ->
+                            val personDataString = personData.toString()
+                            Log.d("BluetoothSyncViewModel", "Sending person data: $personDataString")
+                            bluetoothController.trySendMessage(personDataString)
+                        }
                     }
 
                     is ConnectionResult.ConnectionFailure -> {
-                        //TODO  Handle failed connection
+                        Log.d(
+                            "BluetoothSyncViewModel",
+                            "Failed to connect to device: ${device.name}"
+                        )
                     }
 
                     is ConnectionResult.TransferSuccess -> {
-                        // TODO: Handle successful data transfer
+                        Log.d("BluetoothSyncViewModel", "Data transfer was successful")
                     }
                 }
             }
         }
     }
 
+    /**
+     * Is called when the Sync screen is opened by the user. Automatically starts a bluetooth server.
+     * Handles the results accordingly
+     */
     fun startBluetoothServer() {
         viewModelScope.launch {
             bluetoothController.startBluetoothServer().collect { result ->
@@ -63,18 +83,27 @@ class BluetoothSyncViewModel @Inject constructor(
         }
     }
 
+    /**
+     * Starts discovering the nearby bluetooth devices
+     */
     fun startDiscovery() {
         viewModelScope.launch {
             bluetoothController.startDiscovery()
         }
     }
 
+    /**
+     * Stops the discovering of the nearby bluetooth devices
+     */
     fun stopDiscovery() {
         viewModelScope.launch {
             bluetoothController.stopDiscovery()
         }
     }
 
+    /**
+     * Frees up memory and all the used resources
+     */
     fun release() {
         viewModelScope.launch {
             bluetoothController.release()

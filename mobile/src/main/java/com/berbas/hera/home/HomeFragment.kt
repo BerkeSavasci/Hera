@@ -15,7 +15,6 @@ import com.berbas.hera.R
 import com.berbas.heraconnectcommon.connection.BluetoothConnection
 import com.berbas.heraconnectcommon.connection.BluetoothDeviceDomain
 import com.berbas.heraconnectcommon.connection.ConnectionResult
-import com.berbas.heraconnectcommon.data.UserDataController
 import com.berbas.heraconnectcommon.localData.PersonDataBase
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -158,9 +157,7 @@ class HomeFragment : Fragment() {
         val person = controller.getPersonById(personID)
         Log.d("HomeFragment", "Person data: $person with personID: $personID")
 
-        return "Name: ${person?.firstname} ${person?.lastname}, " +
-                "Birthday: ${person?.birthday}, Gender: ${person?.gender}, " +
-                "Height: ${person?.height}, Weight: ${person?.weight}"
+        return "Name: $person"
     }
 
     companion object {

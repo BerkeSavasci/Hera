@@ -21,7 +21,7 @@ import com.berbas.fittrackapp.navigation.AppScreens
 import com.berbas.fittrackapp.navigation.BottomBarScreens
 import com.berbas.fittrackapp.navigation.BottomNavGraph
 import com.berbas.fittrackapp.screens.profile.ProfileViewModel
-import com.berbas.fittrackapp.screens.profile.bluetooth.BluetoothSyncViewModel
+import com.berbas.fittrackapp.screens.bluetooth.BluetoothSyncViewModel
 
 /**
  * A composable function that defines the navigation graph for the bottom navigation bar.

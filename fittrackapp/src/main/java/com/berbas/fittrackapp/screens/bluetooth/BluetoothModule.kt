@@ -1,4 +1,4 @@
-package com.berbas.fittrackapp.screens.profile.bluetooth
+package com.berbas.fittrackapp.screens.bluetooth
 
 import android.content.Context
 import com.berbas.heraconnectcommon.connection.BluetoothConnection

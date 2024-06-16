@@ -15,10 +15,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.berbas.fittrackapp.navigation.Screen
-import com.berbas.fittrackapp.screens.profile.bluetooth.BluetoothSyncViewModel
+import com.berbas.fittrackapp.screens.bluetooth.BluetoothSyncViewModel
 import com.berbas.fittrackapp.ui.theme.HeraTheme
 import java.util.*
 
+/**
+ * The view class for the profile screen
+ */
 @Composable
 fun ProfileScreen(
     profileViewModel: ProfileViewModel,
@@ -98,6 +101,9 @@ fun ProfileScreen(
     }
 }
 
+/**
+ * About you text
+ */
 @Composable
 fun AboutYouSection() {
     Text(
@@ -108,6 +114,9 @@ fun AboutYouSection() {
     )
 }
 
+/**
+ * The UI elements for the gender and birthday fields
+ */
 @Composable
 fun GenderAndBirthdayRow(
     gender: String,
@@ -144,6 +153,9 @@ fun GenderAndBirthdayRow(
     }
 }
 
+/**
+ * The UI elements for the weight and height row
+ */
 @Composable
 fun WeightAndHeightRow(
     weight: Double,
@@ -211,6 +223,9 @@ fun WeightAndHeightRow(
     }
 }
 
+/**
+ * A dropdown menu for the gender selection
+ */
 @Composable
 fun GenderDropdown(selectedGender: String, onGenderSelected: (String) -> Unit) {
     var expanded by remember { mutableStateOf(false) }
@@ -241,6 +256,9 @@ fun GenderDropdown(selectedGender: String, onGenderSelected: (String) -> Unit) {
     }
 }
 
+/**
+ * A date picker to let the user select their birthday
+ */
 @Composable
 fun BirthdayPicker(birthday: String, onBirthdaySelected: (String) -> Unit) {
     val context = LocalContext.current
@@ -276,6 +294,9 @@ fun BirthdayPicker(birthday: String, onBirthdaySelected: (String) -> Unit) {
     }
 }
 
+/**
+ * The input dialog for both the weight and the height of the user
+ */
 @Composable
 fun InputDialog(
     label: String,

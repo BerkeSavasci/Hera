@@ -11,7 +11,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.berbas.fittrackapp.screens.profile.ProfileViewModel
-import com.berbas.fittrackapp.screens.profile.bluetooth.BluetoothSyncViewModel
+import com.berbas.fittrackapp.screens.bluetooth.BluetoothSyncViewModel
 import com.berbas.fittrackapp.ui.theme.HeraTheme
 import dagger.hilt.android.AndroidEntryPoint
 

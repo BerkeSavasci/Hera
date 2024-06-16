@@ -25,7 +25,6 @@ import com.berbas.heraconnectcommon.connection.BluetoothConnection
 import com.berbas.heraconnectcommon.connection.BluetoothDeviceDomain
 import androidx.health.connect.client.HealthConnectClient
 import androidx.room.Room
-import com.berbas.hera.profile.SyncActivity
 import com.berbas.heraconnectcommon.localData.PersonDataBase
 import com.google.android.material.navigation.NavigationView
 
@@ -81,8 +80,7 @@ class MainActivity : AppCompatActivity() {
             when (menuItem.itemId) {
                 R.id.nav_sync_devices -> {
                     // Handle "Sync Devices" menu item click here
-                    val intent = Intent(this, SyncActivity::class.java)
-                    startActivity(intent)
+
                 }
             }
             drawerLayout.closeDrawer(GravityCompat.START)

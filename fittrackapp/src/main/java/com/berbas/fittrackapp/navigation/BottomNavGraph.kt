@@ -8,8 +8,8 @@ import com.berbas.fittrackapp.screens.goals.GoalsScreen
 import com.berbas.fittrackapp.screens.home.HomeScreen
 import com.berbas.fittrackapp.screens.profile.ProfileScreen
 import com.berbas.fittrackapp.screens.profile.ProfileViewModel
-import com.berbas.fittrackapp.screens.profile.bluetooth.BluetoothSyncScreen
-import com.berbas.fittrackapp.screens.profile.bluetooth.BluetoothSyncViewModel
+import com.berbas.fittrackapp.screens.bluetooth.BluetoothSyncScreen
+import com.berbas.fittrackapp.screens.bluetooth.BluetoothSyncViewModel
 
 /**
  * A composable function that defines the navigation graph for the bottom navigation bar.
