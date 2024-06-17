@@ -29,51 +29,44 @@ class ProfileViewModel @Inject constructor(
     val state: StateFlow<ProfileState> = _state
 
     init {
-        refreshUser()
-        observePerson()
+        observeAndRefreshPerson()
     }
 
     /**
      * Function to refresh the user data
      */
-    private fun refreshUser() {
-        viewModelScope.launch {
-            val person = personDao.getPersonById(id).firstOrNull() ?: Person(
-                id = id,
-                firstname = "Placeholder",
-                lastname = "Placeholder",
-                gender = "Placeholder",
-                birthday = "Placeholder",
-                weight = 0.0,
-                height = 0.0
-            )
-            _state.value = ProfileState(
-                firstName = person.firstname,
-                lastName = person.lastname,
-                gender = person.gender,
-                birthday = person.birthday,
-                weight = person.weight,
-                height = person.height
-            )
-            personDao.upsertPerson(person)
-        }
-    }
-
-    /**
-     * observes the persons values as state and updates it as soon as a value changes.
-     * Is used in the UI to update the values of the fields :)
-     */
-    private fun observePerson() {
+    private fun observeAndRefreshPerson() {
         viewModelScope.launch {
             personDao.getPersonById(id).collect { person ->
-                _state.value = ProfileState(
-                    firstName = person.firstname,
-                    lastName = person.lastname,
-                    gender = person.gender,
-                    birthday = person.birthday,
-                    weight = person.weight,
-                    height = person.height
-                )
+                if (person != null) { // don't simplify
+                    _state.value = ProfileState(
+                        firstName = person.firstname,
+                        lastName = person.lastname,
+                        gender = person.gender,
+                        birthday = person.birthday,
+                        weight = person.weight,
+                        height = person.height
+                    )
+                } else {
+                    val defaultPerson = Person(
+                        id = id,
+                        firstname = "Placeholder",
+                        lastname = "Placeholder",
+                        gender = "Placeholder",
+                        birthday = "Placeholder",
+                        weight = 0.0,
+                        height = 0.0
+                    )
+                    personDao.upsertPerson(defaultPerson)
+                    _state.value = ProfileState(
+                        firstName = defaultPerson.firstname,
+                        lastName = defaultPerson.lastname,
+                        gender = defaultPerson.gender,
+                        birthday = defaultPerson.birthday,
+                        weight = defaultPerson.weight,
+                        height = defaultPerson.height
+                    )
+                }
             }
         }
     }

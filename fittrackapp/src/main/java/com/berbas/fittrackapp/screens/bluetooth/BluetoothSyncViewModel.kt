@@ -36,16 +36,16 @@ class BluetoothSyncViewModel @Inject constructor(
 
     private var serverJob: Job? = null
 
-    /**
-     * the data transfer status TODO change this to idle or smth
-     */
-    private val _dataTransferStatus = MutableStateFlow(DataTransferStatus.STARTED)
+    /** the data transfer status */
+    private val _dataTransferStatus = MutableStateFlow(DataTransferStatus.IDLE)
     val dataTransferStatus: StateFlow<DataTransferStatus> = _dataTransferStatus
+
     /**
      * Handles the connection to a device, responds to the different results
      */
     fun connectToDevice(device: BluetoothDeviceDomain) {
-        _dataTransferStatus.value = DataTransferStatus.IN_PROGRESS
+        _dataTransferStatus.value = DataTransferStatus.IDLE
+
         viewModelScope.launch {
             bluetoothController.connectToDevice(device).collect { result ->
                 when (result) {
@@ -58,6 +58,7 @@ class BluetoothSyncViewModel @Inject constructor(
                                 "Sending person data: $personDataString"
                             )
                             bluetoothController.trySendMessage(personDataString)
+                            _dataTransferStatus.value = DataTransferStatus.SUCCESS
                         }
                     }
 
@@ -67,6 +68,7 @@ class BluetoothSyncViewModel @Inject constructor(
                             "BluetoothSyncViewModel",
                             "Failed to connect to device: ${device.name}"
                         )
+
                     }
 
                     is ConnectionResult.TransferSuccess -> {
@@ -75,7 +77,7 @@ class BluetoothSyncViewModel @Inject constructor(
                             "BluetoothSyncViewModel / connect",
                             "Data transfer was successful: $receivedPersonData"
                         )
-
+                        _dataTransferStatus.value = DataTransferStatus.SUCCESS
                     }
                 }
             }
@@ -87,12 +89,12 @@ class BluetoothSyncViewModel @Inject constructor(
      * Handles the results accordingly
      */
     fun startBluetoothServer() {
-        _dataTransferStatus.value = DataTransferStatus.STARTED
+        _dataTransferStatus.value = DataTransferStatus.IDLE
         serverJob = viewModelScope.launch {
             bluetoothController.startBluetoothServer().collect { result ->
                 when (result) {
                     is ConnectionResult.ConnectionSuccess -> {
-                        // TODO: Handle successful server start
+                        _dataTransferStatus.value = DataTransferStatus.IDLE
                     }
 
                     is ConnectionResult.ConnectionFailure -> {
@@ -100,6 +102,7 @@ class BluetoothSyncViewModel @Inject constructor(
                     }
 
                     is ConnectionResult.TransferSuccess -> {
+                        _dataTransferStatus.value = DataTransferStatus.IN_PROGRESS
                         receivedPersonData = result.message
                         Log.d(
                             "BluetoothSyncViewModel / server",
@@ -176,7 +179,7 @@ class BluetoothSyncViewModel @Inject constructor(
      * A enum class that holds the status of the data transfer
      */
     enum class DataTransferStatus {
-        STARTED, IN_PROGRESS, SUCCESS, FAILURE
+        IDLE, STARTED, IN_PROGRESS, SUCCESS, FAILURE
     }
 
 }

@@ -15,10 +15,4 @@ import androidx.room.RoomDatabase
 abstract class PersonDataBase : RoomDatabase() {
 
     abstract val dao: PersonDao
-
-    companion object {
-        // Singleton prevents multiple instances of database opening at the same time.
-        @Volatile
-        private var INSTANCE: PersonDataBase? = null
-    }
 }

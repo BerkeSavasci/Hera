@@ -16,8 +16,11 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Face
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -37,6 +40,7 @@ fun BluetoothSyncScreen(
     navController: NavHostController
 ) {
     val dataTransferStatus by bluetoothViewModel.dataTransferStatus.collectAsState()
+    val showDialog = remember { mutableStateOf(true ) }
 
     BackHandler {
         bluetoothViewModel.release()
@@ -60,50 +64,50 @@ fun BluetoothSyncScreen(
             BluetoothDeviceList(bluetoothViewModel)
         }
     }
-    /**
-     * observe the status and show the appropriate UI screen to the user
-     * TODO: change some stuff
-     */
-    when (dataTransferStatus) {
-        BluetoothSyncViewModel.DataTransferStatus.STARTED -> {
-            Toast
-                .makeText(
-                    LocalContext.current,
-                    "The data transfer has started!",
-                    Toast.LENGTH_SHORT
-                )
-                .show()
-        }
 
+    if (showDialog.value) {
+        DataTransferDialog(dataTransferStatus, showDialog)
+    }}
+
+/**
+ * Alert dialog to let the user know
+ */
+@Composable
+fun DataTransferDialog(
+    dataTransferStatus: BluetoothSyncViewModel.DataTransferStatus,
+    showDialog: MutableState<Boolean>
+) {
+    // FIXME: Zeigt nur dass daten gesendet wurden, ich will noch anzeigen während die gesendet werden
+    when (dataTransferStatus) {
         BluetoothSyncViewModel.DataTransferStatus.IN_PROGRESS -> {
-            Toast
-                .makeText(
-                    LocalContext.current,
-                    "The data transfer is in progress please don't close the window!",
-                    Toast.LENGTH_SHORT
-                )
-                .show()
+            AlertDialog(
+                onDismissRequest = { },
+                title = { Text("Data Transfer") },
+                text = {
+                    Column {
+                        Text("Data transfer is in progress, please don't close the window!")
+                        CircularProgressIndicator(modifier = Modifier.align(Alignment.CenterHorizontally))
+                    }
+                },
+                confirmButton = { }
+            )
         }
 
         BluetoothSyncViewModel.DataTransferStatus.SUCCESS -> {
-            Toast
-                .makeText(
-                    LocalContext.current,
-                    "The data transfer was successful you can go back to the profile view!",
-                    Toast.LENGTH_SHORT
-                )
-                .show()
+            AlertDialog(
+                onDismissRequest = { },
+                title = { Text("Data Transfer") },
+                text = { Text("The data transfer was successful! You can go back to the profile view.") },
+                confirmButton = {
+                    TextButton(onClick = { showDialog.value = false }) {
+                        Text("OK")
+                    }
+                }
+            )
         }
-
-        BluetoothSyncViewModel.DataTransferStatus.FAILURE -> {
-            Toast
-                .makeText(
-                    LocalContext.current,
-                    "The data transfer was unsuccessful, please try again later!",
-                    Toast.LENGTH_SHORT
-                )
-                .show()
-        }
+        else -> {
+        //TODO: other states (if needed)
+         }
     }
 }
 
