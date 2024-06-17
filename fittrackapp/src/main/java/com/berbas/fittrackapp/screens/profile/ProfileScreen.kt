@@ -4,6 +4,7 @@ import android.app.DatePickerDialog
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Build
@@ -11,6 +12,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
@@ -160,8 +162,8 @@ fun GenderAndBirthdayRow(
 fun WeightAndHeightRow(
     weight: Double,
     onWeightChange: (Double) -> Unit,
-    height: Double,
-    onHeightChange: (Double) -> Unit
+    height: Int,
+    onHeightChange: (Int) -> Unit
 ) {
     var showWeightDialog by remember { mutableStateOf(false) }
     var showHeightDialog by remember { mutableStateOf(false) }
@@ -175,7 +177,7 @@ fun WeightAndHeightRow(
                 .weight(1f)
                 .padding(4.dp)
         ) {
-            Text(text = "Weight", color = Color.White)
+            Text(text = "Weight (kg)", color = Color.White)
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -184,7 +186,7 @@ fun WeightAndHeightRow(
                     .clickable { showWeightDialog = true }
                     .padding(16.dp)
             ) {
-                Text(text = weight.toString(), color = Color.White)
+                Text(text = "$weight kg", color = Color.White)
             }
             if (showWeightDialog) {
                 InputDialog(
@@ -200,7 +202,7 @@ fun WeightAndHeightRow(
                 .weight(1f)
                 .padding(4.dp)
         ) {
-            Text(text = "Height", color = Color.White)
+            Text(text = "Height (cm)", color = Color.White)
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -209,14 +211,15 @@ fun WeightAndHeightRow(
                     .clickable { showHeightDialog = true }
                     .padding(16.dp)
             ) {
-                Text(text = height.toString(), color = Color.White)
+                Text(text = "$height cm", color = Color.White)
             }
             if (showHeightDialog) {
                 InputDialog(
                     label = "Height",
-                    value = height,
-                    onValueChange = onHeightChange,
-                    onDismissRequest = { showHeightDialog = false }
+                    value = height.toDouble(),
+                    onValueChange = { newValue -> onHeightChange(newValue.toInt()) },
+                    onDismissRequest = { showHeightDialog = false },
+                    isInteger = true
                 )
             }
         }
@@ -302,9 +305,10 @@ fun InputDialog(
     label: String,
     value: Double,
     onValueChange: (Double) -> Unit,
-    onDismissRequest: () -> Unit
+    onDismissRequest: () -> Unit,
+    isInteger: Boolean = false
 ) {
-    var inputValue by remember { mutableStateOf(value.toString()) }
+    var inputValue by remember { mutableStateOf(if (isInteger) value.toInt().toString() else String.format("%.1f", value)) }
 
     AlertDialog(
         onDismissRequest = onDismissRequest,
@@ -318,12 +322,13 @@ fun InputDialog(
                     focusedBorderColor = Color.White,
                     unfocusedBorderColor = Color.White,
                     textColor = Color.White
-                )
+                ),
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
             )
         },
         confirmButton = {
             TextButton(onClick = {
-                onValueChange(inputValue.toDoubleOrNull() ?: value)
+                onValueChange(if (isInteger) inputValue.toDoubleOrNull()?.toInt()?.toDouble() ?: value else inputValue.toDoubleOrNull() ?: value)
                 onDismissRequest()
             }, colors = ButtonDefaults.buttonColors(backgroundColor = Color.White)) {
                 Text("OK")

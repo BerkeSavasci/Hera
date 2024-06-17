@@ -13,7 +13,7 @@ data class Person(
     var lastname: String,
     var birthday: String,
     var gender: String,
-    var height: Double,
+    var height: Int,
     var weight: Double,
     @PrimaryKey
     val id: Int = 1

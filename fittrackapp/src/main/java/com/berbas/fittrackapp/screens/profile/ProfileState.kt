@@ -9,6 +9,6 @@ data class ProfileState(
     val gender: String = "",
     val birthday: String = "",
     val weight: Double = 0.0,
-    val height: Double = 0.0,
+    val height: Int = 0,
     val isEditingFields: Boolean = false
 )

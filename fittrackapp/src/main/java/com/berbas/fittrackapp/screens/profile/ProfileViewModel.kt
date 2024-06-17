@@ -55,7 +55,7 @@ class ProfileViewModel @Inject constructor(
                         gender = "Placeholder",
                         birthday = "Placeholder",
                         weight = 0.0,
-                        height = 0.0
+                        height = 0
                     )
                     personDao.upsertPerson(defaultPerson)
                     _state.value = ProfileState(

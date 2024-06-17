@@ -170,7 +170,7 @@ class BluetoothSyncViewModel @Inject constructor(
             lastname = personParts[1].substringAfter("="),
             birthday = personParts[2].substringAfter("="),
             gender = personParts[3].substringAfter("="),
-            height = personParts[4].substringAfter("=").toDouble(),
+            height = personParts[4].substringAfter("=").toInt(),
             weight = personParts[5].substringAfter("=").toDouble()
         )
     }
