@@ -373,9 +373,21 @@ fun GenderDropdown(selectedGender: String, onGenderSelected: (String) -> Unit) {
 fun BirthdayPicker(birthday: String, onBirthdaySelected: (String) -> Unit) {
     val context = LocalContext.current
     val calendar = Calendar.getInstance()
-    val year = calendar.get(Calendar.YEAR)
-    val month = calendar.get(Calendar.MONTH)
-    val day = calendar.get(Calendar.DAY_OF_MONTH)
+
+    // Parse the selected date if possible, otherwise use the current date
+    val selectedDate = if (birthday != "Placeholder" && birthday.split("/").size == 3) {
+        birthday.split("/")
+    } else {
+        listOf(
+            calendar.get(Calendar.DAY_OF_MONTH).toString(),
+            (calendar.get(Calendar.MONTH) + 1).toString(),
+            calendar.get(Calendar.YEAR).toString()
+        )
+    }
+
+    val selectedDay = selectedDate[0].toInt()
+    val selectedMonth = selectedDate[1].toInt() - 1 // Months are 0-indexed in Calendar
+    val selectedYear = selectedDate[2].toInt()
 
     var showDialog by remember { mutableStateOf(false) }
 
@@ -393,13 +405,13 @@ fun BirthdayPicker(birthday: String, onBirthdaySelected: (String) -> Unit) {
     if (showDialog) {
         DatePickerDialog(
             context,
-            { _, selectedYear: Int, selectedMonth: Int, selectedDay: Int ->
-                onBirthdaySelected("$selectedDay/${selectedMonth + 1}/$selectedYear")
+            { _, newYear: Int, newMonth: Int, newDay: Int ->
+                onBirthdaySelected("$newDay/${newMonth + 1}/$newYear")
                 showDialog = false
             },
-            year,
-            month,
-            day
+            selectedYear,
+            selectedMonth,
+            selectedDay
         ).show()
     }
 }
