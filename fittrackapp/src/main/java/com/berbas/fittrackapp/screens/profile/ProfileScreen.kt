@@ -6,16 +6,16 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Build
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.berbas.fittrackapp.R
 import com.berbas.fittrackapp.navigation.Screen
 import com.berbas.fittrackapp.screens.bluetooth.BluetoothSyncViewModel
 import com.berbas.fittrackapp.ui.theme.HeraTheme
@@ -45,7 +45,7 @@ fun ProfileScreen(
                             bluetoothViewModel.startBluetoothServer()
                             navController.navigate(Screen.BLUETOOTHSCREEN.name)
                         }) {
-                            Icon(Icons.Default.Build, contentDescription = "Sync")
+                            Icon(painterResource(id = R.drawable.sync_icon), contentDescription = "Sync")
                         }
                     }
                 )

@@ -1,10 +1,12 @@
 package com.berbas.fittrackapp.navigation
 
+import android.graphics.drawable.Icon
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.filled.Star
+import com.berbas.fittrackapp.R
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.painterResource
 
 /**
  * Sealed class representing the screens of the bottom bar.
@@ -12,24 +14,24 @@ import androidx.compose.ui.graphics.vector.ImageVector
 sealed class BottomBarScreens(
     val route: String,
     val title: String,
-    val icon: ImageVector
+    val icon: Int
 ) {
     object Home : BottomBarScreens(
         route = "home",
         title = "Home",
-        icon = Icons.Default.Home
+        icon = R.drawable.home_icon
     )
 
     object Profile : BottomBarScreens(
         route = "profile",
         title = "Profile",
-        icon = Icons.Default.Person
+        icon = R.drawable.person_icon
     )
 
     object Goals : BottomBarScreens(
         route = "goals",
         title = "Goals",
-        icon = Icons.Default.Star
+        icon = R.drawable.flag_icon
     )
 }
 
@@ -43,6 +45,6 @@ enum class Screen {
 /**
  * Sealed class representing the screens of the app excluding the bottom bar.
  */
-sealed class AppScreens(val route: String){
-    object Bluetooth: AppScreens(Screen.BLUETOOTHSCREEN.name)
+sealed class AppScreens(val route: String) {
+    object Bluetooth : AppScreens(Screen.BLUETOOTHSCREEN.name)
 }
