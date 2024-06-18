@@ -60,6 +60,26 @@ fun ProfileScreen(
                 Column(
                     modifier = Modifier.padding(16.dp)
                 ) {
+                    ActivitySection()
+                    StepAndActiveTimeGoalRow(
+                        stepGoal = state.value.stepGoal,
+                        onStepGoalChange = { newValue ->
+                            profileViewModel.onEvent(
+                                PersonEvent.SetStepGoal(newValue)
+                            )
+                        },
+                        activeTimeGoal = state.value.activityGoal,
+                        onActiveTimeGoalChange = { newValue ->
+                            profileViewModel.onEvent(
+                                PersonEvent.SetActivityGoal(newValue)
+                            )
+                        }
+                    )
+                    Divider(
+                        color = Color.DarkGray,
+                        thickness = 1.dp,
+                        modifier = Modifier.padding(8.dp)
+                    )
                     AboutYouSection()
                     GenderAndBirthdayRow(
                         gender = state.value.gender,
@@ -113,7 +133,94 @@ fun AboutYouSection() {
         fontSize = 20.sp,
         color = Color.White,
         modifier = Modifier.padding(vertical = 8.dp)
+        // TODO: add a divider here
     )
+}
+
+/**
+ * Activity goals text
+ */
+@Composable
+fun ActivitySection() {
+    Text(
+        text = "Activity goals",
+        fontSize = 20.sp,
+        color = Color.White,
+        modifier = Modifier.padding(vertical = 8.dp)
+        // TODO: add a divider here
+    )
+}
+
+/**
+ * The UI elements for the step goal and active time goal fields
+ */
+@Composable
+fun StepAndActiveTimeGoalRow(
+    stepGoal: Int,
+    onStepGoalChange: (Int) -> Unit,
+    activeTimeGoal: Double,
+    onActiveTimeGoalChange: (Double) -> Unit
+) {
+    var showStepGoalDialog by remember { mutableStateOf(false) }
+    var showActiveTimeGoalDialog by remember { mutableStateOf(false) }
+
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        Column(
+            modifier = Modifier
+                .weight(1f)
+                .padding(4.dp)
+        ) {
+            Text(text = "Step Goal", color = Color.White)
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 8.dp)
+                    .background(Color(0xFF1F1F1F))
+                    .clickable { showStepGoalDialog = true }
+                    .padding(16.dp)
+            ) {
+                Text(text = "$stepGoal steps", color = Color.White)
+            }
+            if (showStepGoalDialog) {
+                InputDialog(
+                    label = "Step Goal",
+                    value = stepGoal.toDouble(),
+                    onValueChange = { newValue -> onStepGoalChange(newValue.toInt()) },
+                    onDismissRequest = { showStepGoalDialog = false },
+                    isInteger = true
+                )
+            }
+        }
+        Column(
+            modifier = Modifier
+                .weight(1f)
+                .padding(4.dp)
+        ) {
+            Text(text = "Active Time Goal (hours)", color = Color.White)
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 8.dp)
+                    .background(Color(0xFF1F1F1F))
+                    .clickable { showActiveTimeGoalDialog = true }
+                    .padding(16.dp)
+            ) {
+                Text(text = "$activeTimeGoal h", color = Color.White)
+            }
+            if (showActiveTimeGoalDialog) {
+                InputDialog(
+                    label = "Active Time Goal",
+                    value = activeTimeGoal,
+                    onValueChange = { newValue -> onActiveTimeGoalChange(newValue.toDouble()) },
+                    onDismissRequest = { showActiveTimeGoalDialog = false },
+                    isInteger = false
+                )
+            }
+        }
+    }
 }
 
 /**
@@ -308,7 +415,11 @@ fun InputDialog(
     onDismissRequest: () -> Unit,
     isInteger: Boolean = false
 ) {
-    var inputValue by remember { mutableStateOf(if (isInteger) value.toInt().toString() else String.format("%.1f", value)) }
+    var inputValue by remember {
+        mutableStateOf(
+            if (isInteger) value.toInt().toString() else String.format("%.1f", value)
+        )
+    }
 
     AlertDialog(
         onDismissRequest = onDismissRequest,
@@ -328,7 +439,10 @@ fun InputDialog(
         },
         confirmButton = {
             TextButton(onClick = {
-                onValueChange(if (isInteger) inputValue.toDoubleOrNull()?.toInt()?.toDouble() ?: value else inputValue.toDoubleOrNull() ?: value)
+                onValueChange(
+                    if (isInteger) inputValue.toDoubleOrNull()?.toInt()?.toDouble()
+                        ?: value else inputValue.toDoubleOrNull() ?: value
+                )
                 onDismissRequest()
             }, colors = ButtonDefaults.buttonColors(backgroundColor = Color.White)) {
                 Text("OK")

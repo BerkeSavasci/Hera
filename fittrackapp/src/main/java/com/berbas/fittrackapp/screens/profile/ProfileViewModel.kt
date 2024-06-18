@@ -45,7 +45,9 @@ class ProfileViewModel @Inject constructor(
                         gender = person.gender,
                         birthday = person.birthday,
                         weight = person.weight,
-                        height = person.height
+                        height = person.height,
+                        stepGoal = person.stepGoal,
+                        activityGoal = person.activityGoal
                     )
                 } else {
                     val defaultPerson = Person(
@@ -55,7 +57,9 @@ class ProfileViewModel @Inject constructor(
                         gender = "Placeholder",
                         birthday = "Placeholder",
                         weight = 0.0,
-                        height = 0
+                        height = 0,
+                        stepGoal = 6000,
+                        activityGoal = 1.5
                     )
                     personDao.upsertPerson(defaultPerson)
                     _state.value = ProfileState(
@@ -64,7 +68,9 @@ class ProfileViewModel @Inject constructor(
                         gender = defaultPerson.gender,
                         birthday = defaultPerson.birthday,
                         weight = defaultPerson.weight,
-                        height = defaultPerson.height
+                        height = defaultPerson.height,
+                        stepGoal = defaultPerson.stepGoal,
+                        activityGoal = defaultPerson.activityGoal
                     )
                 }
             }
@@ -135,6 +141,26 @@ class ProfileViewModel @Inject constructor(
                 }
                 updatePersonData()
             }
+
+            is PersonEvent.SetStepGoal -> {
+                _state.update {
+                    it.copy(
+                        stepGoal = event.stepGoal,
+                        isEditingFields = true
+                    )
+                }
+                updatePersonData()
+            }
+
+            is PersonEvent.SetActivityGoal -> {
+                _state.update {
+                    it.copy(
+                        activityGoal = event.activityGoal,
+                        isEditingFields = true
+                    )
+                }
+                updatePersonData()
+            }
         }
     }
 
@@ -150,7 +176,9 @@ class ProfileViewModel @Inject constructor(
                 gender = _state.value.gender,
                 birthday = _state.value.birthday,
                 weight = _state.value.weight,
-                height = _state.value.height
+                height = _state.value.height,
+                stepGoal = _state.value.stepGoal,
+                activityGoal = _state.value.activityGoal
             )
             personDao.upsertPerson(person)
         }

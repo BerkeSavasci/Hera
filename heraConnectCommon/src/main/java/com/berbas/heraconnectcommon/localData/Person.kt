@@ -15,6 +15,8 @@ data class Person(
     var gender: String,
     var height: Int,
     var weight: Double,
+    var stepGoal: Int,
+    var activityGoal: Double,
     @PrimaryKey
     val id: Int = 1
 )

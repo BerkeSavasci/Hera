@@ -8,5 +8,6 @@ sealed interface PersonEvent {
     data class SetBirthday(val birthday: String): PersonEvent
     data class SetWeight(val weight: Double): PersonEvent
     data class SetHeight(val height: Int): PersonEvent
-
+    data class SetStepGoal(val stepGoal: Int): PersonEvent
+    data class SetActivityGoal(val activityGoal: Double): PersonEvent
 }

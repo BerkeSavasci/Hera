@@ -1,8 +1,6 @@
 package com.berbas.fittrackapp.screens.bluetooth
 
 import android.util.Log
-import android.widget.Toast
-import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.berbas.fittrackapp.data.annotations.UserId
@@ -12,7 +10,6 @@ import com.berbas.heraconnectcommon.connection.ConnectionResult
 import com.berbas.heraconnectcommon.connection.PersonDataMessage
 import com.berbas.heraconnectcommon.localData.Person
 import com.berbas.heraconnectcommon.localData.PersonDao
-import com.google.gson.Gson
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -171,7 +168,9 @@ class BluetoothSyncViewModel @Inject constructor(
             birthday = personParts[2].substringAfter("="),
             gender = personParts[3].substringAfter("="),
             height = personParts[4].substringAfter("=").toInt(),
-            weight = personParts[5].substringAfter("=").toDouble()
+            weight = personParts[5].substringAfter("=").toDouble(),
+            stepGoal = personParts[6].substringAfter("=").toInt(),
+            activityGoal = personParts[7].substringAfter("=").toDouble(),
         )
     }
 
