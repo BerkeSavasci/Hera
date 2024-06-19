@@ -1,4 +1,4 @@
-package com.berbas.fittrackapp.screens.bluetooth
+package com.berbas.fittrackapp.screens.connections.bluetooth
 
 import android.util.Log
 import androidx.lifecycle.ViewModel

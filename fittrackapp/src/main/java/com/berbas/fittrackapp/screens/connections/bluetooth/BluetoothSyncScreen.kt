@@ -1,4 +1,4 @@
-package com.berbas.fittrackapp.screens.bluetooth
+package com.berbas.fittrackapp.screens.connections.bluetooth
 
 import android.widget.Toast
 import androidx.activity.compose.BackHandler

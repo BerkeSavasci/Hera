@@ -39,12 +39,16 @@ sealed class BottomBarScreens(
  * Enum class representing the screens of the app excluding the bottom bar.
  */
 enum class Screen {
-    BLUETOOTHSCREEN
+    SELECTSCREEN,
+    BLUETOOTHSCREEN,
+    WIFISCREEN
 }
 
 /**
  * Sealed class representing the screens of the app excluding the bottom bar.
  */
 sealed class AppScreens(val route: String) {
+    object Select : AppScreens(Screen.SELECTSCREEN.name)
     object Bluetooth : AppScreens(Screen.BLUETOOTHSCREEN.name)
+    object Wifi : AppScreens(Screen.WIFISCREEN.name)
 }

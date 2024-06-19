@@ -17,7 +17,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.berbas.fittrackapp.R
 import com.berbas.fittrackapp.navigation.Screen
-import com.berbas.fittrackapp.screens.bluetooth.BluetoothSyncViewModel
+import com.berbas.fittrackapp.screens.connections.bluetooth.BluetoothSyncViewModel
 import com.berbas.fittrackapp.ui.theme.HeraTheme
 import java.util.*
 
@@ -43,7 +43,7 @@ fun ProfileScreen(
                         IconButton(onClick = {
                             // when opening the screen start the server automatically
                             bluetoothViewModel.startBluetoothServer()
-                            navController.navigate(Screen.BLUETOOTHSCREEN.name)
+                            navController.navigate(Screen.SELECTSCREEN.name)
                         }) {
                             Icon(painterResource(id = R.drawable.sync_icon), contentDescription = "Sync")
                         }
