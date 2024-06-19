@@ -1,32 +1,28 @@
-package com.berbas.fittrackapp.screens.profile
+package com.berbas.hera.presentation.data
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.berbas.fittrackapp.data.annotations.UserId
+import com.berbas.hera.annotations.UserId
 import com.berbas.heraconnectcommon.localData.Person
 import com.berbas.heraconnectcommon.localData.PersonDao
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-/**
- * ViewModel for the ProfileScreen manages the data for the view
- */
 @HiltViewModel
-class ProfileViewModel @Inject constructor(
+class UserDataViewModel @Inject constructor(
     private val personDao: PersonDao,
     @UserId private val id: Int
-) : ViewModel() {
-
+) :ViewModel() {
     /**
      * MutableStateFlow to hold the state of the profile of the person
      */
     private val _personState = MutableStateFlow(ProfileState())
     val state: StateFlow<ProfileState> = _personState
-
     init {
         observeAndRefreshPerson()
     }

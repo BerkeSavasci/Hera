@@ -1,5 +1,5 @@
 [versions]
-agp = "8.5.0"
+agp = "8.4.1"
 bsonKotlinx = "5.1.0"
 connectClient = "1.1.0-alpha07"
 junitJupiter = "5.8.1"

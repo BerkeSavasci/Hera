@@ -104,9 +104,8 @@ fun FitnessItem(
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp, vertical = 8.dp)
-            .clip(RoundedCornerShape(10.dp))
-            .background(Color.DarkGray)
-            .border(BorderStroke(1.dp, Color.DarkGray))
+            .clip(RoundedCornerShape(16.dp))
+            .background(Color(30,30,30))
             .clickable(enabled = onClick != null, onClick = { onClick?.invoke() })
             .padding(vertical = 8.dp)
     ) {
