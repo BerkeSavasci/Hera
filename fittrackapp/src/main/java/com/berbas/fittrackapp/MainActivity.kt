@@ -12,6 +12,7 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.berbas.fittrackapp.screens.profile.ProfileViewModel
 import com.berbas.fittrackapp.screens.connections.bluetooth.BluetoothSyncViewModel
+import com.berbas.fittrackapp.screens.connections.wifi.WifiSyncViewModel
 import com.berbas.fittrackapp.ui.theme.HeraTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -50,8 +51,9 @@ class MainActivity : ComponentActivity() {
             HeraTheme {
                 val bluetoothSyncViewModel: BluetoothSyncViewModel = viewModel()
                 val profileViewModel: ProfileViewModel = viewModel()
+                val wifiSyncViewModel: WifiSyncViewModel = viewModel()
 
-                MainScreen(profileViewModel, bluetoothSyncViewModel)
+                MainScreen(profileViewModel, bluetoothSyncViewModel, wifiSyncViewModel)
             }
         }
     }

@@ -9,5 +9,5 @@ interface WifiConnectionInterface {
     /**
      * Receive data from the device
      */
-    fun receive(): String
+    suspend fun receive(id: Int): String
 }
