@@ -47,13 +47,13 @@ fun WifiSyncScreen(
             Spacer(modifier = Modifier.height(16.dp))
             Button(
                 onClick = { wifiSyncViewModel.sendData() },
-                modifier = Modifier.padding(8.dp)
+                modifier = Modifier.padding(paddingValues)
             ) {
                 Text("Send")
             }
             Button(
                 onClick = { wifiSyncViewModel.receiveData() },
-                modifier = Modifier.padding(8.dp)
+                modifier = Modifier.padding(paddingValues)
             ) {
                 Text("Receive")
             }
