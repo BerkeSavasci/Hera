@@ -1,6 +1,7 @@
 package com.berbas.heraconnectcommon.protocolEngine
 
 import com.berbas.heraconnectcommon.connection.PersonDataMessage
+import com.berbas.heraconnectcommon.localData.Person
 
 /**
  * Handles the serialization and deserialization of data
@@ -11,6 +12,14 @@ class BluetoothProtocolEngine : ProtocolEngine {
         val name = substringBeforeLast("#")
         val message = substringAfterLast("#")
         return PersonDataMessage(message = message, senderName = name, isFromMobile = isFromMobile)
+    }
+
+    override fun toPersonDataMessage(data: Person): String {
+        TODO("Not yet implemented")
+    }
+
+    override fun toPerson(data: String): Person {
+        TODO("Not yet implemented")
     }
 
     /**
