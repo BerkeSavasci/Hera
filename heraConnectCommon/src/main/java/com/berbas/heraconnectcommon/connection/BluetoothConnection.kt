@@ -112,11 +112,11 @@ class BluetoothConnection(
 
     override fun startDiscovery() {
         if (!hasPermissions(Manifest.permission.BLUETOOTH_SCAN)) {
-            Log.d("BluetoothConnection", "No permission to scan for devices")
+            Log.e("BluetoothConnection", "No permission to scan for devices")
             return
         }
         if (!isReceiverRegistered) {
-            Log.d("BluetoothConnection", "Starting discovery")
+            Log.i("BluetoothConnection", "Starting discovery")
             context.registerReceiver(
                 foundDeviceReceiver,
                 IntentFilter(BluetoothDevice.ACTION_FOUND)
@@ -130,10 +130,10 @@ class BluetoothConnection(
 
     override fun stopDiscovery() {
         if (!hasPermissions(Manifest.permission.BLUETOOTH_SCAN)) {
-            Log.d("BluetoothConnection", "No permission to stop scanning for devices")
+            Log.e("BluetoothConnection", "No permission to stop scanning for devices")
             return
         }
-        Log.d("BluetoothConnection", "Stopping discovery")
+        Log.i("BluetoothConnection", "Stopping discovery")
         isReceiverRegistered = false
         bluetoothAdapter?.cancelDiscovery()
 

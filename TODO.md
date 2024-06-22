@@ -9,6 +9,7 @@
     - [ ] Wifi
     - [ ] Bluetooth
     - [ ] UI
+- [ ] Bei fehlgeschlagene Verbindung den nutzer informieren
 
 ## Wearable
 - [ ] Bluetooth Connection implementieren und testen

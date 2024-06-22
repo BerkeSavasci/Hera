@@ -1,6 +1,5 @@
 package com.berbas.hera.presentation
 
-import android.service.autofill.UserData
 import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -8,9 +7,11 @@ import androidx.navigation.compose.rememberNavController
 import com.berbas.hera.presentation.data.UserDataScreen
 import com.berbas.hera.presentation.data.UserDataViewModel
 import com.berbas.hera.presentation.sync.SyncScreen
+import com.berbas.hera.presentation.sync.SyncViewModel
 
 @Composable
 fun FitnessApp(
+    syncViewModel: SyncViewModel,
     userDataViewModel: UserDataViewModel
 ) {
     val navController = rememberNavController()
@@ -43,12 +44,13 @@ fun FitnessApp(
         {
             UserDataScreen(
                 onBackClick = { navController.navigateUp() },
-                userDataViewModel
+                viewModel = userDataViewModel
             )
         }
         composable("sync")
         {
             SyncScreen(
+                viewModel = syncViewModel,
                 onBackClick = { navController.navigateUp() }
             )
         }

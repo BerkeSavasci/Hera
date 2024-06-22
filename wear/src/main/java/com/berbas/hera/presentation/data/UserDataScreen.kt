@@ -453,9 +453,6 @@ fun WeightPickerDialog(
     selectedWeight: Double,
     onWeightSelected: (Double) -> Unit
 ) {
-    // TODO: make the background color match the rest of the app
-    // FIXME: make the ui more appealing, change the scroll mechanics
-
     val intPart = selectedWeight.toInt()
     val fractionPart = ((selectedWeight - intPart) * 10).toInt()
 

@@ -3,11 +3,13 @@ package com.berbas.fittrackapp.screens.connections.bluetooth
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
@@ -40,7 +42,7 @@ fun BluetoothSyncScreen(
     navController: NavHostController
 ) {
     val dataTransferStatus by bluetoothViewModel.dataTransferStatus.collectAsState()
-    val showDialog = remember { mutableStateOf(true ) }
+    val showDialog = remember { mutableStateOf(true) }
 
     BackHandler {
         bluetoothViewModel.release()
@@ -50,7 +52,7 @@ fun BluetoothSyncScreen(
         topBar = {
             TopAppBar(
                 title = { Text("Bluetooth") },
-                contentColor = Color.White
+                contentColor = MaterialTheme.colors.surface
             )
         },
         floatingActionButton = { BluetoothFloatingActionButton(bluetoothViewModel, navController) }
@@ -67,7 +69,8 @@ fun BluetoothSyncScreen(
 
     if (showDialog.value) {
         DataTransferDialog(dataTransferStatus, showDialog)
-    }}
+    }
+}
 
 /**
  * Alert dialog to let the user know
@@ -105,9 +108,10 @@ fun DataTransferDialog(
                 }
             )
         }
+
         else -> {
-        //TODO: other states (if needed)
-         }
+            //TODO: other states (if needed)
+        }
     }
 }
 
@@ -133,16 +137,32 @@ fun BluetoothFloatingActionButton(
  */
 @Composable
 fun BluetoothButtons(bluetoothViewModel: BluetoothSyncViewModel) {
-    Row(modifier = Modifier.padding(8.dp)) {
-        Button(onClick = { bluetoothViewModel.startDiscovery() }) {
-            Text("Scan")
-        }
-        Spacer(modifier = Modifier.width(8.dp))
-        Button(onClick = { bluetoothViewModel.stopDiscovery() }) {
-            Text("Stop Scanning")
+    val isScanning = remember { mutableStateOf(false) }
+
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+        verticalArrangement = Arrangement.Top,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Row(Modifier.padding(8.dp)) {
+            Button(onClick = {
+                if (isScanning.value) {
+                    bluetoothViewModel.stopDiscovery()
+                } else {
+                    bluetoothViewModel.startDiscovery()
+                }
+                isScanning.value = !isScanning.value
+            }) {
+                Text(if (isScanning.value) "Stop" else "Scan")
+            }
+            if (isScanning.value) {
+                CircularProgressIndicator(
+                    modifier = Modifier.padding(start = 8.dp),
+                    strokeWidth = 4.dp
+                )
+            }
         }
     }
-    Divider()
 }
 
 /**

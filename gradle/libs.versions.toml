@@ -38,6 +38,7 @@ fragmentKtx = "1.5.6"
 lifecycleRuntimeKtx = "2.8.1"
 appcompatVersion = "1.7.0"
 material3Android = "1.2.1"
+foundationDesktop = "1.6.8"
 
 [libraries]
 androidx-connect-client = { module = "androidx.health.connect:connect-client", version.ref = "connectClient" }
@@ -86,6 +87,7 @@ androidx-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
 androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
 appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompatVersion" }
 androidx-material3-android = { group = "androidx.compose.material3", name = "material3-android", version.ref = "material3Android" }
+androidx-foundation-desktop = { group = "androidx.compose.foundation", name = "foundation-desktop", version.ref = "foundationDesktop" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

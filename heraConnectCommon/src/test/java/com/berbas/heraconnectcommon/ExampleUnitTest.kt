@@ -1,10 +1,7 @@
 package com.berbas.heraconnectcommon
 
-import com.berbas.heraconnectcommon.connection.dbManager.MongoClientConnection
 import org.junit.Test
-
-import org.junit.Assert.*
-import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Assertions.assertEquals
 
 /**
  * Example local unit test, which will execute on the development machine (host).

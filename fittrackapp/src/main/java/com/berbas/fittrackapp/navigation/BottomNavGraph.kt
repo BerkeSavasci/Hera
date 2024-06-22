@@ -31,7 +31,7 @@ fun BottomNavGraph(
         startDestination = BottomBarScreens.Home.route
     ) {
         composable(route = BottomBarScreens.Goals.route) {
-            GoalsScreen(navController)
+            GoalsScreen()
         }
         composable(route = BottomBarScreens.Home.route) {
             HomeScreen()

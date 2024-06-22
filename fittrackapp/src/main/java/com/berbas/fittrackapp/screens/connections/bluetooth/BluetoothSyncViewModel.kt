@@ -29,7 +29,7 @@ class BluetoothSyncViewModel @Inject constructor(
      */
     val devices: StateFlow<List<BluetoothDeviceDomain>> = bluetoothController.scannedDevices
 
-    private var receivedPersonData: PersonDataMessage? = null
+    private var sendPersonData: PersonDataMessage? = null
 
     private var serverJob: Job? = null
 
@@ -69,10 +69,10 @@ class BluetoothSyncViewModel @Inject constructor(
                     }
 
                     is ConnectionResult.TransferSuccess -> {
-                        receivedPersonData = result.message
+                        sendPersonData = result.message
                         Log.d(
                             "BluetoothSyncViewModel / connect",
-                            "Data transfer was successful: $receivedPersonData"
+                            "Data transfer was successful: $sendPersonData"
                         )
                         _dataTransferStatus.value = DataTransferStatus.SUCCESS
                     }
@@ -100,12 +100,12 @@ class BluetoothSyncViewModel @Inject constructor(
 
                     is ConnectionResult.TransferSuccess -> {
                         _dataTransferStatus.value = DataTransferStatus.IN_PROGRESS
-                        receivedPersonData = result.message
+                        sendPersonData = result.message
                         Log.d(
                             "BluetoothSyncViewModel / server",
-                            "Data transfer was successful: $receivedPersonData"
+                            "Data transfer was successful: $sendPersonData"
                         )
-                        val localReceivedPersonData = receivedPersonData
+                        val localReceivedPersonData = sendPersonData
                         if (localReceivedPersonData != null) {
                             val person =
                                 localReceivedPersonData.toPerson()
