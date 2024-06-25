@@ -10,4 +10,5 @@ data class FitnessData(
     var sleepTime: ArrayList<String>,
     @PrimaryKey
     val id: Int = 1
-)
+) {
+}
