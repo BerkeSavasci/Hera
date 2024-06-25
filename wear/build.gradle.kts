@@ -22,6 +22,10 @@ android {
 
     }
 
+    packaging {
+        resources.excludes.add("META-INF/LICENSE-notice.md")
+    }
+
     buildTypes {
         release {
             isMinifyEnabled = false

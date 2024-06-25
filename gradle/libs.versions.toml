@@ -2,7 +2,7 @@
 agp = "8.5.0"
 bsonKotlinx = "5.1.0"
 connectClient = "1.1.0-alpha07"
-junitJupiter = "5.8.1"
+junitJupiter = "5.10.2"
 kotlin = "1.9.0"
 coreKtx = "1.10.1"
 junit = "4.13.2"
@@ -10,8 +10,13 @@ junitVersion = "1.1.5"
 espressoCore = "3.5.1"
 appcompat = "1.6.1"
 lifecycleLivedataKtxVersion = "2.3.1"
+lifecycleViewmodelCompose = "2.8.2"
+mockitoAndroid = "5.12.0"
+mockitoCore = "5.12.0"
 mockitoInline = " 125"
+mockitoInlineVersion = "3.12.4"
 mockitoJunitJupiter = "124"
+mockitoJunitJupiterVersion = "3.12.4"
 mockitoKotlinVersion = "x.x.x"
 mockk = "1.12.0"
 mongodbDriverKotlin = "1.7.2"
@@ -41,21 +46,27 @@ lifecycleRuntimeKtx = "2.8.1"
 appcompatVersion = "1.7.0"
 material3Android = "1.2.1"
 foundationDesktop = "1.6.8"
+testng = "6.9.6"
+junitJupiterVersion = "5.8.1"
 
 [libraries]
 androidx-connect-client = { module = "androidx.health.connect:connect-client", version.ref = "connectClient" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-foundation = { module = "androidx.compose.foundation:foundation" }
 androidx-lifecycle-livedata-ktx-v231 = { module = "androidx.lifecycle:lifecycle-livedata-ktx", version.ref = "lifecycleLivedataKtxVersion" }
+androidx-lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycleViewmodelCompose" }
 bson-kotlinx = { module = "org.mongodb:bson-kotlinx", version.ref = "bsonKotlinx" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 junit-jupiter = { module = "org.junit.jupiter:junit-jupiter", version.ref = "junitJupiter" }
-kotlin-mockito-kotlin = { module = "org.mockito.kotlin:mockito-kotlin", version.ref = "mockitoKotlinVersion" }
+mockito-android = { module = "org.mockito:mockito-android", version = "5.12.0" }
+mockito-core = { module = "org.mockito:mockito-core", version.ref = "mockitoCore" }
 mockito-inline = { module = "org.mockito:mockito-inline", version.ref = "mockitoInline" }
+mockito-inline-v3124 = { module = "org.mockito:mockito-inline", version = "5.2.0" }
 mockito-junit-jupiter = { module = "org.mockito:mockito-junit-jupiter", version = "5.12.0" }
+mockito-junit-jupiter-v3124 = { module = "org.mockito:mockito-junit-jupiter", version = "5.12.0" }
 mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
 mongodb-driver-kotlin = { module = "org.mongodb:mongodb-driver-kotlin", version.ref = "mongodbDriverKotlin" }
 mongodb-driver-kotlin-coroutine = { module = "org.mongodb:mongodb-driver-kotlin-coroutine", version.ref = "mongodbDriverKotlinCoroutine" }
@@ -92,6 +103,8 @@ androidx-material3 = { group = "androidx.compose.material3", name = "material3" 
 appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompatVersion" }
 androidx-material3-android = { group = "androidx.compose.material3", name = "material3-android", version.ref = "material3Android" }
 androidx-foundation-desktop = { group = "androidx.compose.foundation", name = "foundation-desktop", version.ref = "foundationDesktop" }
+testng = { group = "org.testng", name = "testng", version.ref = "testng" }
+jupiter-junit-jupiter = { group = "org.junit.jupiter", name = "junit-jupiter", version.ref = "junitJupiterVersion" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

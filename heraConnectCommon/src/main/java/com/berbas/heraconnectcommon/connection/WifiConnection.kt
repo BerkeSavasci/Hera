@@ -9,23 +9,32 @@ import org.json.JSONObject
 import java.net.HttpURLConnection
 import java.net.URL
 
-class WifiConnection : WifiConnectionInterface {
+class WifiConnection (
+    private val urlWrapper: UrlWrapper
+) : WifiConnectionInterface {
     private var url = URL("http://5.28.100.60:3000/users")
 
+    fun splitData(data: String, jsonObject: JSONObject): JSONObject {
+        val dataSplit = data.substringAfter("Person(").substringBeforeLast(")").split(", ")
+
+        for (item in dataSplit) {
+            val keyValue = item.split("=")
+            val key = keyValue[0]
+            jsonObject.put(key, keyValue[1])
+        }
+
+        return jsonObject
+    }
+
     override fun send(data: String) {
+        urlWrapper.setUrl(url)
+
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                val jsonObject = JSONObject()
-                val dataSplit = data.substringAfter("Person(").substringBeforeLast(")").split(", ")
+                val jsonObject = splitData(data, JSONObject())
 
-                for (item in dataSplit) {
-                    val keyValue = item.split("=")
-                    val key = keyValue[0]
-                    jsonObject.put(key, keyValue[1])
-                }
-
-                Log.d("WifiConnection", "Sending data to: $url")
-                val httpURLConnection = (url.openConnection() as HttpURLConnection).apply {
+                Log.d("WifiConnection", "Sending data to: ${urlWrapper.getUrl()}")
+                val httpURLConnection = urlWrapper.openConnection().apply {
                     requestMethod = "POST"
                     setRequestProperty("Content-Type", "application/json")
                     doOutput = true
@@ -54,8 +63,9 @@ class WifiConnection : WifiConnectionInterface {
             var result = ""
             try {
                 val urlWithId = URL("$url/$id")
-                Log.d("WifiConnection", "Receiving data from: $urlWithId")
-                val httpURLConnection = (urlWithId.openConnection() as HttpURLConnection).apply {
+                urlWrapper.setUrl(urlWithId)
+                Log.d("WifiConnection", "Receiving data from: ${urlWrapper.getUrl()}")
+                val httpURLConnection = urlWrapper.openConnection().apply {
                     requestMethod = "GET"
                     doInput = true
                 }

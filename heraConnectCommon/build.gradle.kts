@@ -19,6 +19,13 @@ android {
 
     }
 
+    packaging {
+        resources.excludes.add("META-INF/LICENSE-notice.md")
+    }
+
+    packagingOptions {
+        exclude("META-INF/LICENSE.md")
+    }
 
     buildTypes {
         release {
@@ -47,37 +54,29 @@ dependencies {
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
 
-    // mongodb
-    implementation("org.mongodb:mongodb-driver-sync:4.4.0")
-    implementation("org.litote.kmongo:kmongo-coroutine:4.4.0")
-
+    androidTestImplementation ("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
     // gson
     implementation("com.google.code.gson:gson:2.11.0")
 
     // room
     implementation("androidx.room:room-ktx:2.6.1")
+    testImplementation(libs.testng)
+    androidTestImplementation(libs.jupiter.junit.jupiter)
     kapt("androidx.room:room-compiler:2.6.1")
     implementation("androidx.room:room-runtime:2.6.1")
 
     // Testing
     // mockito
-    testImplementation(libs.mockito.inline)  // die funktionieren nicht aber ich lass die drin
-    testImplementation(libs.mockito.junit.jupiter) // die funktionieren nicht aber ich lass die drin
-    testImplementation(libs.mockk)
-    testImplementation("org.mockito:mockito-core:3.12.4")
-    testImplementation("org.mockito:mockito-inline:3.12.4")
-    testImplementation("org.mockito:mockito-junit-jupiter:3.12.4")
+    androidTestImplementation(libs.mockito.core)
+    androidTestImplementation(libs.mockito.junit.jupiter.v3124)
+    androidTestImplementation(libs.mockito.android)
     // coroutines
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.0")
     //Junit
-    testImplementation(libs.junit)
-    testImplementation(libs.junit.jupiter)
-    androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 
     implementation(libs.bson.kotlinx)
     implementation(libs.play.services.fitness)
     implementation(libs.play.services.auth)
-    implementation(libs.androidx.connect.client)
 
 }

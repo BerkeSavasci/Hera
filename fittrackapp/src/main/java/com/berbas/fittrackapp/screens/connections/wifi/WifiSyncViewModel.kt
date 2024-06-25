@@ -1,6 +1,7 @@
 package com.berbas.fittrackapp.screens.connections.wifi
 
 import android.util.Log
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.berbas.fittrackapp.data.annotations.UserId
@@ -12,6 +13,7 @@ import com.berbas.heraconnectcommon.protocolEngine.ProtocolEngine
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import org.json.JSONException
 import org.json.JSONObject
 import javax.inject.Inject
 
@@ -21,7 +23,7 @@ class WifiSyncViewModel @Inject constructor(
     @UserId private val id: Int,
     private val wifiController: WifiConnectionInterface
 ): ViewModel(), ProtocolEngine {
-
+    val errorMessage = MutableLiveData<String>()
 
     fun sendData(){
         viewModelScope.launch {
@@ -35,8 +37,13 @@ class WifiSyncViewModel @Inject constructor(
     fun receiveData(){
         viewModelScope.launch {
             val receivedData = wifiController.receive(id)
-            val person = toPerson(receivedData)
-            personDao.upsertPerson(person)
+            if (receivedData.isEmpty()) {
+                Log.e("WifiSyncViewModel", "Received data is empty")
+                errorMessage.postValue("Received data is empty")
+            } else {
+                val person = toPerson(receivedData)
+                personDao.upsertPerson(person)
+            }
         }
     }
 
@@ -53,6 +60,9 @@ class WifiSyncViewModel @Inject constructor(
     }
 
     override fun toPerson(data: String): Person {
+        if (data.isEmpty()) {
+            throw IllegalArgumentException("Data string is empty")
+        }
         val jsonObject = JSONObject(data)
 
         return Person(

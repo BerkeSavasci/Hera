@@ -22,6 +22,10 @@ android {
         }
     }
 
+    packaging {
+        resources.excludes.add("META-INF/LICENSE-notice.md")
+    }
+
     buildTypes {
         release {
             isMinifyEnabled = false
@@ -107,6 +111,9 @@ dependencies {
     // local
     implementation(project(":heraConnectCommon"))
     wearApp(project(":wear"))
+
+    // live data
+    implementation (libs.androidx.lifecycle.viewmodel.compose)
 }
 
 // Allow references to generated code
