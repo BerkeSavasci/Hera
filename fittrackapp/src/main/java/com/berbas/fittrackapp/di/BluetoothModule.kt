@@ -1,4 +1,4 @@
-package com.berbas.hera.annotations
+package com.berbas.fittrackapp.di
 
 import android.content.Context
 import com.berbas.heraconnectcommon.connection.BluetoothConnection
@@ -12,7 +12,7 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-object BluetoothModuleMobile {
+object BluetoothModule {
 
     @Singleton
     @Provides

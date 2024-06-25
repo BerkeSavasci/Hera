@@ -1,4 +1,4 @@
-package com.berbas.hera.annotations
+package com.berbas.hera.di
 
 import android.content.Context
 import androidx.room.Room

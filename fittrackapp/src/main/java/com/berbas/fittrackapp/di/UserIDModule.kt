@@ -1,4 +1,4 @@
-package com.berbas.fittrackapp.data
+package com.berbas.fittrackapp.di
 
 import com.berbas.fittrackapp.data.annotations.UserId
 import dagger.Module

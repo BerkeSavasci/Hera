@@ -16,7 +16,7 @@ android {
         versionCode = 1
         versionName = "1.0"
 
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner = "com.berbas.fittrackapp.HiltTestRunner"
         vectorDrawables {
             useSupportLibrary = true
         }
@@ -60,15 +60,17 @@ dependencies {
     kapt("com.google.dagger:hilt-android-compiler:2.48")
 
     // hilt testing
-    androidTestImplementation("com.google.dagger:hilt-android-testing:2.44.2")
-    testImplementation("com.google.dagger:hilt-android-testing:2.44.2")
-    kaptAndroidTest("com.google.dagger:hilt-compiler:2.44.2")
-    kaptTest("com.google.dagger:hilt-compiler:2.44.2")
-
+    androidTestImplementation("com.google.dagger:hilt-android-testing:2.48")
+    kaptAndroidTest("com.google.dagger:hilt-android-compiler:2.48")
     // room
     implementation("androidx.room:room-ktx:2.6.1")
     implementation("androidx.room:room-runtime:2.6.1")
     kapt("androidx.room:room-compiler:2.6.1")
+
+    // mockito
+    testImplementation("org.mockito:mockito-core:2.1.0")
+    testImplementation("org.mockito.kotlin:mockito-kotlin:3.2.0")
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.0")
 
     // compose
     implementation(libs.androidx.activity.compose)
@@ -85,6 +87,8 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+    androidTestImplementation("androidx.compose.ui:ui-test-junit4:1.0.5")
+    androidTestImplementation("androidx.compose.ui:ui-test-manifest:1.0.5")
 
     // defaults
     implementation(libs.androidx.core.ktx)
@@ -96,6 +100,7 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+    testImplementation(libs.truth)
 
     implementation("com.google.code.gson:gson:2.11.0")
 

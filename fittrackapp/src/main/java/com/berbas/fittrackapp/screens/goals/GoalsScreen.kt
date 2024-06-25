@@ -20,6 +20,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.berbas.fittrackapp.R
 
+/** A place holder scene for the goals screen */
 @Composable
 fun GoalsScreen() {
     val badges = listOf(
@@ -56,9 +57,9 @@ fun GoalsScreen() {
             )
 
             Spacer(modifier = Modifier.height(16.dp))
-            GoalSection(title = "Abnehmen")
-            GoalSection(title = "Zunehmen")
-            GoalSection(title = "Aktiver werden")
+            GoalSection(title = "Lose weight")
+            GoalSection(title = "Gain weight")
+            GoalSection(title = "Become more active")
             Text(
                 text = "Your Achievements",
                 style = MaterialTheme.typography.h5,

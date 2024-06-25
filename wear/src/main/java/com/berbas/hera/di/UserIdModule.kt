@@ -1,5 +1,6 @@
-package com.berbas.hera.annotations
+package com.berbas.hera.di
 
+import com.berbas.hera.annotations.UserId
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
