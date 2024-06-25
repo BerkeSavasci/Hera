@@ -43,7 +43,6 @@ android {
 }
 
 dependencies {
-
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
@@ -51,6 +50,9 @@ dependencies {
     // mongodb
     implementation("org.mongodb:mongodb-driver-sync:4.4.0")
     implementation("org.litote.kmongo:kmongo-coroutine:4.4.0")
+
+    // gson
+    implementation("com.google.code.gson:gson:2.11.0")
 
     // room
     implementation("androidx.room:room-ktx:2.6.1")
