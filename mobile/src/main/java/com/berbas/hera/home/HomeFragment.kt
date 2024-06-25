@@ -15,7 +15,7 @@ import com.berbas.hera.R
 import com.berbas.heraconnectcommon.connection.BluetoothConnection
 import com.berbas.heraconnectcommon.connection.BluetoothDeviceDomain
 import com.berbas.heraconnectcommon.connection.ConnectionResult
-import com.berbas.heraconnectcommon.localData.PersonDataBase
+import com.berbas.heraconnectcommon.localData.person.PersonDataBase
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 

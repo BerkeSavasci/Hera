@@ -2,8 +2,8 @@ package com.berbas.fittrackapp.di
 
 import android.content.Context
 import androidx.room.Room
-import com.berbas.heraconnectcommon.localData.PersonDao
-import com.berbas.heraconnectcommon.localData.PersonDataBase
+import com.berbas.heraconnectcommon.localData.person.PersonDao
+import com.berbas.heraconnectcommon.localData.person.PersonDataBase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

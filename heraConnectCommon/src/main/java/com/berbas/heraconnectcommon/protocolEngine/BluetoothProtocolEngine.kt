@@ -1,7 +1,7 @@
 package com.berbas.heraconnectcommon.protocolEngine
 
 import com.berbas.heraconnectcommon.connection.PersonDataMessage
-import com.berbas.heraconnectcommon.localData.Person
+import com.berbas.heraconnectcommon.localData.person.Person
 
 /**
  * Handles the serialization and deserialization of data

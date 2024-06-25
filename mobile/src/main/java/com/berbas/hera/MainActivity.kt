@@ -25,7 +25,7 @@ import com.berbas.heraconnectcommon.connection.BluetoothConnection
 import com.berbas.heraconnectcommon.connection.BluetoothDeviceDomain
 import androidx.health.connect.client.HealthConnectClient
 import androidx.room.Room
-import com.berbas.heraconnectcommon.localData.PersonDataBase
+import com.berbas.heraconnectcommon.localData.person.PersonDataBase
 import com.google.android.material.navigation.NavigationView
 
 class MainActivity : AppCompatActivity() {

@@ -1,4 +1,4 @@
-package com.berbas.heraconnectcommon.localData
+package com.berbas.heraconnectcommon.localData.person
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

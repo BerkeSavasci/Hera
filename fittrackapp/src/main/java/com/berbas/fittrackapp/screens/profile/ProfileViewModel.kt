@@ -3,8 +3,8 @@ package com.berbas.fittrackapp.screens.profile
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.berbas.fittrackapp.data.annotations.UserId
-import com.berbas.heraconnectcommon.localData.Person
-import com.berbas.heraconnectcommon.localData.PersonDao
+import com.berbas.heraconnectcommon.localData.person.Person
+import com.berbas.heraconnectcommon.localData.person.PersonDao
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

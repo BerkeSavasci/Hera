@@ -6,8 +6,8 @@ import androidx.lifecycle.viewModelScope
 import com.berbas.fittrackapp.data.annotations.UserId
 import com.berbas.heraconnectcommon.connection.PersonDataMessage
 import com.berbas.heraconnectcommon.connection.WifiConnectionInterface
-import com.berbas.heraconnectcommon.localData.Person
-import com.berbas.heraconnectcommon.localData.PersonDao
+import com.berbas.heraconnectcommon.localData.person.Person
+import com.berbas.heraconnectcommon.localData.person.PersonDao
 import com.berbas.heraconnectcommon.protocolEngine.ProtocolEngine
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.first

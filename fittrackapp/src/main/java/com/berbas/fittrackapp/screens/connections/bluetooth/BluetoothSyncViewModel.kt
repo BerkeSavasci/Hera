@@ -8,8 +8,8 @@ import com.berbas.heraconnectcommon.connection.BluetoothControllerInterface
 import com.berbas.heraconnectcommon.connection.BluetoothDeviceDomain
 import com.berbas.heraconnectcommon.connection.ConnectionResult
 import com.berbas.heraconnectcommon.connection.PersonDataMessage
-import com.berbas.heraconnectcommon.localData.Person
-import com.berbas.heraconnectcommon.localData.PersonDao
+import com.berbas.heraconnectcommon.localData.person.Person
+import com.berbas.heraconnectcommon.localData.person.PersonDao
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow

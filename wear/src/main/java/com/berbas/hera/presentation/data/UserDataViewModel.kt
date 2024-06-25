@@ -3,12 +3,11 @@ package com.berbas.hera.presentation.data
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.berbas.hera.annotations.UserId
-import com.berbas.heraconnectcommon.localData.Person
-import com.berbas.heraconnectcommon.localData.PersonDao
+import com.berbas.heraconnectcommon.localData.person.Person
+import com.berbas.heraconnectcommon.localData.person.PersonDao
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject

@@ -7,9 +7,6 @@ import android.os.Bundle
 import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
@@ -21,8 +18,8 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.berbas.hera.R
 import com.berbas.heraconnectcommon.data.UserDataController
-import com.berbas.heraconnectcommon.localData.Person
-import com.berbas.heraconnectcommon.localData.PersonDataBase
+import com.berbas.heraconnectcommon.localData.person.Person
+import com.berbas.heraconnectcommon.localData.person.PersonDataBase
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.ZoneId

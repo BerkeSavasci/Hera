@@ -2,7 +2,7 @@ package com.berbas.fittrackapp.di
 
 import android.content.Context
 import androidx.room.Room
-import com.berbas.heraconnectcommon.localData.PersonDataBase
+import com.berbas.heraconnectcommon.localData.person.PersonDataBase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -18,7 +18,7 @@ object TestAppModule {
     @Named("test_DB")
     fun provideInMemoryDb(@ApplicationContext context: Context) =
         // hold the db in ram
-        Room.inMemoryDatabaseBuilder(context,PersonDataBase::class.java)
+        Room.inMemoryDatabaseBuilder(context, PersonDataBase::class.java)
             .allowMainThreadQueries()
             .build()
 }

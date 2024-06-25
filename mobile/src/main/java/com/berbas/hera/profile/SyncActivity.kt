@@ -1,16 +1,5 @@
 package com.berbas.hera.profile
 
-import android.os.Bundle
-import android.util.Log
-import android.widget.ArrayAdapter
-import android.widget.ListView
-import androidx.appcompat.app.AppCompatActivity
-import com.berbas.hera.R
-import com.berbas.heraconnectcommon.connection.BluetoothConnection
-import com.berbas.heraconnectcommon.connection.BluetoothDeviceDomain
-import com.berbas.heraconnectcommon.localData.PersonDataBase
-import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 /*
 @AndroidEntryPoint
 class SyncActivity : AppCompatActivity() {

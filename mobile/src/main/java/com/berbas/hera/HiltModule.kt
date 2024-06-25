@@ -1,17 +1,5 @@
 package com.berbas.hera
 
-import android.content.Context
-import android.widget.ArrayAdapter
-import androidx.room.Room
-import com.berbas.heraconnectcommon.connection.BluetoothConnection
-import com.berbas.heraconnectcommon.connection.BluetoothDeviceDomain
-import com.berbas.heraconnectcommon.localData.PersonDataBase
-import dagger.Module
-import dagger.Provides
-import dagger.hilt.InstallIn
-import dagger.hilt.android.qualifiers.ApplicationContext
-import dagger.hilt.components.SingletonComponent
-import javax.inject.Singleton
 /*
 @Module
 @InstallIn(SingletonComponent::class)
