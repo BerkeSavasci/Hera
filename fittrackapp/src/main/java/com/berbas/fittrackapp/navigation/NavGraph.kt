@@ -20,7 +20,7 @@ import com.berbas.fittrackapp.screens.connections.wifi.WifiSyncViewModel
  * @param navController the navigation controller
  */
 @Composable
-fun BottomNavGraph(
+fun NavGraph(
     navController: NavHostController,
     profileViewModel: ProfileViewModel,
     bluetoothViewModel: BluetoothSyncViewModel,
@@ -58,6 +58,5 @@ fun BottomNavGraph(
         composable(route = AppScreens.Select.route) {
             SyncSelectionScreen(navController)
         }
-
     }
 }

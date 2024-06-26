@@ -17,7 +17,7 @@ class WifiConnection(
 
     /** The state of the wifi data transfer */
     private val _wifiState = MutableStateFlow(WifiState.IDLE)
-    override val wifiState: StateFlow<WifiState> = _wifiState
+    private val wifiState: StateFlow<WifiState> = _wifiState
 
     private var url = URL("http://5.28.100.60:3000/users")
 
@@ -98,4 +98,6 @@ class WifiConnection(
             result
         }
     }
+
+    override fun getWifiState(): StateFlow<WifiState> = wifiState
 }

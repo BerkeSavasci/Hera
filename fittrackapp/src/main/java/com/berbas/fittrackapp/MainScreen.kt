@@ -13,14 +13,17 @@ import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.ContentAlpha
 import androidx.compose.material.Icon
 import androidx.compose.material.LocalContentColor
+import androidx.compose.material.SnackbarDefaults.backgroundColor
 import androidx.compose.material.Text
+import androidx.compose.material3.ListItemDefaults.contentColor
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.res.painterResource
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import com.berbas.fittrackapp.navigation.AppScreens
 import com.berbas.fittrackapp.navigation.BottomBarScreens
-import com.berbas.fittrackapp.navigation.BottomNavGraph
+import com.berbas.fittrackapp.navigation.NavGraph
 import com.berbas.fittrackapp.screens.profile.ProfileViewModel
 import com.berbas.fittrackapp.screens.connections.bluetooth.BluetoothSyncViewModel
 import com.berbas.fittrackapp.screens.connections.wifi.WifiSyncViewModel
@@ -42,12 +45,15 @@ fun MainScreen(
     Scaffold(
         bottomBar = {
             // Check if the current destination is not the Bluetooth screen
-            if (currentDestination?.route != AppScreens.Bluetooth.route) {
+            if (currentDestination?.route != AppScreens.Bluetooth.route
+                && currentDestination?.route != AppScreens.Wifi.route
+                && currentDestination?.route != AppScreens.Select.route
+            ) {
                 BottomBar(navController = navController)
             }
         }
     ) {
-        BottomNavGraph(
+        NavGraph(
             navController = navController,
             profileViewModel = profileViewModel,
             bluetoothViewModel = bluetoothSyncViewModel,
@@ -70,7 +76,10 @@ fun BottomBar(navController: NavHostController) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
 
-    BottomNavigation {
+    BottomNavigation(
+        backgroundColor = MaterialTheme.colorScheme.primary,
+        contentColor = LocalContentColor.current
+    ) {
         screens.forEach { screen ->
             AddItem(
                 screen = screen,

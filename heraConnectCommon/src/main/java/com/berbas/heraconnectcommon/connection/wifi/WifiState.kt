@@ -1,5 +1,10 @@
 package com.berbas.heraconnectcommon.connection.wifi
 
-enum class WifiState{
-    IDLE, IN_PROGRESS, SUCCESS, FAILURE
+/** The state of data transfer via wifi connection */
+enum class WifiState {
+    // the names are self explanatory
+    IDLE,
+    IN_PROGRESS,
+    SUCCESS,
+    FAILURE
 }

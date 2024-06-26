@@ -2,13 +2,22 @@ package com.berbas.fittrackapp.screens.goals
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.horizontalScroll
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.*
+import androidx.compose.material.Scaffold
+import androidx.compose.material.TopAppBar
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -33,8 +42,7 @@ fun GoalsScreen() {
         topBar = {
             TopAppBar(
                 title = { Text("Goals") },
-                backgroundColor = MaterialTheme.colors.primary,
-                contentColor = Color.White,
+                backgroundColor = MaterialTheme.colorScheme.primary,
             )
         }
     ) { paddingValues ->
@@ -42,15 +50,15 @@ fun GoalsScreen() {
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .background(color = Color.Black)
+                .background(color = MaterialTheme.colorScheme.background)
                 .verticalScroll(rememberScrollState())
                 .padding(bottom = 56.dp)
         ) {
             Text(
                 text = "Pre selected programs",
-                style = MaterialTheme.typography.h5,
+                style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.Bold,
-                color = Color.White,
+                color = MaterialTheme.colorScheme.onBackground,
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
                     .padding(16.dp)
@@ -62,9 +70,9 @@ fun GoalsScreen() {
             GoalSection(title = "Become more active")
             Text(
                 text = "Your Achievements",
-                style = MaterialTheme.typography.h5,
+                style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.Bold,
-                color = Color.White,
+                color = MaterialTheme.colorScheme.onBackground,
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
                     .padding(16.dp)
@@ -79,12 +87,7 @@ fun BadgeItem(badge: Badge) {
     Column(
         modifier = Modifier
             .size(100.dp)
-            .border(
-                1.dp,
-                Color(40, 40, 40),
-                RoundedCornerShape(4.dp)
-            )
-            .background(color = Color(40, 40, 40))
+            .background(MaterialTheme.colorScheme.secondary)
             .padding(4.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
@@ -102,19 +105,14 @@ fun PlaceholderCard() {
     Box(
         modifier = Modifier
             .size(100.dp)
-            .border(
-                1.dp,
-                Color(40, 40, 40),
-                RoundedCornerShape(4.dp)
-            )
-            .background(color = Color(40, 40, 40))
+            .background(MaterialTheme.colorScheme.secondary)
             .padding(4.dp),
         contentAlignment = Alignment.Center
     ) {
         Text(
             text = "Program",
-            style = MaterialTheme.typography.caption,
-            color = Color.White
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.surface
         )
     }
 }
@@ -125,13 +123,12 @@ fun GoalSection(title: String, badges: List<Badge>? = null) {
         modifier = Modifier
             .padding(vertical = 8.dp)
             .padding(horizontal = 8.dp)
-            .background(color = Color(30, 30, 30))
-            .border(1.dp, Color(30, 30, 30), RoundedCornerShape(8.dp))
+            .background(MaterialTheme.colorScheme.onSecondary)
             .padding(8.dp)
     ) {
         Text(
             text = title,
-            style = MaterialTheme.typography.h6,
+            style = MaterialTheme.typography.titleLarge,
             color = Color.White,
             modifier = Modifier.padding(horizontal = 8.dp)
         )

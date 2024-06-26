@@ -1,15 +1,15 @@
 package com.berbas.heraconnectcommon.connection.wifi
 
-interface WifiConnectionInterface {
-    abstract val wifiState: Any
+import kotlinx.coroutines.flow.StateFlow
 
-    /**
-     * Send data to the device
-     */
+interface WifiConnectionInterface {
+
+    /** Send data to the device */
     fun send(data: String)
 
-    /**
-     * Receive data from the device
-     */
+    /** Receive data from the device */
     suspend fun receive(id: Int): String
+
+    /** returns the state of the wifi data transfer */
+    fun getWifiState(): StateFlow<WifiState>
 }

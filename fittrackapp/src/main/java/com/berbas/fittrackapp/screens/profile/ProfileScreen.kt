@@ -5,7 +5,20 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.*
+import androidx.compose.material.AlertDialog
+import androidx.compose.material.DropdownMenuItem
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
+import androidx.compose.material.OutlinedTextField
+import androidx.compose.material.Scaffold
+import androidx.compose.material.Text
+import androidx.compose.material.TextFieldDefaults
+import androidx.compose.material.TopAppBar
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Divider
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -18,7 +31,6 @@ import androidx.navigation.NavHostController
 import com.berbas.fittrackapp.R
 import com.berbas.fittrackapp.navigation.Screen
 import com.berbas.fittrackapp.screens.connections.bluetooth.BluetoothSyncViewModel
-import com.berbas.fittrackapp.ui.theme.HeraTheme
 import java.util.*
 
 /**
@@ -30,94 +42,94 @@ fun ProfileScreen(
     bluetoothViewModel: BluetoothSyncViewModel,
     navController: NavHostController
 ) {
-    HeraTheme {
-        val state = profileViewModel.state.collectAsState()
+    val state = profileViewModel.state.collectAsState()
 
-        Scaffold(
-            topBar = {
-                TopAppBar(
-                    title = { Text("Profile") },
-                    backgroundColor = MaterialTheme.colors.primary,
-                    contentColor = Color.White,
-                    actions = {
-                        IconButton(onClick = {
-                            // when opening the screen start the server automatically
-                            bluetoothViewModel.startBluetoothServer()
-                            navController.navigate(Screen.SELECTSCREEN.name)
-                        }) {
-                            Icon(painterResource(id = R.drawable.sync_icon), contentDescription = "Sync")
-                        }
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { Text("Profile") },
+                actions = {
+                    IconButton(onClick = {
+                        // when opening the screen start the server automatically
+                        bluetoothViewModel.startBluetoothServer()
+                        navController.navigate(Screen.SELECTSCREEN.name)
+                    }) {
+                        Icon(
+                            painterResource(id = R.drawable.sync_icon),
+                            contentDescription = "Sync"
+                        )
+                    }
+                },
+                backgroundColor = MaterialTheme.colorScheme.primary
+            )
+        }
+    ) { paddingValues ->
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.background)
+                .padding(paddingValues)
+        ) {
+            Column(
+                modifier = Modifier.padding(16.dp)
+            ) {
+                ActivitySection()
+                StepAndActiveTimeGoalRow(
+                    stepGoal = state.value.stepGoal,
+                    onStepGoalChange = { newValue ->
+                        profileViewModel.onEvent(
+                            PersonEvent.SetStepGoal(newValue)
+                        )
+                    },
+                    activeTimeGoal = state.value.activityGoal,
+                    onActiveTimeGoalChange = { newValue ->
+                        profileViewModel.onEvent(
+                            PersonEvent.SetActivityGoal(newValue)
+                        )
                     }
                 )
-            }
-        ) { paddingValues ->
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(MaterialTheme.colors.onBackground)
-                    .padding(paddingValues)
-            ) {
-                Column(
-                    modifier = Modifier.padding(16.dp)
-                ) {
-                    ActivitySection()
-                    StepAndActiveTimeGoalRow(
-                        stepGoal = state.value.stepGoal,
-                        onStepGoalChange = { newValue ->
-                            profileViewModel.onEvent(
-                                PersonEvent.SetStepGoal(newValue)
+                Divider(
+                    color = Color.DarkGray,
+                    thickness = 1.dp,
+                    modifier = Modifier.padding(8.dp)
+                )
+                AboutYouSection()
+                GenderAndBirthdayRow(
+                    gender = state.value.gender,
+                    onGenderSelected = { newValue ->
+                        profileViewModel.onEvent(
+                            PersonEvent.SetGender(
+                                newValue
                             )
-                        },
-                        activeTimeGoal = state.value.activityGoal,
-                        onActiveTimeGoalChange = { newValue ->
-                            profileViewModel.onEvent(
-                                PersonEvent.SetActivityGoal(newValue)
+                        )
+                    },
+                    birthday = state.value.birthday,
+                    onBirthdaySelected = { newValue ->
+                        profileViewModel.onEvent(
+                            PersonEvent.SetBirthday(
+                                newValue
                             )
-                        }
-                    )
-                    Divider(
-                        color = Color.DarkGray,
-                        thickness = 1.dp,
-                        modifier = Modifier.padding(8.dp)
-                    )
-                    AboutYouSection()
-                    GenderAndBirthdayRow(
-                        gender = state.value.gender,
-                        onGenderSelected = { newValue ->
-                            profileViewModel.onEvent(
-                                PersonEvent.SetGender(
-                                    newValue
-                                )
+                        )
+                    }
+                )
+                WeightAndHeightRow(
+                    weight = state.value.weight,
+                    onWeightChange = { newValue ->
+                        profileViewModel.onEvent(
+                            PersonEvent.SetWeight(
+                                newValue
                             )
-                        },
-                        birthday = state.value.birthday,
-                        onBirthdaySelected = { newValue ->
-                            profileViewModel.onEvent(
-                                PersonEvent.SetBirthday(
-                                    newValue
-                                )
+                        )
+                    },
+                    height = state.value.height,
+                    onHeightChange = { newValue ->
+                        profileViewModel.onEvent(
+                            PersonEvent.SetHeight(
+                                newValue
                             )
-                        }
-                    )
-                    WeightAndHeightRow(
-                        weight = state.value.weight,
-                        onWeightChange = { newValue ->
-                            profileViewModel.onEvent(
-                                PersonEvent.SetWeight(
-                                    newValue
-                                )
-                            )
-                        },
-                        height = state.value.height,
-                        onHeightChange = { newValue ->
-                            profileViewModel.onEvent(
-                                PersonEvent.SetHeight(
-                                    newValue
-                                )
-                            )
-                        }
-                    )
-                }
+                        )
+                    }
+                )
             }
         }
     }
@@ -131,9 +143,8 @@ fun AboutYouSection() {
     Text(
         text = "About you",
         fontSize = 20.sp,
-        color = Color.White,
+        color = MaterialTheme.colorScheme.onBackground,
         modifier = Modifier.padding(vertical = 8.dp)
-        // TODO: add a divider here
     )
 }
 
@@ -145,9 +156,8 @@ fun ActivitySection() {
     Text(
         text = "Activity goals",
         fontSize = 20.sp,
-        color = Color.White,
+        color = MaterialTheme.colorScheme.onBackground,
         modifier = Modifier.padding(vertical = 8.dp)
-        // TODO: add a divider here
     )
 }
 
@@ -173,16 +183,16 @@ fun StepAndActiveTimeGoalRow(
                 .weight(1f)
                 .padding(4.dp)
         ) {
-            Text(text = "Step Goal", color = Color.White)
+            Text(text = "Step Goal", color = MaterialTheme.colorScheme.onBackground)
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(vertical = 8.dp)
-                    .background(Color(0xFF1F1F1F))
+                    .background(MaterialTheme.colorScheme.secondary)
                     .clickable { showStepGoalDialog = true }
                     .padding(16.dp)
             ) {
-                Text(text = "$stepGoal steps", color = Color.White)
+                Text(text = "$stepGoal steps", color = MaterialTheme.colorScheme.onSecondary)
             }
             if (showStepGoalDialog) {
                 InputDialog(
@@ -199,16 +209,16 @@ fun StepAndActiveTimeGoalRow(
                 .weight(1f)
                 .padding(4.dp)
         ) {
-            Text(text = "Active Time Goal (hours)", color = Color.White)
+            Text(text = "Active Time Goal (hours)", color = MaterialTheme.colorScheme.onBackground)
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(vertical = 8.dp)
-                    .background(Color(0xFF1F1F1F))
+                    .background(MaterialTheme.colorScheme.secondary)
                     .clickable { showActiveTimeGoalDialog = true }
                     .padding(16.dp)
             ) {
-                Text(text = "$activeTimeGoal h", color = Color.White)
+                Text(text = "$activeTimeGoal h", color = MaterialTheme.colorScheme.onSecondary)
             }
             if (showActiveTimeGoalDialog) {
                 InputDialog(
@@ -242,7 +252,7 @@ fun GenderAndBirthdayRow(
                 .weight(1f)
                 .padding(4.dp)
         ) {
-            Text(text = "Gender", color = Color.White)
+            Text(text = "Gender", color = MaterialTheme.colorScheme.onBackground)
             GenderDropdown(
                 selectedGender = gender,
                 onGenderSelected = onGenderSelected
@@ -253,7 +263,7 @@ fun GenderAndBirthdayRow(
                 .weight(1f)
                 .padding(4.dp)
         ) {
-            Text(text = "Birthday", color = Color.White)
+            Text(text = "Birthday", color = MaterialTheme.colorScheme.onBackground)
             BirthdayPicker(
                 birthday = birthday,
                 onBirthdaySelected = onBirthdaySelected
@@ -284,16 +294,16 @@ fun WeightAndHeightRow(
                 .weight(1f)
                 .padding(4.dp)
         ) {
-            Text(text = "Weight (kg)", color = Color.White)
+            Text(text = "Weight (kg)", color = MaterialTheme.colorScheme.onBackground)
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(vertical = 8.dp)
-                    .background(Color(0xFF1F1F1F))
+                    .background(MaterialTheme.colorScheme.secondary)
                     .clickable { showWeightDialog = true }
                     .padding(16.dp)
             ) {
-                Text(text = "$weight kg", color = Color.White)
+                Text(text = "$weight kg", color = MaterialTheme.colorScheme.onSecondary)
             }
             if (showWeightDialog) {
                 InputDialog(
@@ -309,16 +319,16 @@ fun WeightAndHeightRow(
                 .weight(1f)
                 .padding(4.dp)
         ) {
-            Text(text = "Height (cm)", color = Color.White)
+            Text(text = "Height (cm)", color = MaterialTheme.colorScheme.onBackground)
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(vertical = 8.dp)
-                    .background(Color(0xFF1F1F1F))
+                    .background(MaterialTheme.colorScheme.secondary)
                     .clickable { showHeightDialog = true }
                     .padding(16.dp)
             ) {
-                Text(text = "$height cm", color = Color.White)
+                Text(text = "$height cm", color = MaterialTheme.colorScheme.onSecondary)
             }
             if (showHeightDialog) {
                 InputDialog(
@@ -345,11 +355,11 @@ fun GenderDropdown(selectedGender: String, onGenderSelected: (String) -> Unit) {
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 8.dp)
-            .background(Color(0xFF1F1F1F))
+            .background(MaterialTheme.colorScheme.secondary)
             .clickable { expanded = true }
             .padding(16.dp)
     ) {
-        Text(text = selectedGender, color = Color.White)
+        Text(text = selectedGender, color = MaterialTheme.colorScheme.onSecondary)
         DropdownMenu(
             expanded = expanded,
             onDismissRequest = { expanded = false }
@@ -359,7 +369,7 @@ fun GenderDropdown(selectedGender: String, onGenderSelected: (String) -> Unit) {
                     onGenderSelected(gender)
                     expanded = false
                 }) {
-                    Text(text = gender)
+                    Text(text = gender, color = MaterialTheme.colorScheme.onSurface)
                 }
             }
         }
@@ -395,11 +405,11 @@ fun BirthdayPicker(birthday: String, onBirthdaySelected: (String) -> Unit) {
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 8.dp)
-            .background(Color(0xFF1F1F1F))
+            .background(MaterialTheme.colorScheme.secondary)
             .clickable { showDialog = true }
             .padding(16.dp)
     ) {
-        Text(text = birthday, color = Color.White)
+        Text(text = birthday, color = MaterialTheme.colorScheme.onSecondary)
     }
 
     if (showDialog) {
@@ -440,37 +450,38 @@ fun InputDialog(
             OutlinedTextField(
                 value = inputValue,
                 onValueChange = { inputValue = it },
-                label = { Text(label, color = Color.White) },
+                label = { Text(label, color = MaterialTheme.colorScheme.onSurface) },
                 colors = TextFieldDefaults.outlinedTextFieldColors(
-                    focusedBorderColor = Color.White,
-                    unfocusedBorderColor = Color.White,
-                    textColor = Color.White
+                    focusedBorderColor = MaterialTheme.colorScheme.onSurface,
+                    unfocusedBorderColor = MaterialTheme.colorScheme.onSurface,
+                    textColor = MaterialTheme.colorScheme.onSurface
                 ),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
             )
         },
         confirmButton = {
-            TextButton(onClick = {
-                onValueChange(
-                    if (isInteger) inputValue.toDoubleOrNull()?.toInt()?.toDouble()
-                        ?: value else inputValue.toDoubleOrNull() ?: value
-                )
-                onDismissRequest()
-            }, colors = ButtonDefaults.buttonColors(backgroundColor = Color.White)) {
+            TextButton(
+                onClick = {
+                    onValueChange(
+                        if (isInteger) inputValue.toDoubleOrNull()?.toInt()?.toDouble()
+                            ?: value else inputValue.toDoubleOrNull() ?: value
+                    )
+                    onDismissRequest()
+                },
+                colors = ButtonDefaults.textButtonColors(contentColor = MaterialTheme.colorScheme.primary)
+            ) {
                 Text("OK")
             }
         },
         dismissButton = {
             TextButton(
                 onClick = onDismissRequest,
-                colors = ButtonDefaults.buttonColors(backgroundColor = Color.White)
+                colors = ButtonDefaults.textButtonColors(contentColor = MaterialTheme.colorScheme.primary)
             ) {
                 Text("Cancel")
             }
         },
-        backgroundColor = Color(0xFF1F1F1F),
-        contentColor = Color.White
+        backgroundColor = MaterialTheme.colorScheme.background,
+        contentColor = MaterialTheme.colorScheme.onBackground
     )
 }
-
-
