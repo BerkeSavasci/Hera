@@ -1,14 +1,22 @@
 package com.berbas.fittrackapp
 
 import android.Manifest
+import android.content.Context
 import android.content.pm.PackageManager
+import android.hardware.Sensor
+import android.hardware.SensorEvent
+import android.hardware.SensorEventListener
+import android.hardware.SensorManager
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.content.getSystemService
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.berbas.fittrackapp.screens.profile.ProfileViewModel
 import com.berbas.fittrackapp.screens.connections.bluetooth.BluetoothSyncViewModel
@@ -18,7 +26,15 @@ import com.berbas.fittrackapp.ui.theme.HeraTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class MainActivity : ComponentActivity() {
+class MainActivity : ComponentActivity(), SensorEventListener {
+    private val previousTotalSteps = 0f
+    private var totalSteps: Float = 0f
+    private var running: Boolean = false
+
+    private var sensorManager: SensorManager? = null
+
+    private lateinit var homeViewModel: HomeViewModel
+
     private val REQUEST_CODE_PERMISSIONS = 101
 
     @RequiresApi(Build.VERSION_CODES.S)
@@ -42,6 +58,7 @@ class MainActivity : ComponentActivity() {
         Manifest.permission.BODY_SENSORS
     )
 
+
     @RequiresApi(Build.VERSION_CODES.S)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,12 +69,60 @@ class MainActivity : ComponentActivity() {
             HeraTheme {
                 val bluetoothSyncViewModel: BluetoothSyncViewModel = viewModel()
                 val profileViewModel: ProfileViewModel = viewModel()
-                val homeViewModel: HomeViewModel = viewModel()
+                homeViewModel = viewModel()
                 val wifiSyncViewModel: WifiSyncViewModel = viewModel()
 
+                homeViewModel.stepCount.observe(this) { steps ->
+                    Log.d("MainActivity", "Step count: $steps")
+                }
                 MainScreen(profileViewModel, bluetoothSyncViewModel, wifiSyncViewModel)
             }
         }
+
+    }
+
+    override fun onSensorChanged(event: SensorEvent?) {
+        if (running) {
+            totalSteps = event!!.values[0]
+            val currentSteps = totalSteps.toInt() - previousTotalSteps.toInt()
+            if (::homeViewModel.isInitialized) {
+                homeViewModel.stepCount.value = currentSteps
+            }
+        }
+    }
+
+    override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
+        // TODO
+    }
+
+
+    override fun onResume() {
+        super.onResume()
+
+        running = true
+        val sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
+        val countSensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER)
+        when {
+            countSensor != null -> {
+                sensorManager.registerListener(this, countSensor, SensorManager.SENSOR_DELAY_UI)
+                Log.i("Sensor", "Recognized step sensor")
+            }
+
+            else ->
+                Toast.makeText(
+                    this,
+                    "Your device does not have a step sensor",
+                    Toast.LENGTH_SHORT
+                )
+                    .show()
+        }
+
+    }
+
+    override fun onPause() {
+        super.onPause()
+        running = false
+        sensorManager?.unregisterListener(this)
     }
 
     @RequiresApi(Build.VERSION_CODES.S)

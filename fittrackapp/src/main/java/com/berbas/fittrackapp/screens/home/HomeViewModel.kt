@@ -1,5 +1,7 @@
 package com.berbas.fittrackapp.screens.home
 
+import android.util.Log
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.berbas.heraconnectcommon.localData.sensor.FitnessData
@@ -16,7 +18,7 @@ class HomeViewModel @Inject constructor(
     var bpmList = ArrayList<String>()
     var sleepList = ArrayList<String>()
 
-
+    val stepCount = MutableLiveData<Int>()
     init {
         stepList.add(1.toString())
         stepList.add(2.toString())
