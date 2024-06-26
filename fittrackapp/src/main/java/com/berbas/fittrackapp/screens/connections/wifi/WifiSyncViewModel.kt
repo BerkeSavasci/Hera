@@ -11,6 +11,7 @@ import com.berbas.heraconnectcommon.localData.person.Person
 import com.berbas.heraconnectcommon.localData.person.PersonDao
 import com.berbas.heraconnectcommon.protocolEngine.ProtocolEngine
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import org.json.JSONException
@@ -25,6 +26,7 @@ class WifiSyncViewModel @Inject constructor(
 ): ViewModel(), ProtocolEngine {
     val errorMessage = MutableLiveData<String>()
 
+    val wifiStatus = wifiController.wifiState
     fun sendData(){
         viewModelScope.launch {
             val personData = personDao.getPersonById(id).first()

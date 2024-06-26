@@ -42,6 +42,7 @@ class BluetoothSyncViewModel @Inject constructor(
      */
     fun connectToDevice(device: BluetoothDeviceDomain) {
         _dataTransferStatus.value = DataTransferStatus.IDLE
+        Log.d("SyncViewModel","Status: ${_dataTransferStatus.value}")
 
         viewModelScope.launch {
             bluetoothController.connectToDevice(device).collect { result ->
@@ -61,11 +62,11 @@ class BluetoothSyncViewModel @Inject constructor(
 
                     is ConnectionResult.ConnectionFailure -> {
                         _dataTransferStatus.value = DataTransferStatus.FAILURE
+                        Log.d("SyncViewModel","Status: ${_dataTransferStatus.value}")
                         Log.d(
                             "BluetoothSyncViewModel",
                             "Failed to connect to device: ${device.name}"
                         )
-
                     }
 
                     is ConnectionResult.TransferSuccess -> {

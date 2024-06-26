@@ -3,15 +3,22 @@ package com.berbas.heraconnectcommon.connection
 import android.util.Log
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.json.JSONObject
 import java.net.HttpURLConnection
 import java.net.URL
 
-class WifiConnection (
+class WifiConnection(
     private val urlWrapper: UrlWrapper
 ) : WifiConnectionInterface {
+
+    /** The state of the wifi data transfer */
+    private val _wifiState = MutableStateFlow(WifiState.IDLE)
+    override val wifiState: StateFlow<WifiState> = _wifiState
+
     private var url = URL("http://5.28.100.60:3000/users")
 
     fun splitData(data: String, jsonObject: JSONObject): JSONObject {
@@ -27,6 +34,7 @@ class WifiConnection (
     }
 
     override fun send(data: String) {
+        _wifiState.value = WifiState.IN_PROGRESS
         urlWrapper.setUrl(url)
 
         CoroutineScope(Dispatchers.IO).launch {
@@ -47,11 +55,14 @@ class WifiConnection (
                 if (httpURLConnection.responseCode == HttpURLConnection.HTTP_OK || httpURLConnection.responseCode == HttpURLConnection.HTTP_CREATED) {
                     Log.d("WifiConnection", "Data sent successfully")
                     println("Data sent successfully")
+                    _wifiState.value = WifiState.SUCCESS
                 } else {
                     Log.d("WifiConnection", "Failed to send data")
                     println("Failed to send data")
+                    _wifiState.value = WifiState.FAILURE
                 }
             } catch (e: Exception) {
+                _wifiState.value = WifiState.FAILURE
                 Log.e("WiFiConnection", "Failed to send data", e)
                 e.printStackTrace()
             }
@@ -59,6 +70,7 @@ class WifiConnection (
     }
 
     override suspend fun receive(id: Int): String {
+        _wifiState.value = WifiState.IN_PROGRESS
         return withContext(Dispatchers.IO) {
             var result = ""
             try {
@@ -74,11 +86,12 @@ class WifiConnection (
                 if (responseCode == HttpURLConnection.HTTP_OK) {
                     result = httpURLConnection.inputStream.bufferedReader().use { it.readText() }
                     Log.d("WifiConnection", "Data received successfully")
-                    println("Data received successfully")
+                    _wifiState.value = WifiState.SUCCESS
                 } else {
-                    println("Failed to receive data")
+                    _wifiState.value = WifiState.FAILURE
                 }
             } catch (e: Exception) {
+                _wifiState.value = WifiState.FAILURE
                 Log.e("WiFiConnection", "Failed to receive data", e)
                 e.printStackTrace()
             }

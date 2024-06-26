@@ -1,5 +1,6 @@
 package com.berbas.fittrackapp.screens.connections.bluetooth
 
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.clickable
@@ -109,8 +110,25 @@ fun DataTransferDialog(
             )
         }
 
-        else -> {
-            //TODO: other states (if needed)
+        BluetoothSyncViewModel.DataTransferStatus.FAILURE -> {
+            AlertDialog(
+                onDismissRequest = { },
+                title = { Text("Data Transfer") },
+                text = { Text("The data transfer was unsuccessful! Please check your connectivity" +
+                        "and try again.") },
+                confirmButton = {
+                    TextButton(onClick = { showDialog.value = false }) {
+                        Text("OK")
+                    }
+                }
+            )
+        }
+        BluetoothSyncViewModel.DataTransferStatus.IDLE -> {
+            Log.d("SyncScreen", "Status is in IDLE")
+        }
+        BluetoothSyncViewModel.DataTransferStatus.STARTED -> {
+            Log.d("SyncScreen", "Data transfer has started")
+
         }
     }
 }
@@ -189,7 +207,7 @@ fun BluetoothDeviceList(bluetoothViewModel: BluetoothSyncViewModel) {
                             Toast
                                 .makeText(
                                     context,
-                                    "Device Clicked: ${device.name}",
+                                    "Connecting to ${device.name}",
                                     Toast.LENGTH_SHORT
                                 )
                                 .show()

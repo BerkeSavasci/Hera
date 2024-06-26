@@ -1,6 +1,8 @@
 package com.berbas.heraconnectcommon.connection
 
 interface WifiConnectionInterface {
+    abstract val wifiState: Any
+
     /**
      * Send data to the device
      */
