@@ -21,8 +21,8 @@ import com.berbas.hera.databinding.ActivityMainBinding
 import com.berbas.hera.goals.GoalFragment
 import com.berbas.hera.home.HomeFragment
 import com.berbas.hera.profile.ProfileFragment
-import com.berbas.heraconnectcommon.connection.BluetoothConnection
-import com.berbas.heraconnectcommon.connection.BluetoothDeviceDomain
+import com.berbas.heraconnectcommon.connection.bluetooth.BluetoothConnection
+import com.berbas.heraconnectcommon.connection.bluetooth.BluetoothDeviceDomain
 import androidx.health.connect.client.HealthConnectClient
 import androidx.room.Room
 import com.berbas.heraconnectcommon.localData.person.PersonDataBase

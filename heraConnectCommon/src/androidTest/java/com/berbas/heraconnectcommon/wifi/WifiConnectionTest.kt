@@ -1,22 +1,18 @@
 package com.berbas.heraconnectcommon.wifi
 
-import com.berbas.heraconnectcommon.connection.UrlWrapper
-import com.berbas.heraconnectcommon.connection.WifiConnection
-import kotlinx.coroutines.ExperimentalCoroutinesApi
+import com.berbas.heraconnectcommon.connection.wifi.UrlWrapper
+import com.berbas.heraconnectcommon.connection.wifi.WifiConnection
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Test
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.runner.RunWith
-import org.mockito.ArgumentCaptor
 import org.mockito.Mockito.mock
-import org.mockito.Mockito.verify
 import org.mockito.Mockito.`when`
 import org.mockito.junit.MockitoJUnitRunner
 import java.io.ByteArrayInputStream
 import java.io.IOException
 import java.net.HttpURLConnection
-import kotlinx.coroutines.test.runBlockingTest
 import org.json.JSONObject
 import java.io.ByteArrayOutputStream
 

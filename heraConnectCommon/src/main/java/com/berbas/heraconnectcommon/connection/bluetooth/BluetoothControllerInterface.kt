@@ -1,4 +1,4 @@
-package com.berbas.heraconnectcommon.connection
+package com.berbas.heraconnectcommon.connection.bluetooth
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharedFlow

@@ -1,4 +1,4 @@
-package com.berbas.heraconnectcommon.connection
+package com.berbas.heraconnectcommon.connection.wifi
 
 import java.net.HttpURLConnection
 import java.net.URL

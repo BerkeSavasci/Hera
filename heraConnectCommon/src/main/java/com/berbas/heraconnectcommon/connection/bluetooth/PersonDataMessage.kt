@@ -1,4 +1,4 @@
-package com.berbas.heraconnectcommon.connection
+package com.berbas.heraconnectcommon.connection.bluetooth
 
 /**
  * A wrapper class that contains the message and the sender of the message

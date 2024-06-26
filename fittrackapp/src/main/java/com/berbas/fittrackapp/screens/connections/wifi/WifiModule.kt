@@ -1,9 +1,9 @@
 package com.berbas.fittrackapp.screens.connections.wifi
 
 import android.content.Context
-import com.berbas.heraconnectcommon.connection.UrlWrapper
-import com.berbas.heraconnectcommon.connection.WifiConnection
-import com.berbas.heraconnectcommon.connection.WifiConnectionInterface
+import com.berbas.heraconnectcommon.connection.wifi.UrlWrapper
+import com.berbas.heraconnectcommon.connection.wifi.WifiConnection
+import com.berbas.heraconnectcommon.connection.wifi.WifiConnectionInterface
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

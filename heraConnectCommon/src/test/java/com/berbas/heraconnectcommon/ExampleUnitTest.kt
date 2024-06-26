@@ -1,8 +1,7 @@
 package com.berbas.heraconnectcommon
 
+import junit.framework.Assert.assertEquals
 import org.junit.Test
-import org.junit.jupiter.api.Assertions.assertEquals
-
 /**
  * Example local unit test, which will execute on the development machine (host).
  *

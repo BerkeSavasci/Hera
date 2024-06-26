@@ -22,8 +22,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import com.berbas.fittrackapp.screens.connections.bluetooth.BluetoothSyncViewModel
-import com.berbas.heraconnectcommon.connection.WifiState
+import com.berbas.heraconnectcommon.connection.wifi.WifiState
 
 @Composable
 fun WifiSyncScreen(

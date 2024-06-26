@@ -1,4 +1,4 @@
-package com.berbas.heraconnectcommon.connection
+package com.berbas.heraconnectcommon.connection.wifi
 
 interface WifiConnectionInterface {
     abstract val wifiState: Any

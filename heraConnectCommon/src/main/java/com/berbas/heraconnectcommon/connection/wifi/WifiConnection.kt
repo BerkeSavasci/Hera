@@ -1,4 +1,4 @@
-package com.berbas.heraconnectcommon.connection
+package com.berbas.heraconnectcommon.connection.wifi
 
 import android.util.Log
 import kotlinx.coroutines.CoroutineScope

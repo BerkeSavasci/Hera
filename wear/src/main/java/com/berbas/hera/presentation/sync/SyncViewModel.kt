@@ -4,10 +4,10 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.berbas.hera.annotations.UserId
-import com.berbas.heraconnectcommon.connection.BluetoothControllerInterface
-import com.berbas.heraconnectcommon.connection.BluetoothDeviceDomain
-import com.berbas.heraconnectcommon.connection.ConnectionResult
-import com.berbas.heraconnectcommon.connection.PersonDataMessage
+import com.berbas.heraconnectcommon.connection.bluetooth.BluetoothControllerInterface
+import com.berbas.heraconnectcommon.connection.bluetooth.BluetoothDeviceDomain
+import com.berbas.heraconnectcommon.connection.bluetooth.ConnectionResult
+import com.berbas.heraconnectcommon.connection.bluetooth.PersonDataMessage
 import com.berbas.heraconnectcommon.localData.person.PersonDao
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow

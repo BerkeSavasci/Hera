@@ -1,4 +1,4 @@
-package com.berbas.heraconnectcommon.connection
+package com.berbas.heraconnectcommon.connection.bluetooth
 
 import android.annotation.SuppressLint
 import android.bluetooth.BluetoothDevice

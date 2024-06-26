@@ -12,9 +12,9 @@ import android.widget.ListView
 import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
 import com.berbas.hera.R
-import com.berbas.heraconnectcommon.connection.BluetoothConnection
-import com.berbas.heraconnectcommon.connection.BluetoothDeviceDomain
-import com.berbas.heraconnectcommon.connection.ConnectionResult
+import com.berbas.heraconnectcommon.connection.bluetooth.BluetoothConnection
+import com.berbas.heraconnectcommon.connection.bluetooth.BluetoothDeviceDomain
+import com.berbas.heraconnectcommon.connection.bluetooth.ConnectionResult
 import com.berbas.heraconnectcommon.localData.person.PersonDataBase
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach

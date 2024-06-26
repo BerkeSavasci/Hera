@@ -53,6 +53,7 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
+    testImplementation(libs.jupiter.junit.jupiter)
 
     androidTestImplementation ("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
     // gson
@@ -66,6 +67,8 @@ dependencies {
     implementation("androidx.room:room-runtime:2.6.1")
 
     // Testing
+    testImplementation("org.robolectric:robolectric:4.6.1")
+
     // mockito
     androidTestImplementation(libs.mockito.core)
     androidTestImplementation(libs.mockito.junit.jupiter.v3124)

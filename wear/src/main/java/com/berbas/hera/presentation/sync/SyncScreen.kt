@@ -32,7 +32,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.wear.compose.foundation.lazy.ScalingLazyColumn
 import androidx.wear.compose.foundation.lazy.itemsIndexed
-import com.berbas.heraconnectcommon.connection.BluetoothDeviceDomain
+import com.berbas.heraconnectcommon.connection.bluetooth.BluetoothDeviceDomain
 
 
 @Composable

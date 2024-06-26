@@ -1,4 +1,4 @@
-package com.berbas.heraconnectcommon.connection
+package com.berbas.heraconnectcommon.connection.bluetooth
 
 import android.bluetooth.BluetoothDevice
 import android.content.BroadcastReceiver

@@ -1,4 +1,4 @@
-package com.berbas.heraconnectcommon.connection
+package com.berbas.heraconnectcommon.connection.bluetooth
 
 // erlaubt es, dass BluetoothDeviceDomain als BluetoothDevice verwendet wird (BluetoothDevice gibts auch im Andorid SDK)
 typealias BluetoothDeviceDomain = BluetoothDevice

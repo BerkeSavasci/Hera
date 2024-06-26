@@ -1,8 +1,8 @@
 package com.berbas.fittrackapp.di
 
 import android.content.Context
-import com.berbas.heraconnectcommon.connection.BluetoothConnection
-import com.berbas.heraconnectcommon.connection.BluetoothControllerInterface
+import com.berbas.heraconnectcommon.connection.bluetooth.BluetoothConnection
+import com.berbas.heraconnectcommon.connection.bluetooth.BluetoothControllerInterface
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

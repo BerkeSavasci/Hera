@@ -1,6 +1,6 @@
 package com.berbas.heraconnectcommon.protocolEngine
 
-import com.berbas.heraconnectcommon.connection.PersonDataMessage
+import com.berbas.heraconnectcommon.connection.bluetooth.PersonDataMessage
 import com.berbas.heraconnectcommon.localData.person.Person
 
 /**
@@ -8,7 +8,10 @@ import com.berbas.heraconnectcommon.localData.person.Person
  */
 class BluetoothProtocolEngine : ProtocolEngine {
 
-    override fun String.toPersonDataMessage(isFromMobile: Boolean): PersonDataMessage {
+    /**
+     * Serializes the data to a ByteArray
+     */
+    fun String.toPersonDataMessage(isFromMobile: Boolean): PersonDataMessage {
         val name = substringBeforeLast("#")
         val message = substringAfterLast("#")
         return PersonDataMessage(message = message, senderName = name, isFromMobile = isFromMobile)
@@ -23,9 +26,11 @@ class BluetoothProtocolEngine : ProtocolEngine {
     }
 
     /**
+     * Deserializes the data to a PersonDataMessage
+     *
      * !IMPORTANT The "#" is used to split the message meaning it can't be used in the message itself
      */
-    override fun PersonDataMessage.toByteArray(): ByteArray {
+    fun PersonDataMessage.toByteArray(): ByteArray {
         return "$senderName#$message".encodeToByteArray()
     }
 }

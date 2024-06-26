@@ -1,1 +1,0 @@
-package com.berbas.heraconnectcommon.connection.bluetoothConnection
