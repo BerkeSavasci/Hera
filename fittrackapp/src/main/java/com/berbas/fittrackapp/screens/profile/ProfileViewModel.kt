@@ -34,8 +34,8 @@ class ProfileViewModel @Inject constructor(
     /**
      * Function to refresh the user data
      */
-    private fun observeAndRefreshPerson() {
-        viewModelScope.launch {
+    fun observeAndRefreshPerson() {
+       viewModelScope.launch {
             personDao.getPersonById(id).collect { person ->
                 if (person != null) { // don't simplify
                     _personState.value = ProfileState(
@@ -55,8 +55,8 @@ class ProfileViewModel @Inject constructor(
                         lastname = "Placeholder",
                         gender = "Placeholder",
                         birthday = "Placeholder",
-                        weight = 0.0,
-                        height = 0,
+                        weight = 1.1,
+                        height = 1,
                         stepGoal = 6000,
                         activityGoal = 1.5
                     )
@@ -82,75 +82,91 @@ class ProfileViewModel @Inject constructor(
     fun onEvent(event: PersonEvent) {
         when (event) {
             is PersonEvent.SetFirstName -> {
-                _personState.update {
-                    it.copy(
-                        firstName = event.firstName,
-                    )
+                if (event.firstName.isNotBlank()) {
+                    _personState.update {
+                        it.copy(
+                            firstName = event.firstName,
+                        )
+                    }
+                    updatePersonData()
                 }
-                updatePersonData()
             }
 
             is PersonEvent.SetLastName -> {
-                _personState.update {
-                    it.copy(
-                        lastName = event.lastName,
-                    )
+                if (event.lastName.isNotBlank()) {
+                    _personState.update {
+                        it.copy(
+                            lastName = event.lastName,
+                        )
+                    }
+                    updatePersonData()
                 }
-                updatePersonData()
             }
 
             is PersonEvent.SetGender -> {
-                _personState.update {
-                    it.copy(
-                        gender = event.gender,
-                    )
+                if (event.gender.isNotBlank()) {
+                    _personState.update {
+                        it.copy(
+                            gender = event.gender,
+                        )
+                    }
+                    updatePersonData()
                 }
-                updatePersonData()
             }
 
             is PersonEvent.SetBirthday -> {
-                _personState.update {
-                    it.copy(
-                        birthday = event.birthday,
-                    )
+                if (event.birthday.isNotBlank()) {
+                    _personState.update {
+                        it.copy(
+                            birthday = event.birthday,
+                        )
+                    }
+                    updatePersonData()
                 }
-                updatePersonData()
             }
 
             is PersonEvent.SetHeight -> {
-                _personState.update {
-                    it.copy(
-                        height = event.height,
-                    )
+                if (event.height > 0) {
+                    _personState.update {
+                        it.copy(
+                            height = event.height,
+                        )
+                    }
+                    updatePersonData()
                 }
-                updatePersonData()
             }
 
             is PersonEvent.SetWeight -> {
-                _personState.update {
-                    it.copy(
-                        weight = event.weight,
-                    )
+                if (event.weight > 0) {
+                    _personState.update {
+                        it.copy(
+                            weight = event.weight,
+                        )
+                    }
+                    updatePersonData()
                 }
-                updatePersonData()
             }
 
             is PersonEvent.SetStepGoal -> {
-                _personState.update {
-                    it.copy(
-                        stepGoal = event.stepGoal,
-                    )
+                if (event.stepGoal > 0) {
+                    _personState.update {
+                        it.copy(
+                            stepGoal = event.stepGoal,
+                        )
+                    }
+                    updatePersonData()
                 }
-                updatePersonData()
             }
 
             is PersonEvent.SetActivityGoal -> {
-                _personState.update {
-                    it.copy(
-                        activityGoal = event.activityGoal,
-                    )
+                if (event.activityGoal > 0) {
+                    _personState.update {
+                        it.copy(
+                            activityGoal = event.activityGoal,
+                        )
+                    }
+                    updatePersonData()
                 }
-                updatePersonData()
             }
         }
     }

@@ -4,12 +4,12 @@ package com.berbas.fittrackapp.screens.profile
  *  Data class for the state of the profile screen with the default values
  */
 data class ProfileState(
-    val firstName: String = "",
-    val lastName: String = "",
-    val gender: String = "",
-    val birthday: String = "",
-    val weight: Double = 0.0,
-    val height: Int = 0,
+    val firstName: String = "Placeholder",
+    val lastName: String = "Placeholder",
+    val gender: String = "Placeholder",
+    val birthday: String = "Placeholder",
+    val weight: Double = 1.1,
+    val height: Int = 1,
     val stepGoal: Int = 6000,
     val activityGoal: Double = 1.5,
 )
