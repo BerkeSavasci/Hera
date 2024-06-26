@@ -3,7 +3,7 @@ package com.berbas.fittrackapp.screens.connections.bluetooth
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.berbas.fittrackapp.data.annotations.UserId
+import com.berbas.fittrackapp.annotations.UserId
 import com.berbas.heraconnectcommon.connection.bluetooth.BluetoothControllerInterface
 import com.berbas.heraconnectcommon.connection.bluetooth.BluetoothDeviceDomain
 import com.berbas.heraconnectcommon.connection.bluetooth.ConnectionResult

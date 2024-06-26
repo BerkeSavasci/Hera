@@ -4,7 +4,7 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.berbas.fittrackapp.data.annotations.UserId
+import com.berbas.fittrackapp.annotations.UserId
 import com.berbas.heraconnectcommon.connection.bluetooth.PersonDataMessage
 import com.berbas.heraconnectcommon.connection.wifi.WifiConnectionInterface
 import com.berbas.heraconnectcommon.localData.person.Person

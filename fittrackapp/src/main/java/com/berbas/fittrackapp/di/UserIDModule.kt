@@ -1,6 +1,6 @@
 package com.berbas.fittrackapp.di
 
-import com.berbas.fittrackapp.data.annotations.UserId
+import com.berbas.fittrackapp.annotations.UserId
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

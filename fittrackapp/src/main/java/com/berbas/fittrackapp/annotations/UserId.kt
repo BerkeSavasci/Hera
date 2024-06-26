@@ -1,4 +1,4 @@
-package com.berbas.fittrackapp.data.annotations
+package com.berbas.fittrackapp.annotations
 
 import javax.inject.Qualifier
 
