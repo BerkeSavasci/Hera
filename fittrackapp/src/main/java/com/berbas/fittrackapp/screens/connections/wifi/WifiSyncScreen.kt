@@ -1,5 +1,6 @@
 package com.berbas.fittrackapp.screens.connections.wifi
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -15,15 +16,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 
 @Composable
 fun WifiSyncScreen(
     wifiSyncViewModel: WifiSyncViewModel,
-    navController: NavHostController
+    navController: NavHostController,
 ) {
 
+    val context = LocalContext.current
     Scaffold (
         topBar = {
             TopAppBar(
@@ -44,13 +47,25 @@ fun WifiSyncScreen(
             )
             Spacer(modifier = Modifier.height(16.dp))
             Button(
-                onClick = { wifiSyncViewModel.sendData() },
+                onClick = { wifiSyncViewModel.sendData()
+                            Toast.makeText(
+                                context,
+                                "Sending data to the server...",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                          },
                 modifier = Modifier.padding(paddingValues)
             ) {
                 Text("Send")
             }
             Button(
-                onClick = { wifiSyncViewModel.receiveData() },
+                onClick = { wifiSyncViewModel.receiveData()
+                          Toast.makeText(
+                              context,
+                              "Receiving data from the server...",
+                              Toast.LENGTH_SHORT
+                          ).show()
+                          },
                 modifier = Modifier.padding(paddingValues)
             ) {
                 Text("Receive")
