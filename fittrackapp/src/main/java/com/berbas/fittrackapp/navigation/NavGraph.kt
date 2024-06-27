@@ -13,6 +13,7 @@ import com.berbas.fittrackapp.screens.connections.bluetooth.BluetoothSyncScreen
 import com.berbas.fittrackapp.screens.connections.bluetooth.BluetoothSyncViewModel
 import com.berbas.fittrackapp.screens.connections.wifi.WifiSyncScreen
 import com.berbas.fittrackapp.screens.connections.wifi.WifiSyncViewModel
+import com.berbas.fittrackapp.screens.home.HomeViewModel
 
 /**
  * A composable function that defines the navigation graph for the bottom navigation bar.
@@ -24,7 +25,8 @@ fun NavGraph(
     navController: NavHostController,
     profileViewModel: ProfileViewModel,
     bluetoothViewModel: BluetoothSyncViewModel,
-    wifiViewModel: WifiSyncViewModel
+    wifiViewModel: WifiSyncViewModel,
+    homeViewModel: HomeViewModel
 ) {
     NavHost(
         navController = navController,
@@ -34,7 +36,7 @@ fun NavGraph(
             GoalsScreen()
         }
         composable(route = BottomBarScreens.Home.route) {
-            HomeScreen()
+            HomeScreen(homeViewModel)
         }
         composable(route = BottomBarScreens.Profile.route) {
             ProfileScreen(

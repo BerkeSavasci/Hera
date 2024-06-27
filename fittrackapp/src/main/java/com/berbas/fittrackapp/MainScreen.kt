@@ -2,31 +2,30 @@ package com.berbas.fittrackapp
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.RowScope
-import androidx.compose.material3.Scaffold
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.currentBackStackEntryAsState
-import androidx.navigation.compose.rememberNavController
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.ContentAlpha
 import androidx.compose.material.Icon
 import androidx.compose.material.LocalContentColor
-import androidx.compose.material.SnackbarDefaults.backgroundColor
 import androidx.compose.material.Text
-import androidx.compose.material3.ListItemDefaults.contentColor
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.res.painterResource
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
 import com.berbas.fittrackapp.navigation.AppScreens
 import com.berbas.fittrackapp.navigation.BottomBarScreens
 import com.berbas.fittrackapp.navigation.NavGraph
-import com.berbas.fittrackapp.screens.profile.ProfileViewModel
 import com.berbas.fittrackapp.screens.connections.bluetooth.BluetoothSyncViewModel
 import com.berbas.fittrackapp.screens.connections.wifi.WifiSyncViewModel
+import com.berbas.fittrackapp.screens.home.HomeViewModel
+import com.berbas.fittrackapp.screens.profile.ProfileViewModel
 
 /**
  * A composable function that defines the navigation graph for the bottom navigation bar.
@@ -36,7 +35,8 @@ import com.berbas.fittrackapp.screens.connections.wifi.WifiSyncViewModel
 fun MainScreen(
     profileViewModel: ProfileViewModel,
     bluetoothSyncViewModel: BluetoothSyncViewModel,
-    wifiSyncViewModel: WifiSyncViewModel
+    wifiSyncViewModel: WifiSyncViewModel,
+    homeViewModel: HomeViewModel
 ) {
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
@@ -57,7 +57,8 @@ fun MainScreen(
             navController = navController,
             profileViewModel = profileViewModel,
             bluetoothViewModel = bluetoothSyncViewModel,
-            wifiViewModel = wifiSyncViewModel
+            wifiViewModel = wifiSyncViewModel,
+            homeViewModel = homeViewModel
         )
     }
 }

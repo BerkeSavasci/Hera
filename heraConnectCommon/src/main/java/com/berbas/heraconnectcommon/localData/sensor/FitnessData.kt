@@ -8,6 +8,8 @@ data class FitnessData(
     var steps: ArrayList<String>,
     var bpm: ArrayList<String>,
     var sleepTime: ArrayList<String>,
+    var initialStepCount: Int = 0,
+    var cumulativeSteps: Int = 0,
     @PrimaryKey
     val id: Int = 1
 ) {

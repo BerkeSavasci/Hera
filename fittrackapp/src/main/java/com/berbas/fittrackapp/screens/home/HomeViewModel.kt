@@ -1,45 +1,47 @@
 package com.berbas.fittrackapp.screens.home
 
 import android.util.Log
+import androidx.compose.runtime.MutableState
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.berbas.fittrackapp.annotations.UserId
+import com.berbas.heraconnectcommon.localData.person.PersonDao
 import com.berbas.heraconnectcommon.localData.sensor.FitnessData
 import com.berbas.heraconnectcommon.localData.sensor.FitnessDataDao
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val fitnessDataDao: FitnessDataDao
+    private val fitnessDataDao: FitnessDataDao,
+    private val personDao: PersonDao,
+    @UserId private val id: Int
 ) : ViewModel() {
-    var stepList = ArrayList<String>()
-    var bpmList = ArrayList<String>()
-    var sleepList = ArrayList<String>()
 
-    val stepCount = MutableLiveData<Int>()
+    val stepCount = MutableStateFlow<Int>(0)
+    val stepGoal = MutableStateFlow<Int>(0)
+
     init {
-        stepList.add(1.toString())
-        stepList.add(2.toString())
-        stepList.add(3.toString())
-
-        bpmList.add(1.toString())
-        bpmList.add(2.toString())
-        bpmList.add(3.toString())
-
-        sleepList.add(1.toString())
-        sleepList.add(2.toString())
-        sleepList.add(3.toString())
-
-        val fitnessData = FitnessData(
-            steps = stepList,
-            bpm = bpmList,
-            sleepTime = sleepList
-        )
         viewModelScope.launch {
-            fitnessDataDao.insertSensorData(fitnessData)
+            fitnessDataDao.getSensorData().collect { fitnessData ->
+                val today = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault()).format(Date())
+                val todaySteps = fitnessData?.steps?.find { it.startsWith(today) }
+                stepCount.value = todaySteps?.split(": ")?.get(1)?.toInt() ?: 0
+            }
+        }
+        viewModelScope.launch {
+            personDao.getPersonById(id).collect { person ->
+                stepGoal.value = person.stepGoal
+            }
         }
     }
-
 }
+

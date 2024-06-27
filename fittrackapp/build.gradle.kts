@@ -61,6 +61,7 @@ dependencies {
 
     // hilt
     implementation("com.google.dagger:hilt-android:2.48")
+    implementation(libs.androidx.lifecycle.service)
     testImplementation(libs.jupiter.junit.jupiter)
     kapt("com.google.dagger:hilt-android-compiler:2.48")
 
