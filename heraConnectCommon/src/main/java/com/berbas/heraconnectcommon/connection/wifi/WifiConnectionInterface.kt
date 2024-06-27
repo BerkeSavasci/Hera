@@ -5,7 +5,7 @@ import kotlinx.coroutines.flow.StateFlow
 interface WifiConnectionInterface {
 
     /** Send data to the device */
-    fun send(data: String)
+    suspend fun send(data: String)
 
     /** Receive data from the device */
     suspend fun receive(id: Int): String

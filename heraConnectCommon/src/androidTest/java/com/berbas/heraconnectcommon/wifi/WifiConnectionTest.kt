@@ -48,6 +48,22 @@ class WifiConnectionTest {
     }
 
     @Test
+    fun `send should send correct data`() {
+        // Arrange
+        val testData = "Person(name=John, age=30)"
+        val expectedJson = "{\"name\":\"John\",\"age\":\"30\"}"
+
+        // Act
+        runBlocking {
+            wifiConnection.send(testData)
+        }
+
+        // Assert
+        val sentData = mockOutputStream.toString()
+        assertEquals(expectedJson, sentData)
+    }
+
+    @Test
     fun `receive should fetch data from server and return result`() {
         `when`(mockHttpConnection.responseCode).thenReturn(HttpURLConnection.HTTP_OK)
 
@@ -67,7 +83,7 @@ class WifiConnectionTest {
         `when`(mockHttpConnection.outputStream).thenThrow(IOException("Simulated network error"))
 
         val testData = "Person(name=Alice, age=25)"
-        wifiConnection.send(testData)
+        runBlocking { wifiConnection.send(testData) }
 
         // Verify that an error is logged or handled appropriately
     }
