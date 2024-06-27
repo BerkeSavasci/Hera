@@ -73,6 +73,10 @@ dependencies {
     androidTestImplementation(libs.mockito.core)
     androidTestImplementation(libs.mockito.junit.jupiter.v3124)
     androidTestImplementation(libs.mockito.android)
+
+    testImplementation(libs.mockito.core)
+    testImplementation(libs.mockito.junit.jupiter.v3124)
+    testImplementation(libs.mockito.inline)
     // coroutines
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.0")
     //Junit

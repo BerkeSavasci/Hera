@@ -94,7 +94,7 @@ class WifiConnectionTest {
 
         val result = runBlocking { wifiConnection.receive(456) }
 
-        assertEquals("", result) // Or assert an error message if your implementation provides one
+        assertEquals("", result)
     }
 
     @Test
@@ -103,6 +103,6 @@ class WifiConnectionTest {
 
         val result = runBlocking { wifiConnection.receive(789) }
 
-        assertEquals("", result) // Or assert an error message if your implementation provides one
+        assertEquals("", result)
     }
 }

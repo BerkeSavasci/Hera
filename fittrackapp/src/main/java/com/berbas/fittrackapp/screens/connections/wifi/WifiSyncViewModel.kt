@@ -20,7 +20,7 @@ import org.json.JSONObject
 import javax.inject.Inject
 
 @HiltViewModel
-class WifiSyncViewModel @Inject constructor(
+open class WifiSyncViewModel @Inject constructor(
     private val personDao: PersonDao,
     @UserId private val id: Int,
     private val wifiController: WifiConnectionInterface

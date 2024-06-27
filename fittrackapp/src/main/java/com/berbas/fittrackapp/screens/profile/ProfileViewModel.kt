@@ -16,7 +16,7 @@ import javax.inject.Inject
  * ViewModel for the ProfileScreen manages the data for the view
  */
 @HiltViewModel
-class ProfileViewModel @Inject constructor(
+open class ProfileViewModel @Inject constructor(
     private val personDao: PersonDao,
     @UserId private val id: Int
 ) : ViewModel() {

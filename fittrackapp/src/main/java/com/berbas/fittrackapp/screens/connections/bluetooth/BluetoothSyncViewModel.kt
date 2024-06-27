@@ -18,7 +18,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class BluetoothSyncViewModel @Inject constructor(
+open class BluetoothSyncViewModel @Inject constructor(
     private val personDao: PersonDao,
     @UserId private val id: Int,
     private val bluetoothController: BluetoothControllerInterface

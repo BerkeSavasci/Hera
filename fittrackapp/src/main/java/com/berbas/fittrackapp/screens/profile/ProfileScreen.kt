@@ -15,6 +15,7 @@ import androidx.compose.material.Text
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.TopAppBar
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Divider
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.MaterialTheme
@@ -38,101 +39,112 @@ import java.util.*
  */
 @Composable
 fun ProfileScreen(
-    profileViewModel: ProfileViewModel,
+    profileViewModel: ProfileViewModel?,
     bluetoothViewModel: BluetoothSyncViewModel,
     navController: NavHostController
 ) {
-    val state = profileViewModel.state.collectAsState()
+    val state = profileViewModel?.state?.collectAsState()
 
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text("Profile") },
-                actions = {
-                    IconButton(onClick = {
-                        // when opening the screen start the server automatically
-                        bluetoothViewModel.startBluetoothServer()
-                        navController.navigate(Screen.SELECTSCREEN.name)
-                    }) {
-                        Icon(
-                            painterResource(id = R.drawable.sync_icon),
-                            contentDescription = "Sync"
-                        )
-                    }
-                },
-                backgroundColor = MaterialTheme.colorScheme.primary
-            )
-        }
-    ) { paddingValues ->
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(MaterialTheme.colorScheme.background)
-                .padding(paddingValues)
-        ) {
-            Column(
-                modifier = Modifier.padding(16.dp)
+    if (state != null) {
+        Scaffold(
+            topBar = {
+                TopAppBar(
+                    title = { Text("Profile") },
+                    actions = {
+                        IconButton(onClick = {
+                            // when opening the screen start the server automatically
+                            bluetoothViewModel.startBluetoothServer()
+                            navController.navigate(Screen.SELECTSCREEN.name)
+                        }) {
+                            Icon(
+                                painterResource(id = R.drawable.sync_icon),
+                                contentDescription = "Sync"
+                            )
+                        }
+                    },
+                    backgroundColor = MaterialTheme.colorScheme.primary
+                )
+            }
+        ) { paddingValues ->
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(MaterialTheme.colorScheme.background)
+                    .padding(paddingValues)
             ) {
-                ActivitySection()
-                StepAndActiveTimeGoalRow(
-                    stepGoal = state.value.stepGoal,
-                    onStepGoalChange = { newValue ->
-                        profileViewModel.onEvent(
-                            PersonEvent.SetStepGoal(newValue)
-                        )
-                    },
-                    activeTimeGoal = state.value.activityGoal,
-                    onActiveTimeGoalChange = { newValue ->
-                        profileViewModel.onEvent(
-                            PersonEvent.SetActivityGoal(newValue)
-                        )
-                    }
-                )
-                Divider(
-                    color = Color.DarkGray,
-                    thickness = 1.dp,
-                    modifier = Modifier.padding(8.dp)
-                )
-                AboutYouSection()
-                GenderAndBirthdayRow(
-                    gender = state.value.gender,
-                    onGenderSelected = { newValue ->
-                        profileViewModel.onEvent(
-                            PersonEvent.SetGender(
-                                newValue
+                Column(
+                    modifier = Modifier.padding(16.dp)
+                ) {
+                    ActivitySection()
+                    StepAndActiveTimeGoalRow(
+                        stepGoal = state.value.stepGoal,
+                        onStepGoalChange = { newValue ->
+                            profileViewModel.onEvent(
+                                PersonEvent.SetStepGoal(newValue)
                             )
-                        )
-                    },
-                    birthday = state.value.birthday,
-                    onBirthdaySelected = { newValue ->
-                        profileViewModel.onEvent(
-                            PersonEvent.SetBirthday(
-                                newValue
+                        },
+                        activeTimeGoal = state.value.activityGoal,
+                        onActiveTimeGoalChange = { newValue ->
+                            profileViewModel.onEvent(
+                                PersonEvent.SetActivityGoal(newValue)
                             )
-                        )
-                    }
-                )
-                WeightAndHeightRow(
-                    weight = state.value.weight,
-                    onWeightChange = { newValue ->
-                        profileViewModel.onEvent(
-                            PersonEvent.SetWeight(
-                                newValue
+                        }
+                    )
+                    Divider(
+                        color = Color.DarkGray,
+                        thickness = 1.dp,
+                        modifier = Modifier.padding(8.dp)
+                    )
+                    AboutYouSection()
+                    GenderAndBirthdayRow(
+                        gender = state.value.gender,
+                        onGenderSelected = { newValue ->
+                            profileViewModel.onEvent(
+                                PersonEvent.SetGender(
+                                    newValue
+                                )
                             )
-                        )
-                    },
-                    height = state.value.height,
-                    onHeightChange = { newValue ->
-                        profileViewModel.onEvent(
-                            PersonEvent.SetHeight(
-                                newValue
+                        },
+                        birthday = state.value.birthday,
+                        onBirthdaySelected = { newValue ->
+                            profileViewModel.onEvent(
+                                PersonEvent.SetBirthday(
+                                    newValue
+                                )
                             )
-                        )
-                    }
-                )
+                        }
+                    )
+                    WeightAndHeightRow(
+                        weight = state.value.weight,
+                        onWeightChange = { newValue ->
+                            profileViewModel.onEvent(
+                                PersonEvent.SetWeight(
+                                    newValue
+                                )
+                            )
+                        },
+                        height = state.value.height,
+                        onHeightChange = { newValue ->
+                            profileViewModel.onEvent(
+                                PersonEvent.SetHeight(
+                                    newValue
+                                )
+                            )
+                        }
+                    )
+                }
             }
         }
     }
+    else {
+        LoadingSpinner()
+        Text("Loading...")
+    }
+}
+
+@Composable
+fun LoadingSpinner() {
+    CircularProgressIndicator()
 }
 
 /**

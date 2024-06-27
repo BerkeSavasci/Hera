@@ -165,6 +165,15 @@ fun DataTransferDialog(
                 Toast.LENGTH_SHORT
             ).show()
         }
+
+        WifiState.SERVER_ERROR -> {
+            Log.d("WifiSyncScreen", "Status: ${dataTransferStatus.name}")
+            Toast.makeText(
+                context,
+                "Cannot connect to the server",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
     }
 }
 

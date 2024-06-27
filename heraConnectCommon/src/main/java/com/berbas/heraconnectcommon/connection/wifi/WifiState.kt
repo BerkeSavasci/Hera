@@ -6,5 +6,6 @@ enum class WifiState {
     IDLE,
     IN_PROGRESS,
     SUCCESS,
-    FAILURE
+    FAILURE,
+    SERVER_ERROR
 }

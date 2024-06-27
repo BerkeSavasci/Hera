@@ -37,37 +37,38 @@ class WifiConnection(
     override suspend fun send(data: String) {
         _wifiState.value = WifiState.IN_PROGRESS
         urlWrapper.setUrl(url)
+        return withContext(Dispatchers.IO) {
+            try {
+                val jsonObject = splitData(data, JSONObject())
 
-        try {
-            val jsonObject = splitData(data, JSONObject())
+                Log.d("TAG", "Sending data to: ${urlWrapper.getUrl()}")
+                val httpURLConnection = urlWrapper.openConnection().apply {
+                    requestMethod = "POST"
+                    setRequestProperty("Content-Type", "application/json")
+                    doOutput = true
+                }
 
-            Log.d("TAG", "Sending data to: ${urlWrapper.getUrl()}")
-            val httpURLConnection = urlWrapper.openConnection().apply {
-                requestMethod = "POST"
-                setRequestProperty("Content-Type", "application/json")
-                doOutput = true
+                httpURLConnection.outputStream.bufferedWriter().use {
+                    it.write(jsonObject.toString())
+                    it.flush()
+                }
+
+                if (httpURLConnection.responseCode == HttpURLConnection.HTTP_OK || httpURLConnection.responseCode == HttpURLConnection.HTTP_CREATED) {
+                    Log.d("TAG", "Data sent successfully")
+                    println("Data sent successfully")
+                    _wifiState.value = WifiState.SUCCESS
+                } else {
+                    Log.d("TAG", "Failed to send data")
+                    println("Failed to send data")
+                    _wifiState.value = WifiState.FAILURE
+                }
+            } catch (e: Exception) {
+
+                Log.d(TAG, "wifiState value before change: ${_wifiState.value}")
+                _wifiState.value = WifiState.SERVER_ERROR
+                Log.e("TAG", "Failed to send data", e)
+                e.printStackTrace()
             }
-
-            httpURLConnection.outputStream.bufferedWriter().use {
-                it.write(jsonObject.toString())
-                it.flush()
-            }
-
-            if (httpURLConnection.responseCode == HttpURLConnection.HTTP_OK || httpURLConnection.responseCode == HttpURLConnection.HTTP_CREATED) {
-                Log.d("TAG", "Data sent successfully")
-                println("Data sent successfully")
-                _wifiState.value = WifiState.SUCCESS
-            } else {
-                Log.d("TAG", "Failed to send data")
-                println("Failed to send data")
-                _wifiState.value = WifiState.FAILURE
-            }
-        } catch (e: Exception) {
-
-            Log.d(TAG, "wifiState value before change: ${_wifiState.value}")
-            _wifiState.value = WifiState.FAILURE
-            Log.e("TAG", "Failed to send data", e)
-            e.printStackTrace()
         }
     }
 
@@ -82,6 +83,7 @@ class WifiConnection(
                 val httpURLConnection = urlWrapper.openConnection().apply {
                     requestMethod = "GET"
                     doInput = true
+                    connectTimeout = 5000
                 }
 
                 val responseCode = httpURLConnection.responseCode
@@ -93,7 +95,7 @@ class WifiConnection(
                     _wifiState.value = WifiState.FAILURE
                 }
             } catch (e: Exception) {
-                _wifiState.value = WifiState.FAILURE
+                _wifiState.value = WifiState.SERVER_ERROR
                 Log.e(TAG, "Failed to receive data", e)
                 e.printStackTrace()
             }
