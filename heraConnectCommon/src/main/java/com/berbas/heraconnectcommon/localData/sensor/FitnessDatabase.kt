@@ -6,7 +6,7 @@ import androidx.room.TypeConverters
 
 @Database(
     entities = [FitnessData::class],
-    version = 1
+    version = 2
 )
 @TypeConverters(Converters::class)
 abstract class  FitnessDatabase : RoomDatabase() {
