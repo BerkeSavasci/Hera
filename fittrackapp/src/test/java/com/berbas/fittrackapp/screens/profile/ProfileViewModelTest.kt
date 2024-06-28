@@ -1,10 +1,10 @@
 package com.berbas.fittrackapp.screens.profile
 
 import com.berbas.heraconnectcommon.localData.person.Person
+import com.berbas.heraconnectcommon.localData.sensor.FitnessData
 import junit.framework.TestCase.assertEquals
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
@@ -17,14 +17,16 @@ import org.junit.Test
 class ProfileViewModelTest {
 
     private lateinit var viewModel: ProfileViewModel
-    private lateinit var fakeRepository: FakePersonRepository
+    private lateinit var fakePersonRepository: FakePersonRepository
+    private lateinit var fakeFitnessRepository: FakeFitnessDataRepository
 
 
     @Before
     fun setup() {
         Dispatchers.setMain(Dispatchers.Unconfined)
-        fakeRepository = FakePersonRepository()
-        viewModel = ProfileViewModel(fakeRepository, 101)
+        fakePersonRepository = FakePersonRepository()
+        fakeFitnessRepository = FakeFitnessDataRepository()
+        viewModel = ProfileViewModel(fakePersonRepository, 101)
     }
 
     @After
@@ -45,7 +47,7 @@ class ProfileViewModelTest {
             stepGoal = 6000,
             activityGoal = 2.0
         )
-        fakeRepository.upsertPerson(person)
+        fakePersonRepository.upsertPerson(person)
 
         viewModel.observeAndRefreshPerson()
 
@@ -73,7 +75,7 @@ class ProfileViewModelTest {
             stepGoal = 6000,
             activityGoal = 2.0
         )
-        fakeRepository.upsertPerson(person)
+        fakePersonRepository.upsertPerson(person)
 
         viewModel.observeAndRefreshPerson()
 
@@ -96,7 +98,7 @@ class ProfileViewModelTest {
             stepGoal = 6000,
             activityGoal = 2.0
         )
-        fakeRepository.upsertPerson(person)
+        fakePersonRepository.upsertPerson(person)
 
         viewModel.observeAndRefreshPerson()
 
@@ -119,7 +121,7 @@ class ProfileViewModelTest {
             stepGoal = 6000,
             activityGoal = 2.0
         )
-        fakeRepository.upsertPerson(person)
+        fakePersonRepository.upsertPerson(person)
 
         viewModel.observeAndRefreshPerson()
 
@@ -142,7 +144,7 @@ class ProfileViewModelTest {
             stepGoal = 6000,
             activityGoal = 2.0
         )
-        fakeRepository.upsertPerson(person)
+        fakePersonRepository.upsertPerson(person)
 
         viewModel.observeAndRefreshPerson()
 
@@ -165,7 +167,7 @@ class ProfileViewModelTest {
             stepGoal = 6000,
             activityGoal = 2.0
         )
-        fakeRepository.upsertPerson(person)
+        fakePersonRepository.upsertPerson(person)
 
         viewModel.observeAndRefreshPerson()
 
@@ -188,7 +190,7 @@ class ProfileViewModelTest {
             stepGoal = 6000,
             activityGoal = 2.0
         )
-        fakeRepository.upsertPerson(person)
+        fakePersonRepository.upsertPerson(person)
 
         viewModel.observeAndRefreshPerson()
 
@@ -211,7 +213,7 @@ class ProfileViewModelTest {
             stepGoal = 6000,
             activityGoal = 2.0
         )
-        fakeRepository.upsertPerson(person)
+        fakePersonRepository.upsertPerson(person)
 
         viewModel.observeAndRefreshPerson()
 
@@ -234,7 +236,7 @@ class ProfileViewModelTest {
             stepGoal = 6000,
             activityGoal = 2.0
         )
-        fakeRepository.upsertPerson(person)
+        fakePersonRepository.upsertPerson(person)
 
         viewModel.observeAndRefreshPerson()
 
@@ -242,6 +244,29 @@ class ProfileViewModelTest {
 
         val state = viewModel.state.value
         assertEquals(2.5, state.activityGoal)
+    }
+
+    @Test
+    fun `happy case test person and fitness data serialization`() = runTest {
+        val person = Person(
+            id = 101,
+            firstname = "Max",
+            lastname = "Mustermann",
+            gender = "male",
+            birthday = "01/01/2000",
+            height = 180,
+            weight = 80.0,
+            stepGoal = 6000,
+            activityGoal = 2.0
+        )
+        val fitnessData = FitnessData(
+            steps = arrayListOf("27.06.2024: 4000","28.06.2024: 5000"),
+            bpm = arrayListOf("78","65","89","105"),
+            sleepTime = arrayListOf("7.30","8.44","6.52")
+        )
+
+        fakePersonRepository.upsertPerson(person)
+        fakeFitnessRepository.insertSensorData(fitnessData)
     }
 
     @Test

@@ -1,12 +1,17 @@
 package com.berbas.heraconnectcommon.protocolEngine
 
 import com.berbas.heraconnectcommon.localData.person.Person
+import com.berbas.heraconnectcommon.localData.sensor.FitnessData
 import org.json.JSONObject
 
 class WifiProtocolEngine : ProtocolEngine {
 
     override fun toPersonDataMessage(data: Person): String {
         return data.toString()
+    }
+
+    override fun toFitnessData(data: String): FitnessData {
+        TODO("Not yet implemented")
     }
 
     override fun toPerson(data: String): Person {

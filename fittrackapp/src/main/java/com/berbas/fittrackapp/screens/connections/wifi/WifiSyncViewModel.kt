@@ -5,18 +5,14 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.berbas.fittrackapp.annotations.UserId
-import com.berbas.heraconnectcommon.connection.bluetooth.PersonDataMessage
 import com.berbas.heraconnectcommon.connection.wifi.WifiConnectionInterface
 import com.berbas.heraconnectcommon.connection.wifi.WifiState
-import com.berbas.heraconnectcommon.localData.person.Person
 import com.berbas.heraconnectcommon.localData.person.PersonDao
-import com.berbas.heraconnectcommon.protocolEngine.ProtocolEngine
 import com.berbas.heraconnectcommon.protocolEngine.WifiProtocolEngine
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-import org.json.JSONObject
 import javax.inject.Inject
 
 @HiltViewModel

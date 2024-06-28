@@ -151,7 +151,7 @@ class BluetoothConnection(
         closeConnection()
     }
 
-    override suspend fun trySendMessage(message: String): PersonDataMessage? {
+    override suspend fun trySendMessage(message: String): DataMessage? {
         if (!hasPermissions(Manifest.permission.BLUETOOTH_CONNECT)) {
             return null
         }
@@ -160,18 +160,17 @@ class BluetoothConnection(
             return null
         }
 
-        val personDataMessage =
-            PersonDataMessage(
+        val userDataMessage =
+            DataMessage(
                 message = message, senderName = bluetoothAdapter?.name ?: "Unkonwn",
-                isFromMobile = true
             )
         dataTransferService?.sendMessage(
             BluetoothProtocolEngine().run {
-                personDataMessage.toByteArray()
+                userDataMessage.toByteArray()
             }
         )
-        Log.d("BluetoothConnection", "Data transfer was successful: $personDataMessage")
-        return personDataMessage
+        Log.d("BluetoothConnection", "Data transfer was successful: $userDataMessage")
+        return userDataMessage
     }
 
     override fun startBluetoothServer(): Flow<ConnectionResult> {

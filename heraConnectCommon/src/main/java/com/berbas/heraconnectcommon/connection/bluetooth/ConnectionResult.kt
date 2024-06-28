@@ -5,7 +5,7 @@ package com.berbas.heraconnectcommon.connection.bluetooth
  */
 sealed interface ConnectionResult {
     object ConnectionSuccess : ConnectionResult
-    data class TransferSuccess(val message: PersonDataMessage) : ConnectionResult
+    data class TransferSuccess(val message: DataMessage) : ConnectionResult
     data class ConnectionFailure(val message: String) : ConnectionResult
 }
 

@@ -12,5 +12,4 @@ data class FitnessData(
     var cumulativeSteps: Int = 0,
     @PrimaryKey
     val id: Int = 1
-) {
-}
+)

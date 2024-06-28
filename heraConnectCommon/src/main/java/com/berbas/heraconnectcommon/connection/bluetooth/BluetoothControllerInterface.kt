@@ -30,7 +30,7 @@ interface BluetoothControllerInterface {
      * @param message String the message to send
      * @return PersonDataMessage? the message that was sent
      */
-    suspend fun trySendMessage(message: String): PersonDataMessage?
+    suspend fun trySendMessage(message: String): DataMessage?
 
     /**
      * start the bluetooth server

@@ -43,7 +43,7 @@ class BluetoothDataTransferService(
                         ConnectionResult.TransferSuccess(
                             message = buffer.decodeToString(
                                 endIndex = byteCount
-                            ).toPersonDataMessage(
+                            ).toUserDataMessage(
                                 isFromMobile = true
 
                             )

@@ -1,26 +1,16 @@
 package com.berbas.fittrackapp
 
 import android.Manifest
-import android.app.NotificationChannel
-import android.app.NotificationManager
-import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.hardware.Sensor
-import android.hardware.SensorEvent
-import android.hardware.SensorEventListener
-import android.hardware.SensorManager
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
-import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.core.content.getSystemService
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.berbas.fittrackapp.screens.profile.ProfileViewModel
 import com.berbas.fittrackapp.screens.connections.bluetooth.BluetoothSyncViewModel
@@ -31,9 +21,6 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-
-    private val REQUEST_CODE_PERMISSIONS = 101
-    private val REQUEST_CODE_STEP_COUNTER_PERMISSIONS = 102
 
     @RequiresApi(Build.VERSION_CODES.S)
     private val requiredPermissions = arrayOf(
@@ -47,30 +34,49 @@ class MainActivity : ComponentActivity() {
         Manifest.permission.ACCESS_WIFI_STATE,
         Manifest.permission.CHANGE_WIFI_STATE,
         Manifest.permission.ACCESS_FINE_LOCATION,
-        Manifest.permission.ACCESS_COARSE_LOCATION,
+        Manifest.permission.ACCESS_COARSE_LOCATION
     )
 
     @RequiresApi(Build.VERSION_CODES.S)
-    private val stepCounterPermissions = arrayOf(
+    private val criticalPermissions = arrayOf(
         Manifest.permission.ACTIVITY_RECOGNITION,
         Manifest.permission.BODY_SENSORS
     )
 
     @RequiresApi(Build.VERSION_CODES.S)
+    private val requestCriticalPermissionsLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestMultiplePermissions()
+    ) { permissions ->
+        val granted = permissions.entries.all { it.value }
+        if (granted) {
+            startStepCounterService()
+        } else {
+            Toast.makeText(this, "Critical permissions are required for the app to function", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.S)
+    private val requestAllPermissionsLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestMultiplePermissions()
+    ) { permissions ->
+        val missingPermissions = permissions.entries.any { !it.value }
+        if (missingPermissions) {
+            Toast.makeText(this, "Some permissions are missing, functionality might be limited", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.S)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        if (!allStepCounterPermissionsGranted()) {
-            ActivityCompat.requestPermissions(
-                this,
-                stepCounterPermissions,
-                REQUEST_CODE_STEP_COUNTER_PERMISSIONS
-            )
+        if (!allCriticalPermissionsGranted()) {
+            requestCriticalPermissionsLauncher.launch(criticalPermissions)
         } else {
             startStepCounterService()
         }
+
         if (!allPermissionsGranted()) {
-            ActivityCompat.requestPermissions(this, requiredPermissions, REQUEST_CODE_PERMISSIONS)
+            requestAllPermissionsLauncher.launch(requiredPermissions)
         }
 
         setContent {
@@ -88,7 +94,6 @@ class MainActivity : ComponentActivity() {
                 )
             }
         }
-
     }
 
     private fun startStepCounterService() {
@@ -102,7 +107,7 @@ class MainActivity : ComponentActivity() {
     }
 
     @RequiresApi(Build.VERSION_CODES.S)
-    private fun allStepCounterPermissionsGranted() = stepCounterPermissions.all {
+    private fun allCriticalPermissionsGranted() = criticalPermissions.all {
         ContextCompat.checkSelfPermission(baseContext, it) == PackageManager.PERMISSION_GRANTED
     }
 }

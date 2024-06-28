@@ -7,13 +7,17 @@ import com.berbas.fittrackapp.annotations.UserId
 import com.berbas.heraconnectcommon.connection.bluetooth.BluetoothControllerInterface
 import com.berbas.heraconnectcommon.connection.bluetooth.BluetoothDeviceDomain
 import com.berbas.heraconnectcommon.connection.bluetooth.ConnectionResult
-import com.berbas.heraconnectcommon.connection.bluetooth.PersonDataMessage
+import com.berbas.heraconnectcommon.connection.bluetooth.DataMessage
 import com.berbas.heraconnectcommon.localData.person.Person
 import com.berbas.heraconnectcommon.localData.person.PersonDao
+import com.berbas.heraconnectcommon.localData.sensor.FitnessData
+import com.berbas.heraconnectcommon.localData.sensor.FitnessDataDao
+import com.berbas.heraconnectcommon.protocolEngine.BluetoothProtocolEngine
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -21,7 +25,8 @@ import javax.inject.Inject
 open class BluetoothSyncViewModel @Inject constructor(
     private val personDao: PersonDao,
     @UserId private val id: Int,
-    private val bluetoothController: BluetoothControllerInterface
+    private val bluetoothController: BluetoothControllerInterface,
+    private val fitnessDao: FitnessDataDao,
 ) : ViewModel() {
 
     /**
@@ -29,9 +34,12 @@ open class BluetoothSyncViewModel @Inject constructor(
      */
     val devices: StateFlow<List<BluetoothDeviceDomain>> = bluetoothController.scannedDevices
 
-    private var sendPersonData: PersonDataMessage? = null
+    private var sentUserData: DataMessage? = null
+    private var receivedUserData: DataMessage? = null
 
     private var serverJob: Job? = null
+
+    private val protocolEngine = BluetoothProtocolEngine()
 
     /** the data transfer status */
     private val _dataTransferStatus = MutableStateFlow(DataTransferStatus.IDLE)
@@ -42,27 +50,24 @@ open class BluetoothSyncViewModel @Inject constructor(
      */
     fun connectToDevice(device: BluetoothDeviceDomain) {
         _dataTransferStatus.value = DataTransferStatus.IDLE
-        Log.d("SyncViewModel","Status: ${_dataTransferStatus.value}")
+        Log.d("SyncViewModel", "Status: ${_dataTransferStatus.value}")
 
         viewModelScope.launch {
             bluetoothController.connectToDevice(device).collect { result ->
                 when (result) {
                     is ConnectionResult.ConnectionSuccess -> {
                         Log.d("BluetoothSyncViewModel", "Connected to device: ${device.name}")
-                        personDao.getPersonById(id).collect { personData ->
-                            val personDataString = personData.toString()
-                            Log.d(
-                                "BluetoothSyncViewModel",
-                                "Sending person data: $personDataString"
-                            )
-                            bluetoothController.trySendMessage(personDataString)
-                            _dataTransferStatus.value = DataTransferStatus.SUCCESS
-                        }
+
+                        val allDataString = fetchAllData()
+                        Log.d("BluetoothSyncViewModel", "Sending all data: $allDataString")
+
+                        bluetoothController.trySendMessage(allDataString)
+                        _dataTransferStatus.value = DataTransferStatus.SUCCESS
                     }
 
                     is ConnectionResult.ConnectionFailure -> {
                         _dataTransferStatus.value = DataTransferStatus.FAILURE
-                        Log.d("SyncViewModel","Status: ${_dataTransferStatus.value}")
+                        Log.d("SyncViewModel", "Status: ${_dataTransferStatus.value}")
                         Log.d(
                             "BluetoothSyncViewModel",
                             "Failed to connect to device: ${device.name}"
@@ -70,16 +75,33 @@ open class BluetoothSyncViewModel @Inject constructor(
                     }
 
                     is ConnectionResult.TransferSuccess -> {
-                        sendPersonData = result.message
+                        sentUserData = result.message
                         Log.d(
                             "BluetoothSyncViewModel / connect",
-                            "Data transfer was successful: $sendPersonData"
+                            "Data transfer was successful: $sentUserData"
                         )
                         _dataTransferStatus.value = DataTransferStatus.SUCCESS
                     }
                 }
             }
         }
+    }
+
+    /**
+     * Receives both fitness and person entries form both databases joins them
+     * with the separator "*" and returns it
+     */
+    private suspend fun fetchAllData(): String {
+        Log.d("BluetoothSyncViewModel", "Fetching data from database")
+
+        val personData = personDao.getPersonById(id).first()
+        Log.d("BluetoothSyncViewModel", "Fetched data from database: $personData")
+
+        val allFitnessData = fitnessDao.getSensorData().first()
+        Log.d("BluetoothSyncViewModel", "Fetched data from database: $allFitnessData")
+
+
+        return "${personData.toString()}*${allFitnessData.toString()}"
     }
 
     /**
@@ -101,16 +123,27 @@ open class BluetoothSyncViewModel @Inject constructor(
 
                     is ConnectionResult.TransferSuccess -> {
                         _dataTransferStatus.value = DataTransferStatus.IN_PROGRESS
-                        sendPersonData = result.message
+                        receivedUserData = result.message
                         Log.d(
                             "BluetoothSyncViewModel / server",
-                            "Data transfer was successful: $sendPersonData"
+                            "Data transfer was successful: $receivedUserData"
                         )
-                        val localReceivedPersonData = sendPersonData
-                        if (localReceivedPersonData != null) {
+                        val localReceivedUserData = receivedUserData
+                        if (localReceivedUserData != null) {
+                            Log.d("BluetoothSyncViewModel / server", "Message will get deserialized: $localReceivedUserData")
                             val person =
-                                localReceivedPersonData.toPerson()
+                                protocolEngine.toPerson(localReceivedUserData.toString())
+                            Log.d("BluetoothSyncViewModel / server", "Person Object received: $person")
+
+                            val fitnessData =
+                                protocolEngine.toFitnessData(localReceivedUserData.toString())
+
+                            Log.d("BluetoothSyncViewModel / server", "Fitness Object received: $fitnessData")
                             personDao.upsertPerson(person)
+                            fitnessDao.insertSensorData(fitnessData)
+
+                            Log.d("BluetoothSyncViewModel / server", "Person Object saved: $person")
+                            Log.d("BluetoothSyncViewModel / server", "Fitness Object saved: $fitnessData")
                             _dataTransferStatus.value = DataTransferStatus.SUCCESS
                         }
                     }
@@ -154,7 +187,7 @@ open class BluetoothSyncViewModel @Inject constructor(
     /**
      * Converts the received row data (as String) to a person object and returns it
      */
-    private fun PersonDataMessage.toPerson(): Person {
+    private fun DataMessage.toPerson(): Person {
         val personString = message.substringAfter("Person(").substringBeforeLast(")")
         val personParts = personString.split(", ")
 

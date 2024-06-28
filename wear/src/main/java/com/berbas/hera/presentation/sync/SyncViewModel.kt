@@ -7,7 +7,7 @@ import com.berbas.hera.annotations.UserId
 import com.berbas.heraconnectcommon.connection.bluetooth.BluetoothControllerInterface
 import com.berbas.heraconnectcommon.connection.bluetooth.BluetoothDeviceDomain
 import com.berbas.heraconnectcommon.connection.bluetooth.ConnectionResult
-import com.berbas.heraconnectcommon.connection.bluetooth.PersonDataMessage
+import com.berbas.heraconnectcommon.connection.bluetooth.DataMessage
 import com.berbas.heraconnectcommon.localData.person.PersonDao
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -27,7 +27,7 @@ class SyncViewModel @Inject constructor(
     val devices: StateFlow<List<BluetoothDeviceDomain>> = bluetoothController.scannedDevices
 
     /** The person data message that is going to be sent */
-    private var sendPersonData: PersonDataMessage? = null
+    private var sendPersonData: DataMessage? = null
 
     /** The transfer status */
     private val _transferStatus = MutableSharedFlow<String>()
