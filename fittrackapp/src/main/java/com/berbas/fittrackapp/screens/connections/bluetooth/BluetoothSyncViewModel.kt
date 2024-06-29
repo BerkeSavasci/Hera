@@ -185,30 +185,6 @@ open class BluetoothSyncViewModel @Inject constructor(
     }
 
     /**
-     * Converts the received row data (as String) to a person object and returns it
-     */
-    private fun DataMessage.toPerson(): Person {
-        val personString = message.substringAfter("Person(").substringBeforeLast(")")
-        val personParts = personString.split(", ")
-
-        if (personParts.size < 6) {
-            _dataTransferStatus.value = DataTransferStatus.FAILURE
-            Log.e("BluetoothSyncViewModel / data.toperson", "Not enough data parts: $personParts")
-        }
-
-        return Person(
-            firstname = personParts[0].substringAfter("="),
-            lastname = personParts[1].substringAfter("="),
-            birthday = personParts[2].substringAfter("="),
-            gender = personParts[3].substringAfter("="),
-            height = personParts[4].substringAfter("=").toInt(),
-            weight = personParts[5].substringAfter("=").toDouble(),
-            stepGoal = personParts[6].substringAfter("=").toInt(),
-            activityGoal = personParts[7].substringAfter("=").toDouble(),
-        )
-    }
-
-    /**
      * A enum class that holds the status of the data transfer
      */
     enum class DataTransferStatus {

@@ -11,17 +11,14 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Scaffold
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Info
-import androidx.compose.material.icons.twotone.Info
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -31,6 +28,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -38,9 +36,6 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import kotlinx.coroutines.launch
-import java.text.SimpleDateFormat
-import java.util.Calendar
-import java.util.Locale
 
 @Composable
 fun HomeScreen(homeViewModel: HomeViewModel) {
@@ -103,15 +98,21 @@ fun HomeScreen(homeViewModel: HomeViewModel) {
 
 @Composable
 fun StepProgressBar(stepCount: Int, stepGoal: Int) {
+    val progression = stepCount.toFloat() / stepGoal.toFloat()
+    val progressColor = if (stepCount >= stepGoal) {
+        Color.Green
+    } else {
+        MaterialTheme.colorScheme.primary
+    }
     Box(
         contentAlignment = Alignment.Center,
         modifier = Modifier.size(150.dp)
     ) {
         CircularProgressIndicator(
-            progress = stepCount.toFloat() / stepGoal.toFloat(),
+            progress = progression,
             strokeWidth = 10.dp,
             modifier = Modifier.size(150.dp),
-            color = MaterialTheme.colorScheme.primary,
+            color = progressColor,
             backgroundColor = MaterialTheme.colorScheme.onBackground
         )
         Column(
@@ -185,12 +186,18 @@ fun LastSevenDaysStepsGraph(
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
             steps.forEachIndexed { index, stepCount ->
+                val progression = stepCount.toFloat() / stepGoal.toFloat()
+                val progressColor = if (stepCount >= stepGoal) {
+                    Color.Green
+                } else {
+                    MaterialTheme.colorScheme.primary
+                }
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     CircularProgressIndicator(
-                        progress = stepCount.toFloat() / stepGoal,
+                        progress = progression,
                         strokeWidth = 6.dp,
                         modifier = Modifier.size(40.dp),
-                        color = MaterialTheme.colorScheme.secondary,
+                        color = progressColor,
                         backgroundColor = MaterialTheme.colorScheme.onBackground
                     )
                     Spacer(modifier = Modifier.height(4.dp))

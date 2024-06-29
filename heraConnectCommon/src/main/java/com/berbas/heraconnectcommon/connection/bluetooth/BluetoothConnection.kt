@@ -227,9 +227,7 @@ class BluetoothConnection(
 
             if (bluetoothAdapter?.bondedDevices?.contains(bluetoothDevice) == false) {
 
-
             }
-
             currentClientSocket?.let { socket ->
                 try {
                     socket.connect()

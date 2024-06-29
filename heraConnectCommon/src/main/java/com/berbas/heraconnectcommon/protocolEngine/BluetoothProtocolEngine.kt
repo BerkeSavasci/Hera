@@ -15,7 +15,7 @@ class BluetoothProtocolEngine : ProtocolEngine {
      *
      * !IMPORTANT The "#" is used to split the message meaning it can't be used in the message itself
      */
-    fun String.toUserDataMessage(isFromMobile: Boolean): DataMessage {
+    fun String.toUserDataMessage(): DataMessage {
         val name = substringBeforeLast("#")
         val message = substringAfterLast("#")
         return DataMessage(message = message, senderName = name)
@@ -74,7 +74,7 @@ class BluetoothProtocolEngine : ProtocolEngine {
             steps = steps,
             bpm = bpm,
             sleepTime = sleepTime,
-            initialStepCount = initialStepCount,
+            initialStepCount = -1,
             cumulativeSteps = cumulativeSteps
         )
     }

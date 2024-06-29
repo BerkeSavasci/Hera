@@ -5,6 +5,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -24,8 +25,6 @@ class MainActivity : ComponentActivity() {
 
     @RequiresApi(Build.VERSION_CODES.S)
     private val requiredPermissions = arrayOf(
-        Manifest.permission.BLUETOOTH,
-        Manifest.permission.BLUETOOTH_ADMIN,
         Manifest.permission.BLUETOOTH_SCAN,
         Manifest.permission.BLUETOOTH_ADVERTISE,
         Manifest.permission.BLUETOOTH_CONNECT,
@@ -51,7 +50,11 @@ class MainActivity : ComponentActivity() {
         if (granted) {
             startStepCounterService()
         } else {
-            Toast.makeText(this, "Critical permissions are required for the app to function", Toast.LENGTH_SHORT).show()
+            Toast.makeText(
+                this,
+                "Critical permissions are required for the app to function",
+                Toast.LENGTH_SHORT
+            ).show()
         }
     }
 
@@ -60,8 +63,14 @@ class MainActivity : ComponentActivity() {
         ActivityResultContracts.RequestMultiplePermissions()
     ) { permissions ->
         val missingPermissions = permissions.entries.any { !it.value }
+        Log.d("MainActivity", "${permissions.entries}")
+
         if (missingPermissions) {
-            Toast.makeText(this, "Some permissions are missing, functionality might be limited", Toast.LENGTH_SHORT).show()
+            Toast.makeText(
+                this,
+                "Some permissions are missing, functionality might be limited",
+                Toast.LENGTH_SHORT
+            ).show()
         }
     }
 
