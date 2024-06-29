@@ -95,7 +95,7 @@ class StepCounterService : LifecycleService(), SensorEventListener {
             }
 
             val currentSteps = totalSteps.toInt() - initialStepCount
-            Log.i("Steptaken", "step taken: $currentSteps")
+            Log.v("Steptaken", "step taken: $currentSteps")
             saveStepsToDatabase(currentSteps)
         }
     }

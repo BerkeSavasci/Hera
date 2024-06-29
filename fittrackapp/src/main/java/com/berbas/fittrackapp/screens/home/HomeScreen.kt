@@ -98,9 +98,12 @@ fun HomeScreen(homeViewModel: HomeViewModel) {
 
 @Composable
 fun StepProgressBar(stepCount: Int, stepGoal: Int) {
-    val progression = stepCount.toFloat() / stepGoal.toFloat()
+    var progression = 0f
+    if (stepCount > 0) {
+        progression = stepCount.toFloat() / stepGoal.toFloat()
+    }
     val progressColor = if (stepCount >= stepGoal) {
-        Color.Green
+        Color.Green.copy(alpha = 0.5f)
     } else {
         MaterialTheme.colorScheme.primary
     }
@@ -188,7 +191,7 @@ fun LastSevenDaysStepsGraph(
             steps.forEachIndexed { index, stepCount ->
                 val progression = stepCount.toFloat() / stepGoal.toFloat()
                 val progressColor = if (stepCount >= stepGoal) {
-                    Color.Green
+                    Color.Green.copy(alpha = 0.5f)
                 } else {
                     MaterialTheme.colorScheme.primary
                 }
