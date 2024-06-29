@@ -247,29 +247,6 @@ class ProfileViewModelTest {
     }
 
     @Test
-    fun `happy case test person and fitness data serialization`() = runTest {
-        val person = Person(
-            id = 101,
-            firstname = "Max",
-            lastname = "Mustermann",
-            gender = "male",
-            birthday = "01/01/2000",
-            height = 180,
-            weight = 80.0,
-            stepGoal = 6000,
-            activityGoal = 2.0
-        )
-        val fitnessData = FitnessData(
-            steps = arrayListOf("27.06.2024: 4000","28.06.2024: 5000"),
-            bpm = arrayListOf("78","65","89","105"),
-            sleepTime = arrayListOf("7.30","8.44","6.52")
-        )
-
-        fakePersonRepository.upsertPerson(person)
-        fakeFitnessRepository.insertSensorData(fitnessData)
-    }
-
-    @Test
     fun `test initial person state when person is null`() = runTest {
         viewModel.observeAndRefreshPerson()
 

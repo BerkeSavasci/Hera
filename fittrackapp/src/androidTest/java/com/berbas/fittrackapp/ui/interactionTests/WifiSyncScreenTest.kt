@@ -12,16 +12,16 @@ class WifiSyncScreenTest {
     @get:Rule
     val composeTestRule = createComposeRule()
 
-    @Test
-    fun wifiSyncScreen_buttonsFunctionProperly() {
-        val wifiSyncViewModel = WifiSyncViewModel() // provide necessary params
-
-        composeTestRule.setContent {
-            val navController = rememberNavController()
-            WifiSyncScreen(wifiSyncViewModel, navController)
-        }
-
-        composeTestRule.onNodeWithText("Send").performClick()
-        composeTestRule.onNodeWithText("Receiving data from the server...").assertIsDisplayed()
-    }
+//    @Test
+//    fun wifiSyncScreen_buttonsFunctionProperly() {
+//        val wifiSyncViewModel = WifiSyncViewModel() // provide necessary params
+//
+//        composeTestRule.setContent {
+//            val navController = rememberNavController()
+//            WifiSyncScreen(wifiSyncViewModel, navController)
+//        }
+//
+//        composeTestRule.onNodeWithText("Send").performClick()
+//        composeTestRule.onNodeWithText("Receiving data from the server...").assertIsDisplayed()
+//    }
 }

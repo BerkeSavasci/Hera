@@ -40,7 +40,7 @@ class HomeViewModel @Inject constructor(
     }
 
     /** Collects the steps taken from the database */
-    private fun fetchTodaySteps() {
+    fun fetchTodaySteps() {
         viewModelScope.launch {
             fitnessDataDao.getSensorData().collect { fitnessData ->
                 val today = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault()).format(Date())
@@ -51,7 +51,7 @@ class HomeViewModel @Inject constructor(
     }
 
     /** Collects the step goal from the database */
-    private fun fetchStepGoal() {
+    fun fetchStepGoal() {
         viewModelScope.launch {
             personDao.getPersonById(id).collect { person ->
                 stepGoal.value = person.stepGoal
