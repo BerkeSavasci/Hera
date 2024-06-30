@@ -22,16 +22,22 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.berbas.fittrackapp.R
 import com.berbas.fittrackapp.navigation.Screen
-import com.berbas.fittrackapp.screens.connections.bluetooth.BluetoothSyncViewModel
+import com.berbas.fittrackapp.screens.connections.bluetooth.IBluetoothSyncViewModel
 import java.util.*
 
 /**
@@ -40,7 +46,7 @@ import java.util.*
 @Composable
 fun ProfileScreen(
     profileViewModel: ProfileViewModel?,
-    bluetoothViewModel: BluetoothSyncViewModel,
+    bluetoothViewModel: IBluetoothSyncViewModel,
     navController: NavHostController
 ) {
     val state = profileViewModel?.state?.collectAsState()
@@ -451,9 +457,15 @@ fun InputDialog(
 ) {
     var inputValue by remember {
         mutableStateOf(
-            if (isInteger) value.toInt().toString() else String.format("%.1f", value)
+            TextFieldValue(
+                text = if (isInteger) value.toInt().toString() else String.format("%.1f", value),
+                selection = TextRange(if (isInteger) value.toInt().toString().length else String.format("%.1f", value).length)
+            )
         )
     }
+
+    val focusRequester = remember { FocusRequester() }
+    val keyboardController = LocalSoftwareKeyboardController.current
 
     AlertDialog(
         onDismissRequest = onDismissRequest,
@@ -468,15 +480,25 @@ fun InputDialog(
                     unfocusedBorderColor = MaterialTheme.colorScheme.onSurface,
                     textColor = MaterialTheme.colorScheme.onSurface
                 ),
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                modifier = Modifier
+                    .focusRequester(focusRequester)
+                    .onFocusChanged { focusState ->
+                        if (focusState.isFocused) {
+                            keyboardController?.show()
+                        }
+                    }
             )
+            LaunchedEffect(Unit) {
+                focusRequester.requestFocus()
+            }
         },
         confirmButton = {
             TextButton(
                 onClick = {
                     onValueChange(
-                        if (isInteger) inputValue.toDoubleOrNull()?.toInt()?.toDouble()
-                            ?: value else inputValue.toDoubleOrNull() ?: value
+                        if (isInteger) inputValue.text.toDoubleOrNull()?.toInt()?.toDouble()
+                            ?: value else inputValue.text.toDoubleOrNull() ?: value
                     )
                     onDismissRequest()
                 },

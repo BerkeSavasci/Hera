@@ -1,4 +1,4 @@
-package com.berbas.fittrackapp.screens.profile
+package com.berbas.fittrackapp
 
 import com.berbas.heraconnectcommon.localData.person.Person
 import com.berbas.heraconnectcommon.localData.person.PersonDao

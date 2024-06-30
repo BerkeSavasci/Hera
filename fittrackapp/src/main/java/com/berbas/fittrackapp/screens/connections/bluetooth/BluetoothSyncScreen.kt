@@ -47,6 +47,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.berbas.fittrackapp.R
 import com.berbas.fittrackapp.navigation.BottomBarScreens
+import com.berbas.heraconnectcommon.connection.bluetooth.BluetoothConnection
 
 @Composable
 fun BluetoothSyncScreen(
@@ -102,11 +103,11 @@ fun BluetoothSyncScreen(
 
 @Composable
 fun DataTransferDialog(
-    dataTransferStatus: BluetoothSyncViewModel.DataTransferStatus,
+    dataTransferStatus: BluetoothConnection.DataTransferStatus,
     showDialog: MutableState<Boolean>
 ) {
     when (dataTransferStatus) {
-        BluetoothSyncViewModel.DataTransferStatus.IN_PROGRESS -> {
+        BluetoothConnection.DataTransferStatus.IN_PROGRESS -> {
             AlertDialog(
                 onDismissRequest = { },
                 title = { Text("Data Transfer") },
@@ -117,11 +118,13 @@ fun DataTransferDialog(
                         CircularProgressIndicator(modifier = Modifier.align(Alignment.CenterHorizontally))
                     }
                 },
-                confirmButton = { }
+                confirmButton = {TextButton(onClick = { showDialog.value = false }) {
+                    Text("OK")
+                } }
             )
         }
 
-        BluetoothSyncViewModel.DataTransferStatus.SUCCESS -> {
+        BluetoothConnection.DataTransferStatus.SUCCESS -> {
             AlertDialog(
                 onDismissRequest = { },
                 title = { Text("Data Transfer") },
@@ -134,7 +137,7 @@ fun DataTransferDialog(
             )
         }
 
-        BluetoothSyncViewModel.DataTransferStatus.FAILURE -> {
+        BluetoothConnection.DataTransferStatus.FAILURE -> {
             AlertDialog(
                 onDismissRequest = { },
                 title = { Text("Data Transfer") },
@@ -152,11 +155,11 @@ fun DataTransferDialog(
             )
         }
 
-        BluetoothSyncViewModel.DataTransferStatus.IDLE -> {
+        BluetoothConnection.DataTransferStatus.IDLE -> {
             Log.d("SyncScreen", "Status is in IDLE")
         }
 
-        BluetoothSyncViewModel.DataTransferStatus.STARTED -> {
+        BluetoothConnection.DataTransferStatus.STARTED -> {
             Log.d("SyncScreen", "Data transfer has started")
         }
     }

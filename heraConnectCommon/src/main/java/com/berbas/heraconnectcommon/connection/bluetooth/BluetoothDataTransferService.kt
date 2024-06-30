@@ -66,4 +66,16 @@ class BluetoothDataTransferService(
             true
         }
     }
+
+    /**
+     * Closes the Bluetooth socket connection.
+     */
+    fun closeConnection() {
+        try {
+            socket.close()
+            Log.d("BluetoothDataTransferService", "Socket connection closed")
+        } catch (e: IOException) {
+            Log.e("BluetoothDataTransferService", "Error closing the socket", e)
+        }
+    }
 }

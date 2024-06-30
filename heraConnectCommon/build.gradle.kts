@@ -73,6 +73,17 @@ dependencies {
     androidTestImplementation(libs.mockito.core)
     androidTestImplementation(libs.mockito.junit.jupiter.v3124)
     androidTestImplementation(libs.mockito.android)
+    // MockK for unit tests
+    testImplementation ("io.mockk:mockk:1.13.11")
+
+    // MockK for Android instrumented tests
+    androidTestImplementation ("io.mockk:mockk-android:1.13.11")
+
+    // testing
+    testImplementation ("junit:junit:4.13.2")
+    androidTestImplementation ("androidx.test:core:1.4.0")
+    androidTestImplementation ("androidx.test.ext:junit:1.1.3")
+    androidTestImplementation ("androidx.test.espresso:espresso-core:3.4.0")
 
     testImplementation(libs.mockito.core)
     testImplementation(libs.mockito.junit.jupiter.v3124)

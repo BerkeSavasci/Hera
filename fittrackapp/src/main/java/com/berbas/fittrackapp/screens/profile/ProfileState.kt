@@ -1,7 +1,7 @@
 package com.berbas.fittrackapp.screens.profile
 
 /**
- *  Data class for the state of the profile screen with the default values
+ *  Data class for the state of the profile screen with default values
  */
 data class ProfileState(
     val firstName: String = "Placeholder",

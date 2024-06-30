@@ -24,6 +24,7 @@ android {
 
     packaging {
         resources.excludes.add("META-INF/LICENSE-notice.md")
+        resources.excludes.add ("META-INF/LICENSE.md")
     }
 
     buildTypes {
@@ -62,6 +63,8 @@ dependencies {
     // hilt
     implementation("com.google.dagger:hilt-android:2.48")
     implementation(libs.androidx.lifecycle.service)
+    implementation(libs.play.services.basement)
+    implementation(libs.core.ktx)
     testImplementation(libs.jupiter.junit.jupiter)
     kapt("com.google.dagger:hilt-android-compiler:2.48")
 
@@ -77,10 +80,19 @@ dependencies {
     // mockito
     testImplementation(libs.mockito.core)
     testImplementation(libs.mockito.kotlin)
+    androidTestImplementation(libs.mockito.android)
+    testImplementation("org.mockito:mockito-core:5.12.0")
+    // For mocking final classes
+    testImplementation ("org.mockito:mockito-inline:5.2.0")
+
     testImplementation(libs.kotlinx.coroutines.test)
 
+    // roboelectric
+    testImplementation ("org.robolectric:robolectric:4.8.2")
+
     // Mockk (for mocking dependencies)
-    testImplementation("io.mockk:mockk:1.12.0")
+    testImplementation("io.mockk:mockk:1.13.10")
+    androidTestImplementation ("io.mockk:mockk-android:1.13.10")
 
     // Coroutines Test
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
@@ -88,10 +100,9 @@ dependencies {
     // AndroidX Test - Core Testing
     testImplementation("androidx.arch.core:core-testing:2.2.0")
 
-    androidTestImplementation(libs.mockito.core)
-    androidTestImplementation(libs.mockito.kotlin)
+    // coroutines test
     androidTestImplementation(libs.kotlinx.coroutines.test)
-    androidTestImplementation(libs.mockito.android)
+    androidTestImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
 
     // compose
     implementation(libs.androidx.activity.compose)
@@ -113,6 +124,14 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.manifest)
     androidTestImplementation(libs.androidx.core.testing)
 
+    // Espresso
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.6.1")
+    androidTestImplementation("androidx.test.espresso:espresso-contrib:3.6.1")
+    androidTestImplementation("androidx.test.espresso:espresso-intents:3.6.1")
+    androidTestImplementation("androidx.test.ext:junit:1.2.1")
+    androidTestImplementation("androidx.test:rules:1.6.1")
+    androidTestImplementation("androidx.test:runner:1.6.1")
+
     // defaults
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
@@ -124,7 +143,9 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     testImplementation(libs.truth)
+    androidTestImplementation("androidx.navigation:navigation-testing:2.7.7")
 
+    // gson
     implementation("com.google.code.gson:gson:2.11.0")
 
     // local
@@ -132,10 +153,10 @@ dependencies {
     wearApp(project(":wear"))
 
     // live data
-    implementation (libs.androidx.lifecycle.viewmodel.compose)
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
 }
 
 // Allow references to generated code
-kapt{
+kapt {
     correctErrorTypes = true
 }

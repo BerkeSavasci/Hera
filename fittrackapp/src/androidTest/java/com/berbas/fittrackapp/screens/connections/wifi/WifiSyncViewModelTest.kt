@@ -1,7 +1,6 @@
-package com.berbas.fittrackapp.ui.viewModelTests
+package com.berbas.fittrackapp.screens.connections.wifi
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.berbas.fittrackapp.screens.connections.wifi.WifiSyncViewModel
 import com.berbas.heraconnectcommon.connection.wifi.WifiConnectionInterface
 import com.berbas.heraconnectcommon.localData.person.PersonDao
 import kotlinx.coroutines.test.TestCoroutineDispatcher

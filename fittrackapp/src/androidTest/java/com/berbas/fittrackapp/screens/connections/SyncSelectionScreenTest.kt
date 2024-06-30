@@ -1,14 +1,7 @@
-package com.berbas.fittrackapp.ui.composeTests
+package com.berbas.fittrackapp.screens.connections
 
-import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
-import androidx.compose.ui.test.onNodeWithText
-import androidx.compose.ui.test.performClick
-import androidx.navigation.compose.rememberNavController
-import com.berbas.fittrackapp.navigation.Screen
-import com.berbas.fittrackapp.screens.connections.SyncSelectionScreen
 import org.junit.Rule
-import org.junit.Test
 
 class SyncSelectionScreenTest {
     @get:Rule

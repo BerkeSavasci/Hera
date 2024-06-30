@@ -37,8 +37,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import kotlinx.coroutines.launch
 
+/** Displays the contents of the HomeScreen */
 @Composable
-fun HomeScreen(homeViewModel: HomeViewModel) {
+fun HomeScreen(homeViewModel: IHomeViewModel) {
     val stepCount by homeViewModel.stepCount.collectAsState()
     val stepGoal by homeViewModel.stepGoal.collectAsState()
     val lastSevenDaysSteps by homeViewModel.lastSevenDaysSteps.collectAsState()
@@ -72,9 +73,19 @@ fun HomeScreen(homeViewModel: HomeViewModel) {
             }
 
             Spacer(modifier = Modifier.size(20.dp))
-            StepProgressBar(stepCount = stepCount, stepGoal = stepGoal)
+            StepProgressBar(
+                stepCount = stepCount,
+                stepGoal = stepGoal,
+                size = 150,
+                thickness = 10,
+                showStepCount = true
+            )
             Spacer(modifier = Modifier.size(20.dp))
-            StepGoalText(stepGoal = stepGoal)
+            Text(
+                text = "Step Goal: $stepGoal",
+                color = MaterialTheme.colorScheme.onBackground,
+                style = MaterialTheme.typography.headlineSmall
+            )
             Spacer(modifier = Modifier.size(20.dp))
             PlaceHolderRow()
             Spacer(modifier = Modifier.size(20.dp))
@@ -96,73 +107,68 @@ fun HomeScreen(homeViewModel: HomeViewModel) {
     }
 }
 
+/**
+ * A circular progress bar that is used to show the progress done by the user
+ * [stepCount] the current step count of the user
+ * [stepGoal] the current step goal of the user
+ * [size] the size of the [CircularProgressIndicator]
+ * [thickness] the thickness of the [CircularProgressIndicator]
+ * [showStepCount] true if the step count needs to be shown false other wise
+ * [goalReachedColor] the color of the [CircularProgressIndicator] when the step goal is reached,
+ * has the default value {Color.Green.copy(alpha = 0.5f)}
+ * [defaultColor] the color of the [CircularProgressIndicator] when the step goal hasn't been reached yet,
+ * has the default value {MaterialTheme.colorScheme.primary}
+ */
 @Composable
-fun StepProgressBar(stepCount: Int, stepGoal: Int) {
+fun StepProgressBar(
+    stepCount: Int,
+    stepGoal: Int,
+    size: Int,
+    thickness: Int,
+    showStepCount: Boolean,
+    goalReachedColor: Color = Color.Green.copy(alpha = 0.5f),
+    defaultColor: Color = MaterialTheme.colorScheme.primary
+
+) {
     var progression = 0f
     if (stepCount > 0) {
         progression = stepCount.toFloat() / stepGoal.toFloat()
     }
     val progressColor = if (stepCount >= stepGoal) {
-        Color.Green.copy(alpha = 0.5f)
+        goalReachedColor
     } else {
-        MaterialTheme.colorScheme.primary
+        defaultColor
     }
     Box(
         contentAlignment = Alignment.Center,
-        modifier = Modifier.size(150.dp)
+        modifier = Modifier.size(size.dp)
     ) {
         CircularProgressIndicator(
             progress = progression,
-            strokeWidth = 10.dp,
-            modifier = Modifier.size(150.dp),
+            strokeWidth = thickness.dp,
+            modifier = Modifier.size(size.dp),
             color = progressColor,
             backgroundColor = MaterialTheme.colorScheme.onBackground
         )
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Text(
-                text = "$stepCount",
-                style = MaterialTheme.typography.bodyLarge,
-                color = MaterialTheme.colorScheme.onBackground
-            )
-            Text(
-                text = "Steps",
-                color = MaterialTheme.colorScheme.onBackground
-            )
+        if (showStepCount) {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(
+                    text = "$stepCount",
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = MaterialTheme.colorScheme.onBackground
+                )
+                Text(
+                    text = "Steps",
+                    color = MaterialTheme.colorScheme.onBackground
+                )
+            }
         }
     }
 }
 
-@Composable
-fun StepGoalText(stepGoal: Int) {
-    Text(
-        text = "Step Goal: $stepGoal",
-        color = MaterialTheme.colorScheme.onBackground,
-        style = MaterialTheme.typography.headlineSmall
-    )
-}
-
-@Composable
-fun InfoButton(onClick: (Boolean) -> Unit) {
-    val scope = rememberCoroutineScope()
-
-    IconButton(
-        onClick = {
-            scope.launch {
-                onClick(true)
-            }
-        },
-        content = {
-            Icon(
-                imageVector = Icons.Default.Info,
-                contentDescription = "Info",
-                tint = MaterialTheme.colorScheme.onBackground
-            )
-        }
-    )
-}
-
+/** Displays a graph allowing the user to see the last seven days of their step tracking data */
 @Composable
 fun LastSevenDaysStepsGraph(
     steps: List<Int>,
@@ -189,19 +195,13 @@ fun LastSevenDaysStepsGraph(
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
             steps.forEachIndexed { index, stepCount ->
-                val progression = stepCount.toFloat() / stepGoal.toFloat()
-                val progressColor = if (stepCount >= stepGoal) {
-                    Color.Green.copy(alpha = 0.5f)
-                } else {
-                    MaterialTheme.colorScheme.primary
-                }
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    CircularProgressIndicator(
-                        progress = progression,
-                        strokeWidth = 6.dp,
-                        modifier = Modifier.size(40.dp),
-                        color = progressColor,
-                        backgroundColor = MaterialTheme.colorScheme.onBackground
+                    StepProgressBar(
+                        stepCount = stepCount,
+                        stepGoal = stepGoal,
+                        size = 40,
+                        thickness = 7,
+                        showStepCount = false
                     )
                     Spacer(modifier = Modifier.height(4.dp))
                     Text(
@@ -216,6 +216,7 @@ fun LastSevenDaysStepsGraph(
     }
 }
 
+/** A placeholder row that displays fitness information */
 @Composable
 fun PlaceHolderRow() {
     Row(
@@ -261,6 +262,28 @@ fun PlaceHolderRow() {
     }
 }
 
+/** Info button used to show the info dialog*/
+@Composable
+fun InfoButton(onClick: (Boolean) -> Unit) {
+    val scope = rememberCoroutineScope()
+
+    IconButton(
+        onClick = {
+            scope.launch {
+                onClick(true)
+            }
+        },
+        content = {
+            Icon(
+                imageVector = Icons.Default.Info,
+                contentDescription = "Info",
+                tint = MaterialTheme.colorScheme.onBackground
+            )
+        }
+    )
+}
+
+/** A UI element that informs the user about the latest status of the app */
 @Composable
 fun InfoDialog(onDismiss: () -> Unit) {
     Dialog(onDismissRequest = onDismiss) {
@@ -271,14 +294,8 @@ fun InfoDialog(onDismiss: () -> Unit) {
                 .padding(8.dp),
             contentAlignment = Alignment.Center
         ) {
-            val text = buildAnnotatedString {
-                append("This is an early version of the Fitness track app \"HERA\". Some features might be partially implemented or not implemented.\nCreated by ")
-                withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
-                    append("\nSebastian Gey & Ilkkan Berke Savasci")
-                }
-            }
             Text(
-                text = text,
+                text = "This is an early version of the Fitness track app \"HERA\". Some features might be partially implemented or not implemented. Created by Sebastian Gey & Ilkkan Berke Savasci",
                 color = MaterialTheme.colorScheme.onBackground
             )
         }

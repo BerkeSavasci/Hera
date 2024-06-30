@@ -26,12 +26,19 @@ class HomeViewModel @Inject constructor(
     private val fitnessDataDao: FitnessDataDao,
     private val personDao: PersonDao,
     @UserId private val id: Int
-) : ViewModel() {
+) : ViewModel(), IHomeViewModel {
 
-    val stepCount = MutableStateFlow<Int>(0)
-    val stepGoal = MutableStateFlow<Int>(0)
-    val lastSevenDaysSteps = MutableStateFlow<List<Int>>(emptyList())
-    val isInfoDialogVisible = mutableStateOf(false)
+    /** The step count of the user */
+    override val stepCount = MutableStateFlow<Int>(0)
+
+    /** Users step gaol */
+    override val stepGoal = MutableStateFlow<Int>(0)
+
+    /** A List of the step counts from the last seven days */
+    override val lastSevenDaysSteps = MutableStateFlow<List<Int>>(emptyList())
+
+    /** True if [InfoDialog] is visible */
+    override val isInfoDialogVisible = mutableStateOf(false)
 
     init {
         fetchTodaySteps()
@@ -60,13 +67,14 @@ class HomeViewModel @Inject constructor(
     }
 
     /** Fetches the step data from the database for the last seven days */
-    fun fetchLastSevenDaysSteps() {
+    override fun fetchLastSevenDaysSteps() {
         viewModelScope.launch {
             fitnessDataDao.getSensorData().collect { fitnessData ->
                 val lastSevenDays = mutableListOf<Int>()
                 for (i in 1..7) {
                     val date = Calendar.getInstance().apply { add(Calendar.DATE, -i) }
-                    val formattedDate = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault()).format(date.time)
+                    val formattedDate =
+                        SimpleDateFormat("dd.MM.yyyy", Locale.getDefault()).format(date.time)
                     val steps = fitnessData?.steps?.find { it.startsWith(formattedDate) }
                     lastSevenDays.add(steps?.split(": ")?.get(1)?.toInt() ?: 0)
                 }
@@ -76,7 +84,7 @@ class HomeViewModel @Inject constructor(
     }
 
     /** Show the info text when the user clicks on the FAB */
-    fun showInfoDialog(show: Boolean) {
+    override fun showInfoDialog(show: Boolean) {
         isInfoDialogVisible.value = show
     }
 }

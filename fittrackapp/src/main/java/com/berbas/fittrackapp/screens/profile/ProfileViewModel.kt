@@ -19,13 +19,13 @@ import javax.inject.Inject
 open class ProfileViewModel @Inject constructor(
     private val personDao: PersonDao,
     @UserId private val id: Int
-) : ViewModel() {
+) : ViewModel(), IProfileViewModel {
 
     /**
      * MutableStateFlow to hold the state of the profile of the person
      */
     private val _personState = MutableStateFlow(ProfileState())
-    val state: StateFlow<ProfileState> = _personState
+    override val state: StateFlow<ProfileState> = _personState
 
     init {
         observeAndRefreshPerson()
@@ -79,7 +79,7 @@ open class ProfileViewModel @Inject constructor(
     /**
      * Function to handle events from the view
      */
-    fun onEvent(event: PersonEvent) {
+    override fun onEvent(event: PersonEvent) {
         when (event) {
             is PersonEvent.SetFirstName -> {
                 if (event.firstName.isNotBlank()) {

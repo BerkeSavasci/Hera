@@ -1,7 +1,8 @@
 package com.berbas.fittrackapp.screens.profile
 
+import com.berbas.fittrackapp.FakeFitnessDataRepository
+import com.berbas.fittrackapp.FakePersonRepository
 import com.berbas.heraconnectcommon.localData.person.Person
-import com.berbas.heraconnectcommon.localData.sensor.FitnessData
 import junit.framework.TestCase.assertEquals
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi

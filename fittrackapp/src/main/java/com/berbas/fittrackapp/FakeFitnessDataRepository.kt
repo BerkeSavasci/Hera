@@ -1,4 +1,4 @@
-package com.berbas.fittrackapp.screens.profile
+package com.berbas.fittrackapp
 
 import com.berbas.heraconnectcommon.localData.sensor.FitnessData
 import com.berbas.heraconnectcommon.localData.sensor.FitnessDataDao

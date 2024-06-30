@@ -25,6 +25,10 @@ class BluetoothConnection(
     private val context: Context
 ) : BluetoothControllerInterface {
 
+    private val _dataTransferStatus = MutableStateFlow(DataTransferStatus.IDLE)
+    override val dataTransferStatus: StateFlow<DataTransferStatus> get() = _dataTransferStatus
+
+
     /** The UUID of the service to connect to */
     companion object {
         const val SERVICE_UUID = "00001101-0000-1000-8000-00805F9B34FB"
@@ -164,17 +168,18 @@ class BluetoothConnection(
             DataMessage(
                 message = message, senderName = bluetoothAdapter?.name ?: "Unkonwn",
             )
-        dataTransferService?.sendMessage(
-            BluetoothProtocolEngine().run {
-                userDataMessage.toByteArray()
-            }
-        )
+        dataTransferService?.sendMessage(BluetoothProtocolEngine().run {
+            _dataTransferStatus.value = DataTransferStatus.IN_PROGRESS
+            userDataMessage.toByteArray()
+        })
         Log.d("BluetoothConnection", "Data transfer was successful: $userDataMessage")
+        _dataTransferStatus.value = DataTransferStatus.SUCCESS
         return userDataMessage
     }
 
     override fun startBluetoothServer(): Flow<ConnectionResult> {
         return flow {
+            _dataTransferStatus.value = DataTransferStatus.IDLE
             if (!hasPermissions(Manifest.permission.BLUETOOTH_CONNECT)) {
                 throw SecurityException("No permission to connect to devices: BLUETOOTH_CONNECT")
             }
@@ -186,23 +191,33 @@ class BluetoothConnection(
                 UUID.fromString(SERVICE_UUID)
             )
             var shouldLoop = true
+            _dataTransferStatus.value = DataTransferStatus.STARTED
+
             // listen to other connections
             while (shouldLoop) {
                 currentClientSocket = try {
                     //accept the connection and save the socket to the currentClientSocket
                     currentServerSocket?.accept()
                 } catch (e: IOException) {
+                    _dataTransferStatus.value = DataTransferStatus.FAILURE
                     shouldLoop = false
                     null
                 }
                 emit(ConnectionResult.ConnectionSuccess)
-                // after accepting the connection, close the server socket
+
                 currentClientSocket?.let {
                     currentServerSocket?.close()
                     val service = BluetoothDataTransferService(it)
                     dataTransferService = service
 
-                    emitAll(service.listenForIncomingMessages())
+                    service.listenForIncomingMessages().collect {result ->
+                        emit(result)
+                        if (result is ConnectionResult.TransferSuccess) {
+                            service.closeConnection()
+                            _dataTransferStatus.value = DataTransferStatus.SUCCESS
+                            shouldLoop = false
+                        }
+                    }
                 }
             }
         }.onCompletion {
@@ -212,6 +227,7 @@ class BluetoothConnection(
 
     override fun connectToDevice(device: BluetoothDeviceDomain): Flow<ConnectionResult> {
         return flow {
+            _dataTransferStatus.value = DataTransferStatus.IDLE
             if (!hasPermissions(Manifest.permission.BLUETOOTH_CONNECT)) {
                 throw SecurityException("No permission to connect to devices: BLUETOOTH_CONNECT")
             }
@@ -229,6 +245,7 @@ class BluetoothConnection(
 
             }
             currentClientSocket?.let { socket ->
+                _dataTransferStatus.value = DataTransferStatus.STARTED
                 try {
                     socket.connect()
                     emit(ConnectionResult.ConnectionSuccess)
@@ -236,16 +253,19 @@ class BluetoothConnection(
                     BluetoothDataTransferService(socket).also {
                         dataTransferService = it
                         emitAll(it.listenForIncomingMessages())
+                        _dataTransferStatus.value = DataTransferStatus.SUCCESS
                     }
 
                 } catch (e: IOException) {
                     socket.close()
                     currentClientSocket = null
+                    _dataTransferStatus.value = DataTransferStatus.FAILURE
                     emit(ConnectionResult.ConnectionFailure("Failed to connect to the device"))
                 }
             }
         }.onCompletion {
             closeConnection()
+            _dataTransferStatus.value = DataTransferStatus.SUCCESS
         }.flowOn(Dispatchers.IO)
     }
 
@@ -272,5 +292,12 @@ class BluetoothConnection(
      */
     private fun hasPermissions(permission: String): Boolean {
         return context.checkSelfPermission(permission) == PackageManager.PERMISSION_GRANTED
+    }
+
+    /**
+     * A enum class that holds the status of the data transfer
+     */
+    enum class DataTransferStatus {
+        IDLE, STARTED, IN_PROGRESS, SUCCESS, FAILURE
     }
 }

@@ -55,6 +55,8 @@ foundationDesktop = "1.6.8"
 testng = "6.9.6"
 junitJupiterVersion = "5.8.1"
 lifecycleService = "2.8.2"
+playServicesBasement = "18.4.0"
+coreKtxVersion = "1.6.1"
 
 [libraries]
 androidx-connect-client = { module = "androidx.health.connect:connect-client", version.ref = "connectClient" }
@@ -119,6 +121,8 @@ testng = { group = "org.testng", name = "testng", version.ref = "testng" }
 jupiter-junit-jupiter = { group = "org.junit.jupiter", name = "junit-jupiter", version.ref = "junitJupiterVersion" }
 ui-test-junit4 = { module = "androidx.compose.ui:ui-test-junit4", version.ref = "uiTestJunit4" }
 androidx-lifecycle-service = { group = "androidx.lifecycle", name = "lifecycle-service", version.ref = "lifecycleService" }
+play-services-basement = { group = "com.google.android.gms", name = "play-services-basement", version.ref = "playServicesBasement" }
+core-ktx = { group = "androidx.test", name = "core-ktx", version.ref = "coreKtxVersion" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
