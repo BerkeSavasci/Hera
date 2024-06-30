@@ -81,7 +81,7 @@ class BluetoothProtocolEngine : ProtocolEngine {
 
 
 
-    override fun toPersonDataMessage(data: Person): String {
+    override fun toPersonDataMessage(personData: Person, fitnessData: FitnessData): String {
         TODO("Not yet implemented")
     }
 }

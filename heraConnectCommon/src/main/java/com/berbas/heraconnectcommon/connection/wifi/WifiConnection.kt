@@ -23,13 +23,30 @@ class WifiConnection(
     private var url = URL("http://5.28.100.60:3000/users")
 
     fun splitData(data: String, jsonObject: JSONObject): JSONObject {
-        val dataSplit = data.substringAfter("Person(").substringBeforeLast(")").split(", ")
+        val personData = data.substringAfter("Person(").substringBefore(")#FitnessData")
+        val fitnessData = data.substringAfter("FitnessData(").substringBeforeLast(")")
 
-        for (item in dataSplit) {
+        val regex = Regex("(\\w+)=\\[(.*?)]|(\\w+)=(\\w+)")
+
+        val personParts = personData.split(", ")
+        val fitnessParts = fitnessData.split(", ")
+
+        val personJson = JSONObject()
+        for (item in personParts) {
             val keyValue = item.split("=")
             val key = keyValue[0]
-            jsonObject.put(key, keyValue[1])
+            personJson.put(key, keyValue[1])
         }
+
+        val fitnessJson = JSONObject()
+        regex.findAll(fitnessData).forEach { matchResult ->
+            val key = matchResult.groupValues[1]
+            val value = matchResult.groupValues[2]
+            fitnessJson.put(key, value)
+        }
+
+        jsonObject.put("person", personJson)
+        jsonObject.put("fitness", fitnessJson)
 
         return jsonObject
     }
