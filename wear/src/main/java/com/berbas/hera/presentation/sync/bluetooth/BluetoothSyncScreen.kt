@@ -1,4 +1,4 @@
-package com.berbas.hera.presentation.sync
+package com.berbas.hera.presentation.sync.bluetooth
 
 import android.widget.Toast
 import androidx.compose.foundation.clickable
@@ -37,7 +37,7 @@ import com.berbas.heraconnectcommon.connection.bluetooth.BluetoothDeviceDomain
 
 @Composable
 fun SyncScreen(
-    viewModel: SyncViewModel,
+    viewModel: BluetoothSyncViewModel,
     onBackClick: () -> Unit
 ) {
     val devices by viewModel.devices.collectAsState()
@@ -107,7 +107,7 @@ fun SyncScreen(
 @Composable
 fun Device(
     device: BluetoothDeviceDomain,
-    viewModel: SyncViewModel
+    viewModel: BluetoothSyncViewModel
 ) {
     val context = LocalContext.current
 

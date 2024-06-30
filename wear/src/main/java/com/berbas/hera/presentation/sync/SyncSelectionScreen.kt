@@ -1,4 +1,4 @@
-package com.berbas.hera.presentation
+package com.berbas.hera.presentation.sync
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -7,10 +7,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -19,38 +16,37 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import androidx.wear.compose.foundation.lazy.ScalingLazyColumn
 import androidx.wear.compose.material.Text
 
 @Composable
-fun SettingsScreen(onBackClick: () -> Unit, navController: NavController) {
+fun SyncSelectionScreen(navController: NavHostController) {
     ScalingLazyColumn(
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         item {
-            IconButton(onClick = onBackClick) {
-                Icon(
-                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                    contentDescription = "Back",
-                    tint = Color.White
-                )
+            // Back to settings
+            IconButton(onClick = { navController.navigate("settings") }) {
+
             }
         }
         item {
-            SettingsItem(
-                label = "Profile",
+            // Bluetooth sync
+            SyncItem(
+                "Bluetooth",
                 onClick = {
-                    navController.navigate("update_data")
+                    navController.navigate("bluetooth_sync")
                 }
             )
         }
         item {
-            SettingsItem(
-                label = "Sync Device",
+            // Wifi sync
+            SyncItem(
+                "Wifi",
                 onClick = {
-                    navController.navigate("sync_selection")
+                    navController.navigate("wifi_sync")
                 }
             )
         }
@@ -58,7 +54,7 @@ fun SettingsScreen(onBackClick: () -> Unit, navController: NavController) {
 }
 
 @Composable
-fun SettingsItem(
+fun SyncItem(
     label: String,
     onClick: () -> Unit
 ) {
@@ -82,11 +78,3 @@ fun SettingsItem(
         )
     }
 }
-
-@Preview
-@Composable
-fun SettingsItemPreview() {
-    SettingsItem(label = "Settings Item") {
-    }
-}
-

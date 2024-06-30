@@ -55,7 +55,7 @@ fun ProfileScreen(
         Scaffold(
             topBar = {
                 TopAppBar(
-                    title = { Text("Profile") },
+                    title = { Text("Profile", color = MaterialTheme.colorScheme.onPrimary) },
                     actions = {
                         IconButton(onClick = {
                             // when opening the screen start the server automatically
