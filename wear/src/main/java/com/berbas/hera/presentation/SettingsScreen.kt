@@ -48,6 +48,14 @@ fun SettingsScreen(onBackClick: () -> Unit, navController: NavController) {
         }
         item {
             SettingsItem(
+                label = "Goals",
+                onClick = {
+                    navController.navigate("goal_data")
+                }
+            )
+        }
+        item {
+            SettingsItem(
                 label = "Sync Device",
                 onClick = {
                     navController.navigate("sync_selection")

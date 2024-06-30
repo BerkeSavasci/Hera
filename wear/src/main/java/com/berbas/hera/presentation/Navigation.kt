@@ -4,6 +4,8 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.berbas.hera.presentation.data.GoalsScreen
+import com.berbas.hera.presentation.data.GoalsViewModel
 import com.berbas.hera.presentation.data.UserDataScreen
 import com.berbas.hera.presentation.data.UserDataViewModel
 import com.berbas.hera.presentation.sync.SyncSelectionScreen
@@ -16,7 +18,8 @@ import com.berbas.hera.presentation.sync.wifi.WifiSyncViewModel
 fun FitnessApp(
     bluetoothSyncViewModel: BluetoothSyncViewModel,
     wifiSyncViewModel: WifiSyncViewModel,
-    userDataViewModel: UserDataViewModel
+    userDataViewModel: UserDataViewModel,
+    goalsViewModel: GoalsViewModel
 ) {
     val navController = rememberNavController()
     NavHost(navController = navController, startDestination = "overview") {
@@ -25,8 +28,9 @@ fun FitnessApp(
                 steps = 6315,
                 heartRate = 75,
                 sleep = "7h 35min",
+                aboutYou = "About You",
                 onStepsClick = { navController.navigate("steps_detail") },
-                onSettingsClick = { navController.navigate("settings") }
+                onAboutYouClick = { navController.navigate("settings") }
             )
         }
         composable("steps_detail") {
@@ -49,6 +53,13 @@ fun FitnessApp(
             UserDataScreen(
                 onBackClick = { navController.navigateUp() },
                 viewModel = userDataViewModel
+            )
+        }
+        composable("goal_data")
+        {
+            GoalsScreen(
+                onBackClick = { navController.navigateUp() },
+                viewModel = goalsViewModel
             )
         }
         composable("sync_selection")

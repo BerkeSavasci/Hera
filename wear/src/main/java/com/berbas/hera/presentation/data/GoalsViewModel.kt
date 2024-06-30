@@ -1,5 +1,6 @@
 package com.berbas.hera.presentation.data
 
+import android.widget.Toast
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.berbas.hera.annotations.UserId
@@ -13,13 +14,11 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class UserDataViewModel @Inject constructor(
+class GoalsViewModel @Inject constructor(
     private val personDao: PersonDao,
     @UserId private val id: Int
 ) : ViewModel() {
-    /**
-     * MutableStateFlow to hold the state of the profile of the person
-     */
+
     private val _personState = MutableStateFlow(ProfileState())
     val state: StateFlow<ProfileState> = _personState
 
@@ -72,60 +71,12 @@ class UserDataViewModel @Inject constructor(
         }
     }
 
-    /**
-     * Function to handle events from the view
-     */
     fun onEvent(event: PersonEvent) {
         when (event) {
-            is PersonEvent.SetFirstName -> {
+            is PersonEvent.SetActivityGoal -> {
                 _personState.update {
                     it.copy(
-                        firstName = event.firstName,
-                    )
-                }
-                updatePersonData()
-            }
-
-            is PersonEvent.SetLastName -> {
-                _personState.update {
-                    it.copy(
-                        lastName = event.lastName,
-                    )
-                }
-                updatePersonData()
-            }
-
-            is PersonEvent.SetGender -> {
-                _personState.update {
-                    it.copy(
-                        gender = event.gender,
-                    )
-                }
-                updatePersonData()
-            }
-
-            is PersonEvent.SetBirthday -> {
-                _personState.update {
-                    it.copy(
-                        birthday = event.birthday,
-                    )
-                }
-                updatePersonData()
-            }
-
-            is PersonEvent.SetHeight -> {
-                _personState.update {
-                    it.copy(
-                        height = event.height,
-                    )
-                }
-                updatePersonData()
-            }
-
-            is PersonEvent.SetWeight -> {
-                _personState.update {
-                    it.copy(
-                        weight = event.weight,
+                        activityGoal = event.activityGoal,
                     )
                 }
                 updatePersonData()
@@ -140,13 +91,8 @@ class UserDataViewModel @Inject constructor(
                 updatePersonData()
             }
 
-            is PersonEvent.SetActivityGoal -> {
-                _personState.update {
-                    it.copy(
-                        activityGoal = event.activityGoal,
-                    )
-                }
-                updatePersonData()
+            else -> {
+
             }
         }
     }

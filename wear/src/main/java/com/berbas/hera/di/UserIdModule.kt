@@ -20,6 +20,6 @@ object UserIdModule {
     @Provides
     @UserId
     fun provideUserId(): Int {
-        return 1
+        return 2
     }
 }

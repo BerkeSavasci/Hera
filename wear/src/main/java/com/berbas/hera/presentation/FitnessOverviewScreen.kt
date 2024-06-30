@@ -1,11 +1,8 @@
 package com.berbas.hera.presentation
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -18,8 +15,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.DirectionsWalk
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.NightsStay
-import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material3.IconButton
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -39,7 +35,8 @@ fun FitnessOverviewScreen(
     heartRate: Int,
     sleep: String,
     onStepsClick: () -> Unit,
-    onSettingsClick: () -> Unit
+    onAboutYouClick: () -> Unit,
+    aboutYou: String
 ) {
     ScalingLazyColumn(
         modifier = Modifier
@@ -73,19 +70,13 @@ fun FitnessOverviewScreen(
             )
         }
         item {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp, vertical = 8.dp)
-            ) {
-                IconButton(onClick = onSettingsClick) {
-                    Icon(
-                        imageVector = Icons.Default.Settings,
-                        contentDescription = "Settings",
-                        tint = Color.White
-                    )
-                }
-            }
+            FitnessItem(
+                icon = Icons.Default.Person,
+                value = aboutYou,
+                unit = "",
+                color = Color.White,
+                onClick = onAboutYouClick
+            )
         }
     }
 }
