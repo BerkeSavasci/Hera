@@ -71,5 +71,4 @@ object RoomDatabaseModule {
     fun provideFitnessDao(database: FitnessDatabase): FitnessDataDao {
         return database.dao
     }
-
 }

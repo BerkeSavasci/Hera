@@ -4,6 +4,8 @@ import android.content.Context
 import androidx.room.Room
 import com.berbas.heraconnectcommon.localData.person.PersonDao
 import com.berbas.heraconnectcommon.localData.person.PersonDataBase
+import com.berbas.heraconnectcommon.localData.sensor.FitnessDataDao
+import com.berbas.heraconnectcommon.localData.sensor.FitnessDatabase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -27,6 +29,25 @@ object RoomDatabaseModule{
     @Singleton
     @Provides
     fun providePersonDao(database: PersonDataBase): PersonDao {
+        return database.dao
+    }
+
+    @Singleton
+    @Provides
+    fun provideFitnessData(@ApplicationContext context: Context): FitnessDatabase {
+        return Room.databaseBuilder(
+            context,
+            FitnessDatabase::class.java,
+            "fitness.db"
+        ).fallbackToDestructiveMigration().build()
+    }
+
+    /**
+     * Provides the PersonDao
+     */
+    @Singleton
+    @Provides
+    fun provideFitnessDao(database: FitnessDatabase): FitnessDataDao {
         return database.dao
     }
 }

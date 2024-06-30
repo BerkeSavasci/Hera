@@ -1,4 +1,4 @@
-package com.berbas.hera.presentation
+package com.berbas.hera.presentation.mainscreen
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -17,6 +17,8 @@ import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.NightsStay
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -34,10 +36,15 @@ fun FitnessOverviewScreen(
     steps: Int,
     heartRate: Int,
     sleep: String,
+    fitnessOverviewViewModel: FitnessOverviewViewModel,
     onStepsClick: () -> Unit,
     onAboutYouClick: () -> Unit,
     aboutYou: String
 ) {
+
+    val stepCount by fitnessOverviewViewModel.stepCount.collectAsState()
+    val stepGoal by fitnessOverviewViewModel.stepGoal.collectAsState()
+
     ScalingLazyColumn(
         modifier = Modifier
             .fillMaxSize()
@@ -47,7 +54,7 @@ fun FitnessOverviewScreen(
         item {
             FitnessItem(
                 icon = Icons.AutoMirrored.Filled.DirectionsWalk,
-                value = "$steps",
+                value = "$stepCount",
                 unit = " Schritte",
                 color = Color.Green,
                 onClick = onStepsClick
@@ -96,7 +103,7 @@ fun FitnessItem(
             .fillMaxWidth()
             .padding(horizontal = 16.dp, vertical = 8.dp)
             .clip(RoundedCornerShape(16.dp))
-            .background(Color(30,30,30))
+            .background(Color(30, 30, 30))
             .clickable(enabled = onClick != null, onClick = { onClick?.invoke() })
             .padding(vertical = 8.dp)
     ) {

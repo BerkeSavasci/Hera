@@ -16,6 +16,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.wear.compose.material.MaterialTheme
 import com.berbas.hera.presentation.data.GoalsViewModel
 import com.berbas.hera.presentation.data.UserDataViewModel
+import com.berbas.hera.presentation.mainscreen.FitnessOverviewViewModel
 import com.berbas.hera.presentation.sync.bluetooth.BluetoothSyncViewModel
 import com.berbas.hera.presentation.sync.wifi.WifiSyncViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -32,6 +33,7 @@ class MainActivity : ComponentActivity() {
                 val bluetoothSyncViewModel: BluetoothSyncViewModel = viewModel()
                 val wifiSyncViewModel: WifiSyncViewModel = viewModel()
                 val goalsViewModel: GoalsViewModel = viewModel()
+                val fitnessOverviewViewModel: FitnessOverviewViewModel = viewModel()
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
@@ -41,7 +43,8 @@ class MainActivity : ComponentActivity() {
                         userDataViewModel = userDataViewModel,
                         bluetoothSyncViewModel = bluetoothSyncViewModel,
                         wifiSyncViewModel = wifiSyncViewModel,
-                        goalsViewModel = goalsViewModel
+                        goalsViewModel = goalsViewModel,
+                        fitnessOverviewViewModel = fitnessOverviewViewModel
                     )
                 }
             }

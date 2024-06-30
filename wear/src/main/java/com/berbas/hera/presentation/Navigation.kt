@@ -8,8 +8,11 @@ import com.berbas.hera.presentation.data.GoalsScreen
 import com.berbas.hera.presentation.data.GoalsViewModel
 import com.berbas.hera.presentation.data.UserDataScreen
 import com.berbas.hera.presentation.data.UserDataViewModel
+import com.berbas.hera.presentation.mainscreen.FitnessOverviewScreen
+import com.berbas.hera.presentation.mainscreen.FitnessOverviewViewModel
+import com.berbas.hera.presentation.mainscreen.StepsDetailScreen
 import com.berbas.hera.presentation.sync.SyncSelectionScreen
-import com.berbas.hera.presentation.sync.bluetooth.SyncScreen
+import com.berbas.hera.presentation.sync.bluetooth.BluetoothSyncScreen
 import com.berbas.hera.presentation.sync.bluetooth.BluetoothSyncViewModel
 import com.berbas.hera.presentation.sync.wifi.WifiSyncScreen
 import com.berbas.hera.presentation.sync.wifi.WifiSyncViewModel
@@ -19,7 +22,8 @@ fun FitnessApp(
     bluetoothSyncViewModel: BluetoothSyncViewModel,
     wifiSyncViewModel: WifiSyncViewModel,
     userDataViewModel: UserDataViewModel,
-    goalsViewModel: GoalsViewModel
+    goalsViewModel: GoalsViewModel,
+    fitnessOverviewViewModel: FitnessOverviewViewModel
 ) {
     val navController = rememberNavController()
     NavHost(navController = navController, startDestination = "overview") {
@@ -30,7 +34,8 @@ fun FitnessApp(
                 sleep = "7h 35min",
                 aboutYou = "About You",
                 onStepsClick = { navController.navigate("steps_detail") },
-                onAboutYouClick = { navController.navigate("settings") }
+                onAboutYouClick = { navController.navigate("settings") },
+                fitnessOverviewViewModel = fitnessOverviewViewModel
             )
         }
         composable("steps_detail") {
@@ -65,12 +70,13 @@ fun FitnessApp(
         composable("sync_selection")
         {
             SyncSelectionScreen(
-                navController = navController
+                navController = navController,
+                bluetoothSyncViewModel = bluetoothSyncViewModel
             )
         }
         composable("bluetooth_sync")
         {
-            SyncScreen(
+            BluetoothSyncScreen(
                 viewModel = bluetoothSyncViewModel,
                 onBackClick = { navController.navigateUp() }
             )

@@ -19,9 +19,13 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.wear.compose.foundation.lazy.ScalingLazyColumn
 import androidx.wear.compose.material.Text
+import com.berbas.hera.presentation.sync.bluetooth.BluetoothSyncViewModel
 
 @Composable
-fun SyncSelectionScreen(navController: NavHostController) {
+fun SyncSelectionScreen(
+    navController: NavHostController,
+    bluetoothSyncViewModel: BluetoothSyncViewModel
+) {
     ScalingLazyColumn(
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally
@@ -37,6 +41,7 @@ fun SyncSelectionScreen(navController: NavHostController) {
             SyncItem(
                 "Bluetooth",
                 onClick = {
+                    bluetoothSyncViewModel.startBluetoothServer()
                     navController.navigate("bluetooth_sync")
                 }
             )

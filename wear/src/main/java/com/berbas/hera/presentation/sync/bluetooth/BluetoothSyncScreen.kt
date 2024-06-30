@@ -36,7 +36,7 @@ import com.berbas.heraconnectcommon.connection.bluetooth.BluetoothDeviceDomain
 
 
 @Composable
-fun SyncScreen(
+fun BluetoothSyncScreen(
     viewModel: BluetoothSyncViewModel,
     onBackClick: () -> Unit
 ) {
@@ -63,6 +63,7 @@ fun SyncScreen(
                         viewModel.stopDiscovery()
                         isScanning.value = false
                     }
+                    viewModel.stopBluetoothServer()
                     onBackClick()
                 }) {
                     Icon(
