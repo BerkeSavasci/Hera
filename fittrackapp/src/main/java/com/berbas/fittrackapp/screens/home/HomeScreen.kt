@@ -48,7 +48,7 @@ fun HomeScreen(homeViewModel: IHomeViewModel) {
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Home") },
+                title = { Text("Home", color = MaterialTheme.colorScheme.onPrimary) },
                 backgroundColor = MaterialTheme.colorScheme.primary,
             )
         }

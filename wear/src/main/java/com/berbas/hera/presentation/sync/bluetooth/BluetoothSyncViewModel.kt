@@ -1,4 +1,4 @@
-package com.berbas.hera.presentation.sync
+package com.berbas.hera.presentation.sync.bluetooth
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
@@ -17,7 +17,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class SyncViewModel @Inject constructor(
+class BluetoothSyncViewModel @Inject constructor(
     private val personDao: PersonDao,
     @UserId private val id: Int,
     private val bluetoothController: BluetoothControllerInterface

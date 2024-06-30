@@ -6,12 +6,16 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.berbas.hera.presentation.data.UserDataScreen
 import com.berbas.hera.presentation.data.UserDataViewModel
-import com.berbas.hera.presentation.sync.SyncScreen
-import com.berbas.hera.presentation.sync.SyncViewModel
+import com.berbas.hera.presentation.sync.SyncSelectionScreen
+import com.berbas.hera.presentation.sync.bluetooth.SyncScreen
+import com.berbas.hera.presentation.sync.bluetooth.BluetoothSyncViewModel
+import com.berbas.hera.presentation.sync.wifi.WifiSyncScreen
+import com.berbas.hera.presentation.sync.wifi.WifiSyncViewModel
 
 @Composable
 fun FitnessApp(
-    syncViewModel: SyncViewModel,
+    bluetoothSyncViewModel: BluetoothSyncViewModel,
+    wifiSyncViewModel: WifiSyncViewModel,
     userDataViewModel: UserDataViewModel
 ) {
     val navController = rememberNavController()
@@ -47,10 +51,23 @@ fun FitnessApp(
                 viewModel = userDataViewModel
             )
         }
-        composable("sync")
+        composable("sync_selection")
+        {
+            SyncSelectionScreen(
+                navController = navController
+            )
+        }
+        composable("bluetooth_sync")
         {
             SyncScreen(
-                viewModel = syncViewModel,
+                viewModel = bluetoothSyncViewModel,
+                onBackClick = { navController.navigateUp() }
+            )
+        }
+        composable("wifi_sync")
+        {
+            WifiSyncScreen(
+                viewModel = wifiSyncViewModel,
                 onBackClick = { navController.navigateUp() }
             )
         }

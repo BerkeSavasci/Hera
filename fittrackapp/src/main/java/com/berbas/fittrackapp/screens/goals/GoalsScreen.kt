@@ -41,7 +41,7 @@ fun GoalsScreen() {
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Goals") },
+                title = { Text("Goals", color = MaterialTheme.colorScheme.onPrimary) },
                 backgroundColor = MaterialTheme.colorScheme.primary,
             )
         }
