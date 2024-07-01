@@ -29,13 +29,22 @@ class WifiProtocolEngine : ProtocolEngine {
         val jsonObject = JSONObject(data)
 
         val stepsString = jsonObject.getString("steps")
-        val stepsList = ArrayList<String>(stepsString.substring(1, stepsString.length - 1).split(","))
+        var stepsList = ArrayList<String>()
+        if (stepsString.isNotEmpty()) {
+            stepsList = ArrayList(stepsString.substring(1, stepsString.length - 1).split(","))
+        }
 
         val bpmString = jsonObject.getString("bpm")
-        val bpmList = ArrayList<String>(bpmString.substring(1, bpmString.length - 1).split(","))
+        var bpmList = ArrayList<String>()
+        if (bpmString.isNotEmpty()) {
+            bpmList = ArrayList(bpmString.substring(1, bpmString.length - 1).split(","))
+        }
 
         val sleepTimeString = jsonObject.getString("sleepTime")
-        val sleepTimeList = ArrayList<String>(sleepTimeString.substring(1, sleepTimeString.length - 1).split(","))
+        var sleepTimeList = ArrayList<String>()
+        if (sleepTimeString.isNotEmpty()) {
+            sleepTimeList = ArrayList(sleepTimeString.substring(1, sleepTimeString.length - 1).split(","))
+        }
 
         return FitnessData(
             steps = stepsList,

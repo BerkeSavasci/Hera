@@ -26,10 +26,9 @@ class WifiConnection(
         val personData = data.substringAfter("Person(").substringBefore(")#FitnessData")
         val fitnessData = data.substringAfter("FitnessData(").substringBeforeLast(")")
 
-        val regex = Regex("(\\w+)=\\[(.*?)]|(\\w+)=(\\w+)")
+        val regex = Regex("(\\w+)=\\[(.*?)]|(\\w+)=([^,]*)(,|$)")
 
         val personParts = personData.split(", ")
-        val fitnessParts = fitnessData.split(", ")
 
         val personJson = JSONObject()
         for (item in personParts) {
@@ -40,8 +39,8 @@ class WifiConnection(
 
         val fitnessJson = JSONObject()
         regex.findAll(fitnessData).forEach { matchResult ->
-            val key = matchResult.groupValues[1]
-            val value = matchResult.groupValues[2]
+            val key = if (matchResult.groupValues[1].isNotEmpty()) matchResult.groupValues[1] else matchResult.groupValues[3]
+            val value = if (matchResult.groupValues[2].isNotEmpty()) matchResult.groupValues[2] else matchResult.groupValues[4]
             fitnessJson.put(key, value)
         }
 
@@ -58,7 +57,7 @@ class WifiConnection(
             try {
                 val jsonObject = splitData(data, JSONObject())
 
-                Log.d("TAG", "Sending data to: ${urlWrapper.getUrl()}")
+                Log.d(TAG, "Sending data to: ${urlWrapper.getUrl()}")
                 val httpURLConnection = urlWrapper.openConnection().apply {
                     requestMethod = "POST"
                     setRequestProperty("Content-Type", "application/json")
@@ -71,11 +70,11 @@ class WifiConnection(
                 }
 
                 if (httpURLConnection.responseCode == HttpURLConnection.HTTP_OK || httpURLConnection.responseCode == HttpURLConnection.HTTP_CREATED) {
-                    Log.d("TAG", "Data sent successfully")
+                    Log.d(TAG, "Data sent successfully")
                     println("Data sent successfully")
                     _wifiState.value = WifiState.SUCCESS
                 } else {
-                    Log.d("TAG", "Failed to send data")
+                    Log.d(TAG, "Failed to send data")
                     println("Failed to send data")
                     _wifiState.value = WifiState.FAILURE
                 }
@@ -83,7 +82,7 @@ class WifiConnection(
 
                 Log.d(TAG, "wifiState value before change: ${_wifiState.value}")
                 _wifiState.value = WifiState.SERVER_ERROR
-                Log.e("TAG", "Failed to send data", e)
+                Log.e(TAG, "Failed to send data", e)
                 e.printStackTrace()
             }
         }

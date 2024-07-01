@@ -188,7 +188,7 @@ class ProfileScreenTest {
         composeTestRule.onNodeWithText("70.0 kg").performClick()
         composeTestRule.onNodeWithText("Enter your Weight").assertExists()
 
-        composeTestRule.onNodeWithText("70.0").performTextClearance()
+        composeTestRule.onNodeWithText("70,0").performTextClearance()
         composeTestRule.onNodeWithText("").performTextInput("85.0")
         composeTestRule.onNodeWithText("Cancel").performClick()
 

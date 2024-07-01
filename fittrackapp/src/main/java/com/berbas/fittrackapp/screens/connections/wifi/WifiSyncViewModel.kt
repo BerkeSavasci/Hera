@@ -47,8 +47,8 @@ open class WifiSyncViewModel @Inject constructor(
             } else {
                 Log.d("WifiSyncViewModel", "Received data: $receivedData")
                 val dataPair = WifiProtocolEngine().splitReceivedData(receivedData)
-                fitnessDao.insertSensorData(dataPair.second)
                 personDao.upsertPerson(dataPair.first)
+                fitnessDao.insertSensorData(dataPair.second)
             }
         }
     }
