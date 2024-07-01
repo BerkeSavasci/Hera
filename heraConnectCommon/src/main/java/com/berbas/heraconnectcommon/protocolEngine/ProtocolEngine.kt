@@ -9,7 +9,7 @@ interface ProtocolEngine {
     fun toPerson(data: String): Person
 
     /** Serializes the data to a String */
-    fun toPersonDataMessage(data: Person): String
+    fun toPersonDataMessage(personData: Person, fitnessData: FitnessData): String
 
     /** Deserializes the data to a [FitnessData] */
     fun toFitnessData(data: String) : FitnessData

@@ -8,6 +8,7 @@ import com.berbas.fittrackapp.annotations.UserId
 import com.berbas.heraconnectcommon.connection.wifi.WifiConnectionInterface
 import com.berbas.heraconnectcommon.connection.wifi.WifiState
 import com.berbas.heraconnectcommon.localData.person.PersonDao
+import com.berbas.heraconnectcommon.localData.sensor.FitnessDataDao
 import com.berbas.heraconnectcommon.protocolEngine.WifiProtocolEngine
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.StateFlow
@@ -18,6 +19,7 @@ import javax.inject.Inject
 @HiltViewModel
 open class WifiSyncViewModel @Inject constructor(
     private val personDao: PersonDao,
+    private val fitnessDao: FitnessDataDao,
     @UserId private val id: Int,
     private val wifiController: WifiConnectionInterface
 ) : ViewModel(){
@@ -28,8 +30,10 @@ open class WifiSyncViewModel @Inject constructor(
     fun sendData() {
         viewModelScope.launch {
             val personData = personDao.getPersonById(id).first()
+            val fitnessData = fitnessDao.getSensorData().first()
+
             Log.d("WifiSyncViewModel", "Sending person data: $personData")
-            val data = WifiProtocolEngine().toPersonDataMessage(personData)
+            val data = WifiProtocolEngine().toPersonDataMessage(personData, fitnessData)
             wifiController.send(data)
         }
     }
@@ -41,8 +45,10 @@ open class WifiSyncViewModel @Inject constructor(
                 Log.e("WifiSyncViewModel", "Received data is empty")
                 errorMessage.postValue("Received data is empty")
             } else {
-                val person = WifiProtocolEngine().toPerson(receivedData)
-                personDao.upsertPerson(person)
+                Log.d("WifiSyncViewModel", "Received data: $receivedData")
+                val dataPair = WifiProtocolEngine().splitReceivedData(receivedData)
+                fitnessDao.insertSensorData(dataPair.second)
+                personDao.upsertPerson(dataPair.first)
             }
         }
     }
