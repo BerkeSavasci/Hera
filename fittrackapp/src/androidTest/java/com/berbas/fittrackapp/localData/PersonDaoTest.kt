@@ -103,7 +103,7 @@ class PersonDaoTest {
     }
 
     @Test
-    fun getPersonByNameEntity() = runTest {
+    fun getPersonEntityByName() = runTest {
         val dummyPerson = Person(
             firstname = "Max",
             lastname = "Mustermann",
@@ -122,7 +122,7 @@ class PersonDaoTest {
     }
 
     @Test
-    fun getPersonByIdEntity() = runTest {
+    fun getPersonEntityById() = runTest {
         val dummyPerson = Person(
             firstname = "Max",
             lastname = "Mustermann",

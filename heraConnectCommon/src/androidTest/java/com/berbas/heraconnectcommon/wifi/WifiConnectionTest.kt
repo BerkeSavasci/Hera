@@ -48,7 +48,7 @@ class WifiConnectionTest {
     }
 
     @Test
-    fun `send should send correct data`() {
+    fun `send should transfer correct data`() {
         // Arrange
         val testData = "Person(name=John, age=30)"
         val expectedJson = "{\"name\":\"John\",\"age\":\"30\"}"

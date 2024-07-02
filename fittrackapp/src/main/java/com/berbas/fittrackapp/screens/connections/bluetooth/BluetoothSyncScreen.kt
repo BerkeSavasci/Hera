@@ -144,7 +144,7 @@ fun DataTransferDialog(
                 text = {
                     Text(
                         "The data transfer was unsuccessful! Please check your connectivity" +
-                                "and try again."
+                                " and try again."
                     )
                 },
                 confirmButton = {

@@ -1,6 +1,5 @@
 package com.berbas.fittrackapp.screens.connections.bluetooth
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.berbas.fittrackapp.annotations.UserId
@@ -15,7 +14,6 @@ import com.berbas.heraconnectcommon.localData.sensor.FitnessDataDao
 import com.berbas.heraconnectcommon.protocolEngine.BluetoothProtocolEngine
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -30,9 +28,7 @@ open class BluetoothSyncViewModel @Inject constructor(
     private val logger: Logger
 ) : ViewModel(), IBluetoothSyncViewModel  {
 
-    /**
-     * A stateflow of all the scanned devices as a list
-     */
+
     override val devices: StateFlow<List<BluetoothDeviceDomain>> = bluetoothController.scannedDevices
     override val dataTransferStatus: StateFlow<BluetoothConnection.DataTransferStatus> = bluetoothController.dataTransferStatus
 
@@ -44,9 +40,6 @@ open class BluetoothSyncViewModel @Inject constructor(
     private val protocolEngine = BluetoothProtocolEngine()
 
 
-    /**
-     * Handles the connection to a device, responds to the different results
-     */
     override fun connectToDevice(device: BluetoothDeviceDomain) {
         logger.d("SyncViewModel", "Status: ${dataTransferStatus.value}")
 
@@ -99,10 +92,6 @@ open class BluetoothSyncViewModel @Inject constructor(
         return "${personData}*${allFitnessData}"
     }
 
-    /**
-     * Is called when the Sync screen is opened by the user. Automatically starts a bluetooth server.
-     * Handles the results accordingly
-     */
     override fun startBluetoothServer() {
         serverJob = viewModelScope.launch {
             bluetoothController.startBluetoothServer().collect { result ->
@@ -144,9 +133,6 @@ open class BluetoothSyncViewModel @Inject constructor(
         }
     }
 
-    /**
-     * Starts discovering the nearby bluetooth devices
-     */
     override fun startDiscovery() {
         viewModelScope.launch {
             bluetoothController.startDiscovery()
@@ -158,18 +144,12 @@ open class BluetoothSyncViewModel @Inject constructor(
         bluetoothController.closeConnection()
     }
 
-    /**
-     * Stops the discovering of the nearby bluetooth devices
-     */
     override fun stopDiscovery() {
         viewModelScope.launch {
             bluetoothController.stopDiscovery()
         }
     }
 
-    /**
-     * Frees up memory and all the used resources
-     */
     override fun release() {
         viewModelScope.launch {
             bluetoothController.release()
