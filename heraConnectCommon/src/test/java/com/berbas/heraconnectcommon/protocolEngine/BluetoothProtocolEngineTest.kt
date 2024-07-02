@@ -79,7 +79,7 @@ class BluetoothProtocolEngineTest {
             ),
             bpm = arrayListOf("80", "70", "65", "85", "154"),
             sleepTime = arrayListOf("8", "7.4", "5.3"),
-            initialStepCount = 0,
+            initialStepCount = -1,
             cumulativeSteps = 10000
         )
         assertEquals(expected, result)
