@@ -22,12 +22,12 @@ open class WifiSyncViewModel @Inject constructor(
     private val fitnessDao: FitnessDataDao,
     @UserId private val id: Int,
     private val wifiController: WifiConnectionInterface
-) : ViewModel(){
+) : ViewModel(), IWifiSyncViewModel {
 
-    val errorMessage = MutableLiveData<String>()
-    val wifiState: StateFlow<WifiState> = wifiController.getWifiState()
+    override val errorMessage = MutableLiveData<String>()
+    override val wifiState: StateFlow<WifiState> = wifiController.getWifiState()
 
-    fun sendData() {
+    override fun sendData() {
         viewModelScope.launch {
             val personData = personDao.getPersonById(id).first()
             val fitnessData = fitnessDao.getSensorData().first()
@@ -38,7 +38,7 @@ open class WifiSyncViewModel @Inject constructor(
         }
     }
 
-    fun receiveData() {
+    override fun receiveData() {
         viewModelScope.launch {
             val receivedData = wifiController.receive(id)
             if (receivedData.isEmpty()) {

@@ -37,7 +37,7 @@ import com.berbas.heraconnectcommon.connection.wifi.WifiState
 
 @Composable
 fun WifiSyncScreen(
-    wifiSyncViewModel: WifiSyncViewModel,
+    wifiSyncViewModel: IWifiSyncViewModel,
     navController: NavHostController,
 ) {
     val wifiConnectionImage: Painter = painterResource(id = R.drawable.data_transfer_cloud)
