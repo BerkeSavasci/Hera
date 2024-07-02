@@ -22,7 +22,7 @@ class FitnessOverviewViewModel @Inject constructor(
     private val fitnessDataDao: FitnessDataDao,
     private val personDao: PersonDao,
     @UserId private val id: Int
-):  ViewModel() {
+) : ViewModel() {
 
     val stepCount = MutableStateFlow(0)
     val stepGoal = MutableStateFlow<Int>(0)
@@ -33,7 +33,7 @@ class FitnessOverviewViewModel @Inject constructor(
         observeAndUpdateFitnessData()
     }
 
-    fun observeAndUpdateFitnessData(){
+    fun observeAndUpdateFitnessData() {
         CoroutineScope(Dispatchers.IO).launch {
             val existingFitnessData = fitnessDataDao.getSensorData().firstOrNull()
             if (existingFitnessData == null) {
@@ -54,11 +54,12 @@ class FitnessOverviewViewModel @Inject constructor(
         viewModelScope.launch {
             fitnessDataDao.getSensorData().collect { fitnessData ->
                 val today = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault()).format(Date())
-                val todaySteps = fitnessData?.steps?.find { it.startsWith(today) }
+                val todaySteps = fitnessData.steps.find { it.startsWith(today) }
                 stepCount.value = todaySteps?.split(": ")?.get(1)?.toInt() ?: 0
             }
         }
     }
+
     /** Collects the step goal from the database */
     fun fetchStepGoal() {
         viewModelScope.launch {

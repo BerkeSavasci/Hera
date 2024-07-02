@@ -33,41 +33,16 @@ class UserDataViewModel @Inject constructor(
     private fun observeAndRefreshPerson() {
         viewModelScope.launch {
             personDao.getPersonById(id).collect { person ->
-                if (person != null) { // don't simplify
-                    _personState.value = ProfileState(
-                        firstName = person.firstname,
-                        lastName = person.lastname,
-                        gender = person.gender,
-                        birthday = person.birthday,
-                        weight = person.weight,
-                        height = person.height,
-                        stepGoal = person.stepGoal,
-                        activityGoal = person.activityGoal
-                    )
-                } else {
-                    val defaultPerson = Person(
-                        id = id,
-                        firstname = "Placeholder",
-                        lastname = "Placeholder",
-                        gender = "Placeholder",
-                        birthday = "Placeholder",
-                        weight = 0.0,
-                        height = 0,
-                        stepGoal = 6000,
-                        activityGoal = 1.30
-                    )
-                    personDao.upsertPerson(defaultPerson)
-                    _personState.value = ProfileState(
-                        firstName = defaultPerson.firstname,
-                        lastName = defaultPerson.lastname,
-                        gender = defaultPerson.gender,
-                        birthday = defaultPerson.birthday,
-                        weight = defaultPerson.weight,
-                        height = defaultPerson.height,
-                        stepGoal = defaultPerson.stepGoal,
-                        activityGoal = defaultPerson.activityGoal
-                    )
-                }
+                _personState.value = ProfileState(
+                    firstName = person.firstname,
+                    lastName = person.lastname,
+                    gender = person.gender,
+                    birthday = person.birthday,
+                    weight = person.weight,
+                    height = person.height,
+                    stepGoal = person.stepGoal,
+                    activityGoal = person.activityGoal
+                )
             }
         }
     }
