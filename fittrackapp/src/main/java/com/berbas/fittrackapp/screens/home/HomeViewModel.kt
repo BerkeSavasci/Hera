@@ -28,16 +28,12 @@ class HomeViewModel @Inject constructor(
     @UserId private val id: Int
 ) : ViewModel(), IHomeViewModel {
 
-    /** The step count of the user */
     override val stepCount = MutableStateFlow<Int>(0)
 
-    /** Users step gaol */
     override val stepGoal = MutableStateFlow<Int>(0)
 
-    /** A List of the step counts from the last seven days */
     override val lastSevenDaysSteps = MutableStateFlow<List<Int>>(emptyList())
 
-    /** True if [InfoDialog] is visible */
     override val isInfoDialogVisible = mutableStateOf(false)
 
     init {
@@ -46,7 +42,6 @@ class HomeViewModel @Inject constructor(
         fetchLastSevenDaysSteps()
     }
 
-    /** Collects the steps taken from the database */
     fun fetchTodaySteps() {
         viewModelScope.launch {
             fitnessDataDao.getSensorData().collect { fitnessData ->
@@ -57,7 +52,6 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    /** Collects the step goal from the database */
     fun fetchStepGoal() {
         viewModelScope.launch {
             personDao.getPersonById(id).collect { person ->
@@ -66,7 +60,6 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    /** Fetches the step data from the database for the last seven days */
     override fun fetchLastSevenDaysSteps() {
         viewModelScope.launch {
             fitnessDataDao.getSensorData().collect { fitnessData ->
@@ -83,7 +76,6 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    /** Show the info text when the user clicks on the FAB */
     override fun showInfoDialog(show: Boolean) {
         isInfoDialogVisible.value = show
     }

@@ -6,7 +6,7 @@ import org.json.JSONObject
 
 class WifiProtocolEngine : ProtocolEngine {
 
-    override fun toPersonDataMessage(personData: Person, fitnessData: FitnessData): String {
+    override fun toDataMessage(personData: Person, fitnessData: FitnessData): String {
         return "$personData#$fitnessData"
     }
 

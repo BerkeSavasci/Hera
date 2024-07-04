@@ -43,7 +43,7 @@ class FitnessDaoTest {
     }
 
     @Test
-    fun insertFitnessDataEntity() = runTest {
+    fun insertSensorDataEntity() = runTest {
         val dummyFitnessData = FitnessData(
             steps = arrayListOf("1000", "2000", "3000"),
             bpm = arrayListOf("70", "80", "90"),
@@ -58,7 +58,7 @@ class FitnessDaoTest {
     }
 
     @Test
-    fun deleteFitnessDataEntity() = runTest {
+    fun deleteSensorDataEntity() = runTest {
         val dummyFitnessData = FitnessData(
             steps = arrayListOf("1000", "2000", "3000"),
             bpm = arrayListOf("70", "80", "90"),

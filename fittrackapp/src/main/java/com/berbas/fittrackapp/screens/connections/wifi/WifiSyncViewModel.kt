@@ -33,7 +33,7 @@ open class WifiSyncViewModel @Inject constructor(
             val fitnessData = fitnessDao.getSensorData().first()
 
             Log.d("WifiSyncViewModel", "Sending person data: $personData")
-            val data = WifiProtocolEngine().toPersonDataMessage(personData, fitnessData)
+            val data = WifiProtocolEngine().toDataMessage(personData, fitnessData)
             wifiController.send(data)
         }
     }
